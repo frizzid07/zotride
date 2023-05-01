@@ -37,6 +37,16 @@ async function mailer(receiveremail, code) {
 
 }
 
+function validateEmail(email) { //Validates the email address
+    var emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return emailRegex.test(email);
+}
+
+function validatePhone(phone) { //Validates the phone number
+    var phoneRegex = /^(\+1-|\+1|0)?\d{10}$/; // Change this regex based on requirement
+    return phoneRegex.test(phone);
+}
+
 router.post('/register', async (req, res) => {
     const { firstName, lastName, dayOfBirth, monthOfBirth, yearOfBirth, mobileNumber, email, password } = req.body;
     if (!firstName || !lastName || !dayOfBirth || !monthOfBirth || !yearOfBirth || !mobileNumber || !email || !password) {
@@ -82,14 +92,20 @@ router.post('/verify', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(422).json({ error: "Please add email or password" });
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(422).json({ error: "Please enter both email/mobile number and password" });
     }
-    const savedUser = await User.findOne({ email: email })
+    var savedUser = null;
+    if(validateEmail(username)) {
+        savedUser = await User.findOne({ email: username });    
+    }
+    else if(validatePhone(username)) {
+        savedUser = await User.findOne({ mobileNumber: Number(username) });
+    }
 
     if (!savedUser) {
-        return res.status(422).json({ error: "Invalid Credentials" });
+        return res.status(422).json({ error: "Please enter valid user credentials" });
     }
 
     try {

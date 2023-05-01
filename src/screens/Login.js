@@ -11,20 +11,20 @@ import {input} from '../common/input';
 
 const Login = ({ navigation }) => {
   const [fdata, setFdata] = useState({
-    email: '',
+    username: '',
     password: ''
   })
 
   // const [isLoading, setLoading] = useState(false);
   // const [isSuccess, setSuccessMsg] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
-
+  
   async function Sendtobackend() {
     // setLoading(true);
     // setSuccessMsg(false);
     // setErrorMsg(false);
 
-    await fetch("https://2e45-128-195-97-159.ngrok-free.app/login", {
+    await fetch("https://d13a-128-195-97-60.ngrok-free.app/login", {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -35,8 +35,8 @@ const Login = ({ navigation }) => {
               data => {
                   console.log(data);
                   if (data.error) {
-                      alert(data.message);
-                      setErrorMsg(data.error);
+                      alert(data.error);
+                      setErrorMsg("Invalid Credentials");
                   }
                   else {
                       alert('Logged in successfully');
@@ -63,8 +63,8 @@ const Login = ({ navigation }) => {
         {
           errorMsg ? <Text style={[styles.text, {color: 'red'}]}>{errorMsg}</Text> : null
         }
-        <TextInput style = {[input, {textTransform: 'lowercase'}]} placeholder="Email Address" keyboardType='email-address' onPressIn={() => setErrorMsg(null)}
-        onChangeText={(text) => setFdata({ ...fdata, email: text })}/>
+        <TextInput style = {[input, {textTransform: 'lowercase'}]} placeholder="Email or Mobile Number" keyboardType='email-address' onPressIn={() => setErrorMsg(null)}
+        onChangeText={(text) => setFdata({ ...fdata, username: text })} />
         <TextInput style = {input} placeholder="Password" secureTextEntry={true} onChangeText={(text) => setFdata({ ...fdata, password: text })}
         onPressIn={() => setErrorMsg(null)} />
         <Text style={{fontSize: 15, color: '#000', marginTop: 10, marginBottom: 20}}>Don't have an account?&nbsp;

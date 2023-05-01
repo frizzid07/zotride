@@ -44,7 +44,7 @@ const Register = ({ navigation }) => {
         }
         else {
 
-        await fetch("https://2e45-128-195-97-159.ngrok-free.app/verify", {
+        await fetch("https://d13a-128-195-97-60.ngrok-free.app/verify", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

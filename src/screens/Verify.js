@@ -38,7 +38,7 @@ const Verify = ({ navigation, route }) => {
                 password: userdata.user[0]?.password
             }
 
-            await fetch("https://2e45-128-195-97-159.ngrok-free.app/register", {
+            await fetch("https://d13a-128-195-97-60.ngrok-free.app/register", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
