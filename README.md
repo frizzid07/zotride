@@ -1,2 +1,2 @@
-# zotride
-Capstone Repository
+# login_app
+Login &amp; Registration Demo
