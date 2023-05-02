@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Button, Alert, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Image, Button, Alert, Pressable, TouchableOpacity } from 'react-native'
 import React from 'react'
 
 // Images
@@ -13,7 +13,9 @@ const Welcome = ({ navigation }) => {
     <View style = {styles.container}>
       <Image style={styles.bg} source={background}></Image>
       <View style = {styles.textContainer}>
-        <Image style={styles.logo} source={logo}></Image>
+        <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
+          <Image style={styles.logo} source={logo} />
+        </TouchableOpacity>
         <Pressable style={submit} onPress={() => navigation.navigate('Login')}>
           <Text style={styles.text}>Login</Text>
         </Pressable>

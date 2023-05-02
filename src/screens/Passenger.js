@@ -8,28 +8,25 @@ import logo from '../../assets/logo.png';
 // Styles
 import {submit} from '../common/button';
 
-const Landing = ({ navigation }) => {
-
-  return (
-    <View style = {styles.container}>
-      <Image style={styles.bg} source={background}></Image>
-      <View style = {styles.textContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
-          <Image style={styles.logo} source={logo} />
-        </TouchableOpacity>
-        <Text style = {{fontSize: 25, color: '#000', marginBottom: 20}}>Choose a Role</Text>
-        <Pressable style={submit} onPress={() => navigation.navigate('Driver')}>
-          <Text style={styles.text}>Driver</Text>
-        </Pressable>
-        <Pressable style={submit} onPress={() => navigation.navigate('Passenger')}>
-          <Text style={styles.text}>Passenger</Text>
-        </Pressable>
-      </View>
-    </View>
-  )
+const Passenger = ({ navigation }) => {
+    return (
+        <View style = {styles.container}>
+            <Image style={styles.bg} source={background}></Image>
+            <View style = {styles.textContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
+                    <Image style={styles.logo} source={logo} />
+                </TouchableOpacity>
+                <Text style={styles.text}>Welcome to the landing page!</Text>
+                <Text style={styles.text}>New content coming soon...</Text>
+                <Pressable style={[submit, {marginTop: 20}]} onPress={() => navigation.navigate('Landing')}>
+                    <Text style={styles.text}>Choose a Different Role</Text>
+                </Pressable>
+            </View>
+        </View>
+    )
 }
 
-export default Landing
+export default Passenger
 
 const styles = StyleSheet.create({
     container: {

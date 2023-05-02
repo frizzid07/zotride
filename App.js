@@ -6,6 +6,8 @@ import Login from './src/screens/Login';
 import Register from './src/screens/Register';
 import Verify from './src/screens/Verify';
 import Landing from './src/screens/Landing';
+import Driver from './src/screens/Driver';
+import Passenger from './src/screens/Passenger';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -21,6 +23,8 @@ export default function App() {
         <Stack.Screen name='Register' component={Register} options={{headerShown: false}}/>
         <Stack.Screen name='Verify' component={Verify} options={{headerShown: false}}/>
         <Stack.Screen name='Landing' component={Landing} options={{headerShown: false}}/>
+        <Stack.Screen name='Driver' component={Driver} options={{headerShown: false}}/>
+        <Stack.Screen name='Passenger' component={Passenger} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
