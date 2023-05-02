@@ -38,7 +38,7 @@ async function mailer(receiveremail, code) {
 }
 
 function validateEmail(email) { //Validates the email address
-    var emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    var emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z]{2,4})$/;
     return emailRegex.test(email);
 }
 
@@ -47,23 +47,39 @@ function validatePhone(phone) { //Validates the phone number
     return phoneRegex.test(phone);
 }
 
+function validateUser(user) {
+    // var dayOfBirthRegex = /^([0-2]?[1-9]|30|31)$/;
+    // var monthOfBirthRegex = /^(0?[1-9]|1[0-2])$/;
+    // var yearOfBirthRegex = /^(19[0-9][0-9]|20([0-1][0-9]|2[0-2]))$/;
+    var dob = parseInt(user.dayOfBirth);
+    var mob = parseInt(user.monthOfBirth);
+    var yob = parseInt(user.yearOfBirth);
+    var passRegex = /^[a-zA-Z0-9!@#$%^&*]{2,16}$/;
+    return 1<=dob && dob<=31 && 1<=mob && mob<=12 && 1990<=yob && yob<=2015 && passRegex.test(user.password);
+}
+
 router.post('/register', async (req, res) => {
     const { firstName, lastName, dayOfBirth, monthOfBirth, yearOfBirth, mobileNumber, email, password } = req.body;
     if (!firstName || !lastName || !dayOfBirth || !monthOfBirth || !yearOfBirth || !mobileNumber || !email || !password) {
         return res.status(422).send({error : "Please fill all the information"});
     }
-
+    
     const user = new User({
         firstName, lastName, dayOfBirth, monthOfBirth, yearOfBirth, mobileNumber, email, password
     });
 
-    try {
-        await user.save();
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-        res.send({ message: "User Registered Successfully", token });
-    } catch(err) {
-        console.log(`DB Error: ${err}`)
-        return res.status(422).send({error: err.message});
+    if(validateUser(user) && validateEmail(user.email) && validatePhone(user.mobileNumber)) {
+        try {
+            await user.save();
+            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+            res.send({ message: "User Registered Successfully", token });
+        } catch(err) {
+            console.log(`DB Error: ${err}`)
+            return res.status(422).send({error: err.message});
+        }
+    }
+    else {
+        return res.status(422).json({ error: "Please enter valid user credentials" });
     }
 });
 
@@ -73,16 +89,28 @@ router.post('/verify', (req, res) => {
         return res.status(422).json({ error: "Please add all the fields" });
     }
 
-    User.findOne({ email: email }).then(async (savedUser) => {
+    var exists = false;
+    User.findOne({ mobileNumber: mobileNumber }).then(async (savedUser) => {
         if (savedUser) {
-            return res.status(422).json({ error: "Invalid Credentials" });
+            exists = true;
+        }
+    });
+
+    User.findOne({ email: email }).then(async (savedUser) => {
+        if (savedUser || exists) {
+            return res.status(422).json({ error: "Credentials in use, login instead!" });
         }
         try {
 
             let VerificationCode = Math.floor(100000 + Math.random() * 900000);
             let user = [{ firstName, lastName, dayOfBirth, monthOfBirth, yearOfBirth, mobileNumber, email, password }]
-            await mailer(email, VerificationCode);
-            res.send({ message: "Verification Code Sent to your Email", udata: {user, VerificationCode} });
+            if(validateUser(user[0]) && validateEmail(user[0]?.email) && validatePhone(user[0]?.mobileNumber)) {
+                await mailer(email, VerificationCode);
+                res.send({ message: "Verification Code Sent to your Email", udata: {user, VerificationCode} });
+            }
+            else {
+                return res.status(422).json({ error: "Please enter valid user credentials" });
+            }
         }
         catch (err) {
             console.log(err);

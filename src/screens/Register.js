@@ -70,9 +70,14 @@ const Register = ({ navigation }) => {
                             alert(data.message);
                             navigation.navigate('Verify', { userdata: data.udata });
                         }
+                        else {
+                          alert(data.error);
+                          setErrorMsg(data.error);
+                        }
                     }
                 ).catch((error) => {
                   // Handle any errors that occur
+                  alert(error.message);
                   console.error('Error:', error);
               }).finally(() => {
                 // Always make sure to unset the error message
@@ -90,7 +95,7 @@ const Register = ({ navigation }) => {
         </TouchableOpacity>
         <Text style = {[styles.text, {marginBottom: 25}]}>Register your Account</Text>
         {
-          errorMsg ? <Text style={[styles.text, {color: 'red'}]}>{errorMsg}</Text> : null
+          errorMsg ? <Text style={[styles.text, {color: 'red', marginTop: -5}]}>{errorMsg}</Text> : null
         }
         <Text style = {[styles.text, {fontSize: 15, marginBottom: -5}]}>Name</Text>
         <View style = {styles.innerContainer}>

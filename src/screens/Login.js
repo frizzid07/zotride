@@ -40,7 +40,7 @@ const Login = ({ navigation }) => {
                   }
                   else {
                       alert('Logged in successfully');
-                      navigation.navigate('Landing');
+                      navigation.navigate('Landing', { userdata: data });
                   }
               }
           ).catch((error) => {
@@ -61,7 +61,7 @@ const Login = ({ navigation }) => {
         </TouchableOpacity>
         <Text style = {{fontSize: 25, color: '#000', marginBottom: 20}}>Login to your Account</Text>
         {
-          errorMsg ? <Text style={[styles.text, {color: 'red'}]}>{errorMsg}</Text> : null
+          errorMsg ? <Text style={[styles.text, {color: 'red', marginTop: -5}]}>{errorMsg}</Text> : null
         }
         <TextInput style = {[input, {textTransform: 'lowercase'}]} placeholder="Email or Mobile Number" keyboardType='email-address' onPressIn={() => setErrorMsg(null)}
         onChangeText={(text) => setFdata({ ...fdata, username: text })} />

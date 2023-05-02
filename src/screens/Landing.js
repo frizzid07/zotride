@@ -7,7 +7,8 @@ import background from '../../assets/background.jpg';
 // Styles
 import {submit} from '../common/button';
 
-const Landing = ({ navigation }) => {
+const Landing = ({ navigation, route }) => {
+
   return (
     <View style = {styles.container}>
       <Image style={styles.bg} source={background}></Image>

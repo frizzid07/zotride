@@ -59,11 +59,13 @@ const Verify = ({ navigation, route }) => {
                 })
                 .catch((error) => {
                     // Handle any errors that occur
+                    alert(error);
                     console.error(error);
                 });
         }
         else {
             setErrorMsg('Incorrect code');
+            alert('Please enter a valid code');
             return;
         }
     }
@@ -77,7 +79,7 @@ const Verify = ({ navigation, route }) => {
                 <Text style = {styles.text}>Verify your Email</Text>
                 <Text style = {[styles.text, {fontSize: 15}]}>A code has been sent to your email!</Text>
                 {
-                    errorMsg ? <Text style={[styles.text, {color: 'red'}]}>{errorMsg}</Text> : null
+                    errorMsg ? <Text style={[styles.text, {color: 'red', marginBottom: -10, marginTop: 5}]}>{errorMsg}</Text> : null
                 }
                 <Text style = {[styles.text, {fontSize: 15, marginTop: 30}]}>Code</Text>
                 <TextInput style={input} placeholder="Enter 6-digit Verification Code" secureTextEntry={true} onChangeText={(text) => setUserCode(text)} onPressIn={() => setErrorMsg(null)} />
