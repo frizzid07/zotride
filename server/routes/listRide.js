@@ -6,10 +6,15 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 router.post('/listRide', async (req, res) => {
-    const { rideId, driverId, passengers, startLocation, endLocation, startTime, rideCost } = req.body;
+    const { rideId, driverId, passengers, startLocation, endLocation, startTime, rideCost, capacity } = req.body;
     const ride = new Ride({
-        rideId, driverId, passengers, startLocation, endLocation, startTime, rideCost
+        rideId, driverId, startLocation, endLocation, startTime, rideCost, capacity
     });
+    
+    if (!rideId || !driverId || !startLocation || !endLocation || !startTime || !rideCost || !capacity) {
+        return res.status(422).json({ error: "Please add all the fields" });
+    }
+
     try{
         await ride.save();
     }

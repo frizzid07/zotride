@@ -7,7 +7,8 @@ const rideSchema = new mongoose.Schema({
     startLocation: {type: String},
     endLocation: {type: String},
     startTime: {type: Date},
-    rideCost: {type: Number}
+    rideCost: {type: Number},
+    capacity: {type: Number}
 }, {timestamps: true});
 
 mongoose.model("Ride", rideSchema)
