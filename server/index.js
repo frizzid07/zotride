@@ -3,6 +3,7 @@ const app = express();
 
 require('./database');
 require('./models/User');
+require('dotenv').config();
 require('./models/Ride');
 
 const bodyParser = require('body-parser');
