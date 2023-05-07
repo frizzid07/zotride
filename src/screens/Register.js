@@ -9,6 +9,8 @@ import logo from '../../assets/logo.png';
 import {submit} from '../common/button';
 import {input} from '../common/input';
 
+import {NGROK_TUNNEL} from "@env";
+
 const Register = ({ navigation }) => {
   const [fdata, setFdata] = useState({
     firstName: '',
@@ -44,7 +46,7 @@ const Register = ({ navigation }) => {
         }
         else {
 
-        await fetch("https://d13a-128-195-97-60.ngrok-free.app/verify", {
+        await fetch(NGROK_TUNNEL+"/verify", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

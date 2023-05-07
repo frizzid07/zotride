@@ -9,6 +9,8 @@ import logo from '../../assets/logo.png';
 import {submit} from '../common/button';
 import {input} from '../common/input';
 
+import {NGROK_TUNNEL} from "@env";
+
 const Verify = ({ navigation, route }) => {
     const { userdata } = route.params;
 
@@ -38,7 +40,7 @@ const Verify = ({ navigation, route }) => {
                 password: userdata.user[0]?.password
             }
 
-            await fetch("https://d13a-128-195-97-60.ngrok-free.app/register", {
+            await fetch(NGROK_TUNNEL+"/register", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

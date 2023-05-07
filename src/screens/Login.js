@@ -9,6 +9,8 @@ import logo from '../../assets/logo.png';
 import {submit} from '../common/button';
 import {input} from '../common/input';
 
+import {NGROK_TUNNEL} from "@env";
+
 const Login = ({ navigation }) => {
   const [fdata, setFdata] = useState({
     username: '',
@@ -24,7 +26,7 @@ const Login = ({ navigation }) => {
     // setSuccessMsg(false);
     // setErrorMsg(false);
 
-    await fetch("https://d13a-128-195-97-60.ngrok-free.app/login", {
+    await fetch(NGROK_TUNNEL+"/login", {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
