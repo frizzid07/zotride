@@ -9,6 +9,8 @@ app.use(bodyParser.json());
 
 const authRoutes = require('./routes/authRoutes');
 app.use(authRoutes);
+const findRide = require('./routes/findRide');
+app.use(findRide)
 const requireToken = require('./middleware/authTokenRequired');
 
 app.get('/', (req, res) => {
