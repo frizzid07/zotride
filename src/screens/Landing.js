@@ -16,7 +16,9 @@ import logo from "../../assets/logo.png";
 import { submit } from "../common/button";
 
 const Landing = ({ navigation }) => {
-  function isRegisteredDriver() {
+  const [isRegisteredDriver, setRegisteredDriver] = useState(isDriver());
+
+  function isDriver() {
     // This should have logic to check whether a user is already a driver
     return false;
   }
@@ -24,7 +26,7 @@ const Landing = ({ navigation }) => {
   function driverRole() {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
-    if (isRegisteredDriver()) {
+    if (isRegisteredDriver) {
       navigation.navigate("Driver");
     } else {
       navigation.navigate("DriverRegistration");
