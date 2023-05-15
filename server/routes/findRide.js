@@ -8,10 +8,9 @@ const Ride = mongoose.model('Ride');
 
 router.post('/findRide', async (req, res) => {
     const { startLocation, endLocation, startTime } = req.body;
-
     const time = new Date(startTime)
-    const beginTime = new Date(time.getTime() - 30 * 60000);
-    const endTime = new Date(time.getTime() + 30 * 60000);
+    const beginTime = new Date(time.getTime() - (30 * 60000) - (time.getTimezoneOffset() * 60000));
+    const endTime = new Date(time.getTime() + (30 * 60000) - (time.getTimezoneOffset() * 60000));
     const condition = {startLocation:startLocation,endLocation:endLocation,startTime:{ $gte: beginTime, $lte: endTime }};
     const result = await Ride.find(condition).exec();
 
