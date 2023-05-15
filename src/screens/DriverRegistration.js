@@ -41,6 +41,7 @@ const DriverRegistration = ({ navigation }) => {
     vehicleCompany: "",
     vehicleModel: "",
     vehicleColor: "",
+    vehicleCapacity: "",
   });
 
   function registerDriver() {
@@ -49,7 +50,8 @@ const DriverRegistration = ({ navigation }) => {
       data.vehicleNumber == "" ||
       data.vehicleCompany == "" ||
       data.vehicleModel == "" ||
-      data.vehicleColor == ""
+      data.vehicleColor == "" ||
+      data.vehicleCapacity == ""
     ) {
       setErrorMsg("Please Enter all Fields");
       return;
@@ -114,6 +116,13 @@ const DriverRegistration = ({ navigation }) => {
           placeholder="Color"
           onPressIn={clearErrMsg}
           onChangeText={(text) => setData({ ...data, vehicleColor: text })}
+        />
+        <TextInput
+          style={input}
+          placeholder="Capacity"
+          onPressIn={clearErrMsg}
+          onChangeText={(text) => setData({ ...data, vehicleCapacity: text })}
+          keyboardType="number-pad"
         />
         <Pressable style={[submit, { marginTop: -5 }]}>
           <Text style={styles.text} onPress={registerDriver}>
