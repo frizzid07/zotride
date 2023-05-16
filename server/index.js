@@ -4,6 +4,7 @@ const app = express();
 require("./database");
 require("./models/User");
 require("./models/Driver");
+require("./models/Ride");
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
@@ -15,6 +16,9 @@ const requireToken = require("./middleware/authTokenRequired");
 
 const driverRegistration = require("./routes/driverRegistration");
 app.use(driverRegistration);
+
+const listRide = require("./routes/listRide");
+app.use(listRide);
 
 app.get("/", (req, res) => {
   res.send(res.body);

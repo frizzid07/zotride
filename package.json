@@ -27,7 +27,8 @@
     "nodemailer": "^6.9.1",
     "nodemon": "^2.0.22",
     "react": "18.2.0",
-    "react-native": "0.71.7"
+    "react-native": "0.71.7",
+    "react-native-date-picker": "^4.2.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
