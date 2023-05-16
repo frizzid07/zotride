@@ -1,58 +1,55 @@
 import { StyleSheet, Text, TextInput, View, Image, Button, Pressable, Alert, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 // Images
 import background from '../../assets/background.jpg';
 import logo from '../../assets/logo.png';
 
 // Common
-import {submit} from '../common/button';
-import {input} from '../common/input';
+import { submit } from '../common/button';
+import { input } from '../common/input';
 
-import {NGROK_TUNNEL} from "@env";
+import { AuthContext } from '../../server/context/authContext';
+import { NGROK_TUNNEL } from "@env";
+// import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
-  const [fdata, setFdata] = useState({
+  const context = useContext(AuthContext);
+  
+  const [isChecking, setIsChecking] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [data, setData] = useState({
     username: '',
     password: ''
-  })
+  });
 
-  // const [isLoading, setLoading] = useState(false);
-  // const [isSuccess, setSuccessMsg] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);
-  
-  async function Sendtobackend() {
-    // setLoading(true);
-    // setSuccessMsg(false);
-    // setErrorMsg(false);
+  async function loginUser() {
+    try {
+      setIsChecking(true);
 
-    await fetch(NGROK_TUNNEL+"/login", {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(fdata)
-      })
-          .then(res => res.json()).then(
-              data => {
-                  console.log(data);
-                  if (data.error) {
-                      alert(data.error);
-                      setErrorMsg("Invalid Credentials");
-                  }
-                  else {
-                      alert('Logged in successfully');
-                      navigation.navigate('Landing', { userdata: data });
-                  }
-              }
-          ).catch((error) => {
-            // Handle any errors that occur
-            console.error('Error:', error);
-            // setErrorMsg(true);
-        }).finally (()=> {
-          // setLoading(false);
-        });
+      const response = await fetch(NGROK_TUNNEL + "/login", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      const rdata = await response.json();
+      let authenticated = await context.authenticate(JSON.stringify(rdata));
+      if (authenticated) {
+        setIsSuccessful(true);
+        alert('Logged in successfully');
+      }
+    } catch (error) {
+      setIsSuccessful(false);
+      console.error(error);
+      alert(error);
+      setErrorMsg(error);
+    } finally {
+      setIsChecking(false);
     }
+  }
 
   return (
     <View style = {styles.container}>
@@ -66,13 +63,13 @@ const Login = ({ navigation }) => {
           errorMsg ? <Text style={[styles.text, {color: 'red', marginTop: -5}]}>{errorMsg}</Text> : null
         }
         <TextInput style = {[input, {textTransform: 'lowercase'}]} placeholder="Email or Mobile Number" keyboardType='email-address' onPressIn={() => setErrorMsg(null)}
-        onChangeText={(text) => setFdata({ ...fdata, username: text })} />
-        <TextInput style = {input} placeholder="Password" secureTextEntry={true} onChangeText={(text) => setFdata({ ...fdata, password: text })}
-        onPressIn={() => setErrorMsg(null)} />
+        onChangeText={(text) => setData({ ...data, username: text })} value={data.username}/>
+        <TextInput style = {input} placeholder="Password" secureTextEntry={true} onChangeText={(text) => setData({ ...data, password: text })}
+        onPressIn={() => setErrorMsg(null)} value={data.password}/>
         <Text style={{fontSize: 15, color: '#000', marginTop: 10, marginBottom: 20}}>Don't have an account?&nbsp;
           <Text style={{color: '#004aad'}} onPress={() => navigation.navigate('Register')}>Register Now!</Text>
         </Text>
-        <Pressable style={submit} onPress={Sendtobackend}>
+        <Pressable style={submit} onPress={loginUser}>
           <Text style={styles.text}>Login</Text>
         </Pressable>
       </View>
@@ -113,3 +110,68 @@ const styles = StyleSheet.create({
         marginBottom: 40
     }
 });
+
+  
+  // async function fetchUser() {
+  //   console.log('Fetching Login API');
+  //   const response = await fetch(NGROK_TUNNEL+"/login", {
+  //     method: 'POST',
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(data)
+  //   });
+  //   return response.json();
+  // }
+  
+  // async function login() {
+  //   setIsChecking(true);
+  //   try {
+  //     let userJSON = fetchUser();
+  //     const user = context.authenticate(userJSON.token);
+  //     setIsSuccessful(true);
+  //     alert('Logged in successfully');
+  //     navigation.navigate('Landing', { userdata: user });
+  //     // navigation.navigate('Landing');
+  //   } catch(error) {
+  //     console.log(error);
+  //     alert(error);
+  //     setErrorMsg(error.message);
+  //   } finally {
+  //     setIsChecking(false);
+  //   }
+  // }
+
+    // async function Sendtobackend() {
+  //   // setLoading(true);
+  //   // setSuccessMsg(false);
+  //   // setErrorMsg(false);
+
+    // await fetch(NGROK_TUNNEL+"/login", {
+    //       method: 'POST',
+    //       headers: {
+    //           'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify(fdata)
+    //   })
+    //       .then(res => res.json()).then(
+    //           data => {
+    //               console.log(data);
+    //               if (data.error) {
+    //                   alert(data.error);
+    //                   setErrorMsg("Invalid Credentials");
+    //               }
+    //               else {
+    //                   alert('Logged in successfully');
+    //                   login(data.token);
+    //                   navigation.navigate('Landing', { userdata: data });
+    //               }
+    //           }
+    //       ).catch((error) => {
+    //         // Handle any errors that occur
+    //         console.error('Error:', error);
+    //         // setErrorMsg(true);
+    //     }).finally (()=> {
+    //       // setLoading(false);
+    //     });
+  //   }

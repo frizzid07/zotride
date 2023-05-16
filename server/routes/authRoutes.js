@@ -155,4 +155,25 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.post('/auth', async (req, res) => {
+    const { token } = req.body;
+    if (!token) {
+        return res.status(401).json({ error: "You must be logged in, token not given" });
+    }
+    
+    jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
+        if (err) {
+            return res.status(401).json({ error: "You must be logged in, token invalid" });
+        }
+        const { _id } = payload;
+        var userData = await User.findById(_id).lean().exec();
+        try {
+            return res.json({ userData });
+        } catch(error) {
+            console.log(error);
+            return res.status(422).send({error: error.message});
+        } finally {}
+    })
+})
+
 module.exports = router;

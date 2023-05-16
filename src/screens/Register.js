@@ -45,46 +45,45 @@ const Register = ({ navigation }) => {
             return;
         }
         else {
-
-        await fetch(NGROK_TUNNEL+"/verify", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({firstName: fdata.firstName, 
-                  lastName: fdata.lastName,
-                  dayOfBirth: fdata.dayOfBirth,
-                  monthOfBirth: fdata.monthOfBirth,
-                  yearOfBirth: fdata.yearOfBirth,
-                  mobileNumber: fdata.mobileNumber,
-                  email: fdata.email,
-                  password: fdata.password})
-            }).then(res => res.json()).then(
-                    data => {
-                        console.log(data);
-                        if (data.error === 'Invalid Credentials') {
-                            alert('Invalid Credentials')
-                            setErrorMsg('Invalid Credentials');
-                            navigation.navigate('Register');
-                        }
-                        else if (data.message === "Verification Code Sent to your Email") {
-                            // console.log(data.udata);
-                            alert(data.message);
-                            navigation.navigate('Verify', { userdata: data.udata });
-                        }
-                        else {
-                          alert(data.error);
-                          setErrorMsg(data.error);
-                        }
-                    }
-                ).catch((error) => {
-                  // Handle any errors that occur
-                  alert(error.message);
-                  console.error('Error:', error);
-              }).finally(() => {
-                // Always make sure to unset the error message
-              });
-              }
+        console.log('Fetching Verify API');
+        try {
+          const response = await fetch(NGROK_TUNNEL+"/verify", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              firstName: fdata.firstName, 
+              lastName: fdata.lastName,
+              dayOfBirth: fdata.dayOfBirth,
+              monthOfBirth: fdata.monthOfBirth,
+              yearOfBirth: fdata.yearOfBirth,
+              mobileNumber: fdata.mobileNumber,
+              email: fdata.email,
+              password: fdata.password
+            })
+          });
+        
+          const data = await response.json();
+        
+          if (data.error === 'Invalid Credentials') {
+            alert('Invalid Credentials');
+            setErrorMsg('Invalid Credentials');
+            navigation.navigate('Register');
+          } else if (data.message === "Verification Code Sent to your Email") {
+            alert(data.message);
+            navigation.navigate('Verify', { userdata: data.udata });
+          } else {
+            alert(data.error);
+            setErrorMsg(data.error);
+          }
+        } catch (error) {
+          // Handle any errors that occur
+          alert(error.message);
+          console.error('Error:', error);
+        } finally {
+          // Always make sure to unset the error message
+        }}
       }
   }
 

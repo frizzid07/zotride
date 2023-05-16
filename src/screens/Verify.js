@@ -40,30 +40,31 @@ const Verify = ({ navigation, route }) => {
                 password: userdata.user[0]?.password
             }
 
-            await fetch(NGROK_TUNNEL+"/register", {
-                method: 'POST',
-                headers: {
+            console.log('Fetching Register API');
+            try {
+                const response = await fetch(NGROK_TUNNEL + "/register", {
+                  method: 'POST',
+                  headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(fdata)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.message === 'User Registered Successfully') {
-                        alert(data.message);
-                        navigation.navigate('Login');
-                    }
-                    else {
-                        alert("Something went wrong !! Try Signing Up Again");
-                        navigation.navigate('Register');
-                    }
-                })
-                .catch((error) => {
-                    // Handle any errors that occur
-                    alert(error);
-                    console.error(error);
+                  },
+                  body: JSON.stringify(fdata)
                 });
+              
+                const data = await response.json();
+                console.log(data);
+              
+                if (data.message === 'User Registered Successfully') {
+                  alert(data.message);
+                  navigation.navigate('Login');
+                } else {
+                  alert("Something went wrong !! Try Signing Up Again");
+                  navigation.navigate('Register');
+                }
+              } catch (error) {
+                // Handle any errors that occur
+                alert(error);
+                console.error(error);
+              } finally {}              
         }
         else {
             setErrorMsg('Incorrect code');
