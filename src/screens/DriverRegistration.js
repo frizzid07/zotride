@@ -24,9 +24,10 @@ import { NGROK_TUNNEL } from "@env";
 
 const DriverRegistration = ({ navigation }) => {
   const [errorMsg, setErrorMsg] = useState(null);
-  const [userData, setUserData] = useState(getUserData());
+
   //This function will be used to fetch the user's id
   function getUserData() {
+    console.log("Trying to get User Data");
     return { id: "test" };
   }
 
@@ -35,29 +36,31 @@ const DriverRegistration = ({ navigation }) => {
   }
 
   const [data, setData] = useState({
-    userId: "",
+    userId: "test",
     licenseNumber: "",
-    vehicleNumber: "",
-    vehicleCompany: "",
-    vehicleModel: "",
-    vehicleColor: "",
-    vehicleCapacity: "",
+    vehicleInformation: {
+      vehicleNumber: "",
+      vehicleCompany: "",
+      vehicleModel: "",
+      vehicleColor: "",
+      vehicleCapacity: "",
+    },
   });
 
   function registerDriver() {
     if (
       data.licenseNumber == "" ||
-      data.vehicleNumber == "" ||
-      data.vehicleCompany == "" ||
-      data.vehicleModel == "" ||
-      data.vehicleColor == "" ||
-      data.vehicleCapacity == ""
+      data.vehicleInformation.vehicleNumber == "" ||
+      data.vehicleInformation.vehicleCompany == "" ||
+      data.vehicleInformation.vehicleModel == "" ||
+      data.vehicleInformation.vehicleColor == "" ||
+      data.vehicleInformation.vehicleCapacity == ""
     ) {
       setErrorMsg("Please Enter all Fields");
       return;
     }
-
     // Adding the obtained UserId
+
     setData({ ...data, userId: userData.id });
 
     console.log(data);
@@ -95,7 +98,15 @@ const DriverRegistration = ({ navigation }) => {
           style={input}
           placeholder="Vehicle Number"
           onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, vehicleNumber: text })}
+          onChangeText={(text) =>
+            setData({
+              ...data,
+              vehicleInformation: {
+                ...data.vehicleInformation,
+                vehicleNumber: text,
+              },
+            })
+          }
         />
 
         <Text style={styles.text}>Car Details</Text>
@@ -103,25 +114,57 @@ const DriverRegistration = ({ navigation }) => {
           style={input}
           placeholder="Company"
           onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, vehicleCompany: text })}
+          onChangeText={(text) =>
+            setData({
+              ...data,
+              vehicleInformation: {
+                ...data.vehicleInformation,
+                vehicleCompany: text,
+              },
+            })
+          }
         />
         <TextInput
           style={input}
           placeholder="Model"
           onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, vehicleModel: text })}
+          onChangeText={(text) =>
+            setData({
+              ...data,
+              vehicleInformation: {
+                ...data.vehicleInformation,
+                vehicleModel: text,
+              },
+            })
+          }
         />
         <TextInput
           style={input}
           placeholder="Color"
           onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, vehicleColor: text })}
+          onChangeText={(text) =>
+            setData({
+              ...data,
+              vehicleInformation: {
+                ...data.vehicleInformation,
+                vehicleColor: text,
+              },
+            })
+          }
         />
         <TextInput
           style={input}
           placeholder="Capacity"
           onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, vehicleCapacity: text })}
+          onChangeText={(text) =>
+            setData({
+              ...data,
+              vehicleInformation: {
+                ...data.vehicleInformation,
+                vehicleCapacity: text,
+              },
+            })
+          }
           keyboardType="number-pad"
         />
         <Pressable style={[submit, { marginTop: -5 }]}>

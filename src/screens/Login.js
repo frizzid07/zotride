@@ -35,8 +35,6 @@ const Login = ({ navigation }) => {
     // setLoading(true);
     // setSuccessMsg(false);
     // setErrorMsg(false);
-    console.log("Logging in");
-
     await fetch(NGROK_TUNNEL + "/login", {
       method: "POST",
       headers: {
