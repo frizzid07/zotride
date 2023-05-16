@@ -1,21 +1,25 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 
-require('./database');
-require('./models/User');
-require('dotenv').config();
+require("./database");
+require("./models/User");
+require("./models/Driver");
+require("dotenv").config();
 
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require("./routes/authRoutes");
 app.use(authRoutes);
-const requireToken = require('./middleware/authTokenRequired');
+const requireToken = require("./middleware/authTokenRequired");
 
-app.get('/', (req, res) => {
-    res.send(res.body);
-})
+const driverRegistration = require("./routes/driverRegistration");
+app.use(driverRegistration);
+
+app.get("/", (req, res) => {
+  res.send(res.body);
+});
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
-})
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
