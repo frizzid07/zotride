@@ -67,20 +67,19 @@ const DriverRegistration = ({ navigation }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
-
-      if (response.ok) {
+      const rdata = await response.json();
+      if (rdata.success) {
         console.log("Driver Registered Successfully");
         navigation.navigate("Driver");
       } else {
         console.log("Some error in registering");
+        navigation.navigate("DriverRegistration");
       }
     } catch (error) {
       console.log("Some error in registering as Driver " + error);
-    }
-
-    navigation.navigate("Driver");
+    } finally {}
   }
 
   return (
@@ -194,7 +193,7 @@ export default DriverRegistration;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "100%",
+    height: "100%"
   },
   textContainer: {
     display: "flex",

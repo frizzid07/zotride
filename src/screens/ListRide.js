@@ -64,11 +64,14 @@ const ListRide = ({ navigation }) => {
         body: JSON.stringify(data),
       });
 
-      if (response.ok) {
+      const rdata = await response.json()
+
+      if (rdata.added) {
+        alert("Ride added successfully");
         console.log("Ride Added Successfully");
         navigation.navigate("Driver");
       } else {
-        console.log(response.json);
+        alert("Could not add ride");
       }
     } catch (error) {
       console.log("Some error in registering the Ride " + error);

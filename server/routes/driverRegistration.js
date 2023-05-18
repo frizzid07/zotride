@@ -8,16 +8,15 @@ require("dotenv").config();
 
 router.post("/checkDriverReg", async (req, res) => {
   const { userId } = req.body;
-  console.log(userId);
   try {
     const user = await Driver.findOne({ userId: userId });
 
     if (user) {
       console.log("Current User is a Driver");
-      return res.status(200).send({ found: 1 });
+      return res.status(200).send({ found: true });
     } else {
       console.log("Current User is not a Driver");
-      return res.status(200).send({ found: 0 });
+      return res.status(200).send({ found: false });
     }
   } catch (err) {
     console.log(err);
@@ -44,7 +43,7 @@ router.post("/driverRegistration", async (req, res) => {
   }
 
   console.log("success");
-  return res.status(200).send({ success: 1 });
+  return res.status(200).send({ success: true });
 });
 
 function validateInput(licenseNumber, userId, vehicleInformation) {

@@ -3,24 +3,27 @@ import { useState, createContext } from "react";
 
 import { NGROK_TUNNEL } from "@env";
 
-export const AuthContext = createContext({
-    token: '',
-    user: '',
-    isLoggedIn: false,
-    isLoading: false,
-    authenticate: () => {},
-    setIsLoggedIn: () => {},
-    logout: () => {}
-});
+// export const AuthContext = createContext({
+//     token: '',
+//     user: '',
+//     isLoggedIn: false,
+//     isLoading: false,
+//     authenticate: () => {},
+//     setIsLoggedIn: () => {},
+//     logout: () => {}
+// });
+
+export const AuthContext = createContext();
 
 export default AuthProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [token, setToken] = useState(null);
-    const [user, setUser] = useState(null);
+    const [token, setToken] = useState();
+    const [user, setUser] = useState();
     
     async function authenticate(authToken) {
         setIsLoading(true);
+        setIsLoggedIn(true);
         setToken(authToken);
         try {
             let checkUser = await fetch(NGROK_TUNNEL+"/auth", {
@@ -28,13 +31,12 @@ export default AuthProvider = ({children}) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: authToken
+                body: JSON.stringify(authToken)
             });
             const userData = await checkUser.json();
-            setUser(userData.userData);
-            if(user) {
-                await AsyncStorage.setItem('user', JSON.stringify(user));
-                setIsLoggedIn(true);
+            if(userData.userData !== undefined) {
+                setUser(userData.userData);
+                await AsyncStorage.setItem('user', JSON.stringify(userData.userData));
             }
         } catch(error) {
             console.log(`Login Error: ${error}`)

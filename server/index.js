@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 const authRoutes = require("./routes/authRoutes");
 app.use(authRoutes);
-const requireToken = require("./middleware/authTokenRequired");
+// const requireToken = require("./middleware/authTokenRequired");
 
 const driverRegistration = require("./routes/driverRegistration");
 app.use(driverRegistration);

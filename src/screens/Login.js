@@ -27,7 +27,7 @@ const Login = ({ navigation }) => {
   async function loginUser() {
     try {
       setIsChecking(true);
-
+      console.log(`In Login ${data}, ${JSON.stringify(data)}`);
       const response = await fetch(NGROK_TUNNEL + "/login", {
         method: 'POST',
         headers: {
@@ -35,11 +35,14 @@ const Login = ({ navigation }) => {
         },
         body: JSON.stringify(data)
       });
-      const rdata = await response.json();
-      let authenticated = await context.authenticate(JSON.stringify(rdata));
-      if (authenticated) {
-        setIsSuccessful(true);
-        alert('Logged in successfully');
+      if(response.ok) {
+        const rdata = await response.json();
+        console.log(`In Login ${rdata}, ${JSON.stringify(rdata)}`)
+        let authenticated = await context.authenticate(rdata);
+        if (authenticated) {
+          setIsSuccessful(true);
+          alert(`Logged in successfully`);
+        }
       }
     } catch (error) {
       setIsSuccessful(false);

@@ -29,8 +29,7 @@ const Driver = ({ navigation }) => {
         <Text style={styles.text}>Welcome {context.user.firstName}</Text>
         <Pressable
           style={[submit, { marginTop: 20 }]}
-          onPress={() => navigation.navigate("ListRide")}
-        >
+          onPress={() => navigation.navigate("ListRide")}>
           <Text style={styles.text}>Start a new trip</Text>
         </Pressable>
       </View>

@@ -215,21 +215,23 @@ router.post("/login", async (req, res) => {
       .json({ error: "Please enter valid user credentials" });
   }
 
-  try {
-    bcrypt.compare(password, savedUser.password, (err, result) => {
-      if (result) {
-        console.log("Password matched");
-        const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET);
-        res.send({ token });
-      } else {
-        console.log("Password does not match");
-        return res.status(422).json({ error: "Invalid Credentials" });
-      }
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(422).send({ error: err.message });
-  }
+    try {
+        bcrypt.compare(password, savedUser.password, (err, result) => {
+            if (result) {
+                console.log("Password matched");
+                const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET);
+                res.send({token});
+            }
+            else {
+                console.log('Password does not match');
+                return res.status(422).json({ error: "Invalid Credentials" });
+            }
+        })
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(422).send({error: err.message});
+    }
 });
 
 router.post("/auth", async (req, res) => {
@@ -249,7 +251,7 @@ router.post("/auth", async (req, res) => {
     const { _id } = payload;
     var userData = await User.findById(_id).lean().exec();
     try {
-      return res.json({ userData });
+      res.send({ userData });
     } catch (error) {
       console.log(error);
       return res.status(422).send({ error: error.message });

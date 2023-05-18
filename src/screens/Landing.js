@@ -37,7 +37,7 @@ const Landing = ({ navigation }) => {
       const result = await response.json();
       console.log(result);
 
-      if (result.found == 1) {
+      if (result.found) {
         console.log("Current user is Registered Driver");
         return true;
       } else {
@@ -53,7 +53,8 @@ const Landing = ({ navigation }) => {
   async function driverRole() {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
-    if (await isRegisteredDriver()) {
+    const checkDriver = await isRegisteredDriver();
+    if (checkDriver) {
       navigation.navigate("Driver");
     } else {
       navigation.navigate("DriverRegistration");
