@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View, Image, Button, Pressable, Alert, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 // Images
 import background from '../../assets/background.jpg';
@@ -9,6 +9,7 @@ import logo from '../../assets/logo.png';
 import {submit} from '../common/button';
 import {input} from '../common/input';
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {NGROK_TUNNEL} from "@env";
 
 const Verify = ({ navigation, route }) => {
@@ -29,41 +30,41 @@ const Verify = ({ navigation, route }) => {
         }
 
         else if (userCode == actualCode) {
-            const fdata = {
-                firstName: userdata.user[0]?.firstName,
-                lastName: userdata.user[0]?.lastName,
-                dayOfBirth: userdata.user[0]?.dayOfBirth,
-                monthOfBirth: userdata.user[0]?.monthOfBirth,
-                yearOfBirth: userdata.user[0]?.yearOfBirth,
-                mobileNumber: userdata.user[0]?.mobileNumber,
-                email: userdata.user[0]?.email,
-                password: userdata.user[0]?.password
-            }
-
-            await fetch(NGROK_TUNNEL+"/register", {
-                method: 'POST',
-                headers: {
+            console.log('Fetching Register API');
+            try {
+                const response = await fetch(NGROK_TUNNEL + "/register", {
+                  method: 'POST',
+                  headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(fdata)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.message === 'User Registered Successfully') {
-                        alert(data.message);
-                        navigation.navigate('Login');
-                    }
-                    else {
-                        alert("Something went wrong !! Try Signing Up Again");
-                        navigation.navigate('Register');
-                    }
-                })
-                .catch((error) => {
-                    // Handle any errors that occur
-                    alert(error);
-                    console.error(error);
+                  },
+                  body: JSON.stringify({
+                    firstName: userdata.user[0]?.firstName,
+                    lastName: userdata.user[0]?.lastName,
+                    dayOfBirth: userdata.user[0]?.dayOfBirth,
+                    monthOfBirth: userdata.user[0]?.monthOfBirth,
+                    yearOfBirth: userdata.user[0]?.yearOfBirth,
+                    mobileNumber: userdata.user[0]?.mobileNumber,
+                    email: userdata.user[0]?.email,
+                    password: userdata.user[0]?.password
+                    })
                 });
+              
+                const data = await response.json();
+                console.log(data);
+              
+                if (data.message === 'User Registered Successfully') {
+                  alert(data.message);
+                  await AsyncStorage.setItem('token', data.token);
+                  navigation.navigate('Login');
+                } else {
+                  alert("Something went wrong !! Try Signing Up Again");
+                  navigation.navigate('Register');
+                }
+              } catch (error) {
+                // Handle any errors that occur
+                alert(error);
+                console.error(error);
+              } finally {}              
         }
         else {
             setErrorMsg('Incorrect code');
