@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View, Image, Button, Pressable, Alert, TouchableOpacity } from 'react-native';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 // Images
 import background from '../../assets/background.jpg';
@@ -11,11 +11,11 @@ import { input } from '../common/input';
 
 import { AuthContext } from '../../server/context/authContext';
 import { NGROK_TUNNEL } from "@env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
   const context = useContext(AuthContext);
-  
   const [isChecking, setIsChecking] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -23,6 +23,27 @@ const Login = ({ navigation }) => {
     username: '',
     password: ''
   });
+
+  useEffect(() => {
+    const checkUser = async () => {
+    try {
+      setIsChecking(true);
+      const token = await AsyncStorage.getItem('token');
+      if(token) {
+        let authenticated = await context.authenticate({token: token});
+        if (authenticated) {
+          setIsSuccessful(true);
+          alert(`Logged in to registered account`);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsChecking(false);
+    }
+    }
+    checkUser();
+  }, []);
 
   async function loginUser() {
     try {
@@ -35,20 +56,22 @@ const Login = ({ navigation }) => {
         },
         body: JSON.stringify(data)
       });
+      console.log(response.ok);
       if(response.ok) {
         const rdata = await response.json();
-        console.log(`In Login ${rdata}, ${JSON.stringify(rdata)}`)
+        console.log(rdata);
         let authenticated = await context.authenticate(rdata);
         if (authenticated) {
+          await AsyncStorage.setItem('token', JSON.stringify(rdata.token));
           setIsSuccessful(true);
           alert(`Logged in successfully`);
         }
       }
     } catch (error) {
       setIsSuccessful(false);
+      setErrorMsg(error);
       console.error(error);
       alert(error);
-      setErrorMsg(error);
     } finally {
       setIsChecking(false);
     }
@@ -79,7 +102,7 @@ const Login = ({ navigation }) => {
     </View>
   )};
 
-export default Login
+export default Login;
 
 const styles = StyleSheet.create({
     container: {

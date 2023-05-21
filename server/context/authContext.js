@@ -1,30 +1,22 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 
 import { NGROK_TUNNEL } from "@env";
 
-// export const AuthContext = createContext({
-//     token: '',
-//     user: '',
-//     isLoggedIn: false,
-//     isLoading: false,
-//     authenticate: () => {},
-//     setIsLoggedIn: () => {},
-//     logout: () => {}
-// });
-
 export const AuthContext = createContext();
 
-export default AuthProvider = ({children}) => {
+const AuthProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState();
     const [user, setUser] = useState();
+    const [driver, setDriver] = use
     
     async function authenticate(authToken) {
         setIsLoading(true);
         setIsLoggedIn(true);
-        setToken(authToken);
+        setToken(JSON.stringify(authToken));
+        console.log(`In authcontext ${JSON.stringify(authToken)}`);
         try {
             let checkUser = await fetch(NGROK_TUNNEL+"/auth", {
                 method: 'POST',
@@ -34,7 +26,8 @@ export default AuthProvider = ({children}) => {
                 body: JSON.stringify(authToken)
             });
             const userData = await checkUser.json();
-            if(userData.userData !== undefined) {
+            console.log(userData);
+            if(userData !== undefined) {
                 setUser(userData.userData);
                 await AsyncStorage.setItem('user', JSON.stringify(userData.userData));
             }
@@ -50,8 +43,13 @@ export default AuthProvider = ({children}) => {
         setIsLoading(true);
         try {
             await AsyncStorage.removeItem('user');
+            const token = await AsyncStorage.getItem('token');
+            if(token) {
+                await AsyncStorage.removeItem('token');
+            }
             setIsLoggedIn(false);
             setToken(null);
+            setUser(null);
         } catch(error) {
             console.log(`Logout Error: ${error}`)
         } finally {
@@ -76,6 +74,7 @@ export default AuthProvider = ({children}) => {
     );
 }
 
+export default AuthProvider;
 
 // export const AuthProvider = ({children}) => {
 //     const [isLoading, setIsLoading] = useState(false);

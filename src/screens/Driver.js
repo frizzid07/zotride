@@ -26,7 +26,7 @@ const Driver = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Welcome")}>
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
-        <Text style={styles.text}>Welcome {context.user.firstName}</Text>
+        <Text style={styles.text}>Welcome, {context.user.firstName}</Text>
         <Pressable
           style={[submit, { marginTop: 20 }]}
           onPress={() => navigation.navigate("ListRide")}>

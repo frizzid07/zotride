@@ -8,6 +8,7 @@ require("dotenv").config();
 
 router.post("/checkDriverReg", async (req, res) => {
   const { userId } = req.body;
+  console.log(userId);
   try {
     const user = await Driver.findOne({ userId: userId });
 
@@ -42,6 +43,18 @@ router.post("/driverRegistration", async (req, res) => {
     return res.status(422).send({ error: err.message });
   }
 
+  console.log("success");
+  return res.status(200).send({ success: true });
+});
+
+router.put("/driverRegistration", async (req, res) => {
+  const { licenseNumber, userId, vehicleInformation } = req.body;
+  try {
+    console.log(`User ID ${userId}`)
+    await User.findByIdAndUpdate(userId, {$set: {isDriver: true}}, {new: true, useFindAndModify: false});
+  } catch (err) {
+    return res.status(422).send({ error: err.message });
+  }
   console.log("success");
   return res.status(200).send({ success: true });
 });

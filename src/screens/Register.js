@@ -12,6 +12,7 @@ import {input} from '../common/input';
 import {NGROK_TUNNEL} from "@env";
 
 const Register = ({ navigation }) => {
+  const [confirm, setConfirm] = useState();
   const [fdata, setFdata] = useState({
     firstName: '',
     lastName: '',
@@ -21,7 +22,6 @@ const Register = ({ navigation }) => {
     mobileNumber: '',
     email: '',
     password: '',
-    cpassword: ''
   });
 
   const [errorMsg, setErrorMsg] = useState(null);
@@ -35,12 +35,12 @@ const Register = ({ navigation }) => {
         fdata.mobileNumber == '' ||
         fdata.email == '' ||
         fdata.password == '' ||
-        fdata.cpassword == '') {
+        confirm == '') {
         setErrorMsg('All fields are required');
         return;
     }
     else {
-        if (fdata.password != fdata.cpassword) {
+        if (fdata.password != confirm) {
             setErrorMsg('Password and Confirm Password must be same');
             return;
         }
@@ -52,19 +52,11 @@ const Register = ({ navigation }) => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-              firstName: fdata.firstName, 
-              lastName: fdata.lastName,
-              dayOfBirth: fdata.dayOfBirth,
-              monthOfBirth: fdata.monthOfBirth,
-              yearOfBirth: fdata.yearOfBirth,
-              mobileNumber: fdata.mobileNumber,
-              email: fdata.email,
-              password: fdata.password
-            })
+            body: JSON.stringify(fdata)
           });
         
           const data = await response.json();
+          console.log(data);
         
           if (data.error === 'Invalid Credentials') {
             alert('Invalid Credentials');
@@ -121,7 +113,7 @@ const Register = ({ navigation }) => {
         <TextInput style = {input} placeholder="Password" secureTextEntry={true} onPressIn={() => setErrorMsg(null)}
             onChangeText={(text) => setFdata({ ...fdata, password: text })}/>
         <TextInput style = {input} placeholder="Confirm Password" secureTextEntry={true} onPressIn={() => setErrorMsg(null)}
-            onChangeText={(text) => setFdata({ ...fdata, cpassword: text })}/>
+            onChangeText={(text) => setConfirm(text)}/>
         <Text style={{fontSize: 15, color: '#000', marginTop: 5, marginBottom: 10}}>Already have an account?&nbsp;
           <Text style={{color: '#004aad'}} onPress={() => navigation.navigate('Login')}>Login instead!</Text>
         </Text>

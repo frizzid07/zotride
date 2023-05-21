@@ -145,7 +145,6 @@ router.post("/verify", (req, res) => {
   ) {
     return res.status(422).json({ error: "Please add all the fields" });
   }
-
   var exists = false;
   User.findOne({ mobileNumber: mobileNumber }).then(async (savedUser) => {
     if (savedUser) {

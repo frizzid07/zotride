@@ -6,7 +6,7 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NGROK_TUNNEL } from "@env";
 
 // Images
@@ -17,6 +17,7 @@ import logo from "../../assets/logo.png";
 import { submit } from "../common/button";
 
 import { AuthContext } from "../../server/context/authContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Landing = ({ navigation }) => {
@@ -54,7 +55,12 @@ const Landing = ({ navigation }) => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
     const checkDriver = await isRegisteredDriver();
-    if (checkDriver) {
+    console.log(checkDriver);
+    if(context.user.isDriver) {
+      navigation.navigate("Driver");
+    }
+    else if (checkDriver) {
+      context.user.isDriver = true;
       navigation.navigate("Driver");
     } else {
       navigation.navigate("DriverRegistration");

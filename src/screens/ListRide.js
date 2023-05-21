@@ -64,7 +64,8 @@ const ListRide = ({ navigation }) => {
         body: JSON.stringify(data),
       });
 
-      const rdata = await response.json()
+      const rdata = await response.json();
+      console.log(rdata);
 
       if (rdata.added) {
         alert("Ride added successfully");

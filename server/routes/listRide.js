@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Ride = mongoose.model("Ride");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 router.post("/listRide", async (req, res) => {

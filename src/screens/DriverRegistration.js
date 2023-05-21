@@ -70,8 +70,23 @@ const DriverRegistration = ({ navigation }) => {
         body: JSON.stringify(data)
       });
       const rdata = await response.json();
+      console.log(rdata);
       if (rdata.success) {
         console.log("Driver Registered Successfully");
+        try {
+          const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+          });
+          const rrdata = await response.json();
+          console.log(rrdata);
+          context.user.isDriver = true;
+        } catch(error) {
+          console.error(error);
+        }
         navigation.navigate("Driver");
       } else {
         console.log("Some error in registering");
