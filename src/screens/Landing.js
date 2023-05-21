@@ -51,19 +51,21 @@ const Landing = ({ navigation }) => {
     }
   }
 
-  async function driverRole() {
+  const driverRole = async () => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
-    const checkDriver = await isRegisteredDriver();
-    console.log(checkDriver);
     if(context.user.isDriver) {
       navigation.navigate("Driver");
     }
-    else if (checkDriver) {
-      context.user.isDriver = true;
-      navigation.navigate("Driver");
-    } else {
-      navigation.navigate("DriverRegistration");
+    else {
+      const checkDriver = await isRegisteredDriver();
+      console.log(checkDriver);
+      
+      if (checkDriver) {
+        navigation.navigate("Driver");
+      } else {
+        navigation.navigate("DriverRegistration");
+      }
     }
   }
 

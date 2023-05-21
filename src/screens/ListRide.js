@@ -138,12 +138,10 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   textContainer: {
-    display: "flex",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-start",
-    height: "100%",
+    height: "100%"
   },
   innerContainer: {
     display: "flex",

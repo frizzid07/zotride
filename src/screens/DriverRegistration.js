@@ -24,8 +24,8 @@ import { NGROK_TUNNEL } from "@env";
 import { AuthContext } from "../../server/context/authContext";
 
 const DriverRegistration = ({ navigation }) => {
-  const [errorMsg, setErrorMsg] = useState(null);
   const context = useContext(AuthContext);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   function clearErrMsg() {
     setErrorMsg(null);
@@ -208,12 +208,10 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   textContainer: {
-    display: "flex",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-start",
-    height: "100%",
+    height: "100%"
   },
   innerContainer: {
     display: "flex",
