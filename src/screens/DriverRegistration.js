@@ -81,9 +81,6 @@ const DriverRegistration = ({ navigation }) => {
             },
             body: JSON.stringify(data)
           });
-          const rrdata = await response.json();
-          console.log(rrdata);
-          context.user.isDriver = true;
         } catch(error) {
           console.error(error);
         }

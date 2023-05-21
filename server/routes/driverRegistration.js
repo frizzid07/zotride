@@ -51,12 +51,19 @@ router.put("/driverRegistration", async (req, res) => {
   const { licenseNumber, userId, vehicleInformation } = req.body;
   try {
     console.log(`User ID ${userId}`)
-    await User.findByIdAndUpdate(userId, {$set: {isDriver: true}}, {new: true, useFindAndModify: false});
+    const updatedUser = await User.findByIdAndUpdate(userId, {$set: {isDriver: true}}, {new: true, useFindAndModify: false});
+
+    if (!updatedUser) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+
+    console.log('User registration updated successfully');
+    return res.status(200).send();
+
   } catch (err) {
-    return res.status(422).send({ error: err.message });
+    console.error(err);
+    return res.status(500).send({ error: 'Failed to update user' });
   }
-  console.log("success");
-  return res.status(200).send({ success: true });
 });
 
 function validateInput(licenseNumber, userId, vehicleInformation) {

@@ -10,7 +10,6 @@ const AuthProvider = ({children}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState();
     const [user, setUser] = useState();
-    const [driver, setDriver] = use
     
     async function authenticate(authToken) {
         setIsLoading(true);
@@ -75,65 +74,3 @@ const AuthProvider = ({children}) => {
 }
 
 export default AuthProvider;
-
-// export const AuthProvider = ({children}) => {
-//     const [isLoading, setIsLoading] = useState(false);
-//     const [user, setUser] = useState(null);
-
-//     const login = async(data) => {
-//         setIsLoading(true);
-//         await fetch(NGROK_TUNNEL+"/login", {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(data)
-//         })
-//             .then(res => res.json()).then(
-//                 res => {
-//                     console.log(res);
-//                     if (res.error) {
-//                         alert(res.error);
-//                     }
-//                     else {
-//                         alert('Logged in successfully');
-//                         setUser(res.token);
-//                         console.log('Logged in successfully with user '+res.token);
-//                         AsyncStorage.setItem('user', res.token);
-//                     }
-//                 }
-//             ).catch((error) => {
-//               // Handle any errors that occur
-//               console.error('Error:', error);
-//           }).finally (()=> {
-//             setIsLoading(false);
-//           });
-//     }
-
-    // const logout = async() => {
-    //     try {
-    //         setIsLoading(true);
-    //         await AsyncStorage.removeItem('user');
-    //         setUser(null);
-    //         setIsLoading(false);
-    //     }
-    //     catch (error) {
-    //         console.log(`Login Error ${error}`)
-    //     }
-    // }
-
-    // const isLoggedIn = async() => {
-    //     try {
-    //         setIsLoading(true);
-    //         let user = await AsyncStorage.getItem('user');
-    //         setUser(user);
-    //         setIsLoading(false);
-    //     }
-    //     catch (error) {
-    //         console.log(`Login Error ${error}`)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     isLoggedIn();
-    // }, []);
