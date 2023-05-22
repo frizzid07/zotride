@@ -23,9 +23,15 @@ function SetLocation(props) {
     longitudeDelta: lngDelta,
   });
 
-  function changeSearchRegion(details) {
+  const [description, setDescription] = useState("Not Selected");
+
+  function changeSearchRegion(data, details) {
+    // console.log(data);
+    // console.log(details);
+    const desc = data.description;
     const lat = details.geometry.location.lat;
     const lng = details.geometry.location.lng;
+    setDescription(desc);
     setSearchRegion({
       latitude: lat,
       longitude: lng,
@@ -41,13 +47,22 @@ function SetLocation(props) {
     });
   }
 
+  function confirmLocation() {
+    alert("Location Confirmed");
+    props.confirm({
+      description: description,
+      latitude: searchRegion.latitude,
+      longitude: searchRegion.longitude,
+    });
+  }
+
   return (
     <Modal visible={props.visible} animationType="slide">
       <View style={styles.mapContainer}>
         <GooglePlacesAutocomplete
           placeholder="Search"
           fetchDetails={true}
-          onPress={(data, details) => changeSearchRegion(details)}
+          onPress={(data, details) => changeSearchRegion(data, details)}
           query={{
             key: "AIzaSyCZ3WDFCoMW-7VjiNGQq1fqEXvPwrj_Lpg",
             language: "en",
@@ -61,12 +76,7 @@ function SetLocation(props) {
       </View>
       <View style={styles.buttonsContainer}>
         <Button title="Return" onPress={props.closeModal}></Button>
-        <Button
-          title="Confirm"
-          onPress={() => {
-            console.log("Set Locarion");
-          }}
-        ></Button>
+        <Button title="Confirm" onPress={confirmLocation}></Button>
       </View>
     </Modal>
   );

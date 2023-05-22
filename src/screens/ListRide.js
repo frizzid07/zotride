@@ -34,6 +34,9 @@ const ListRide = ({ navigation }) => {
   const [isStartLocVisible, setStartLocVisible] = useState(false);
   const [isEndLocVisible, setEndLocVisible] = useState(false);
 
+  const [startLocDesc, setStartLocDesc] = useState("Start Location");
+  const [endLocDesc, setEndLocDesc] = useState("End Location");
+
   function startLocOpenHandler() {
     setStartLocVisible(true);
   }
@@ -42,16 +45,56 @@ const ListRide = ({ navigation }) => {
     setStartLocVisible(false);
   }
 
+  function endLocOpenHandler() {
+    setEndLocVisible(true);
+  }
+
+  function endLocCloseHandler() {
+    setEndLocVisible(false);
+  }
+
   const [data, setData] = useState({
     rideId: "test",
     driverId: context.user._id,
     passengers: [],
-    startLocation: "",
-    endLocation: "",
+    startLocation: {
+      description: "",
+      latitude: "",
+      longitude: "",
+    },
+    endLocation: { description: "", latitude: "", longitude: "" },
     startTime: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
     rideCost: "",
     capacity: "",
   });
+
+  function setStartLocation(object) {
+    console.log(object);
+    setStartLocDesc(object.description);
+    setData({
+      ...data,
+      startLocation: {
+        ...data.startLocation,
+        description: object.description,
+        latitude: object.latitude,
+        longitude: object.longitude,
+      },
+    });
+  }
+
+  function setEndLocation(object) {
+    console.log(object);
+    setEndLocDesc(object.description);
+    setData({
+      ...data,
+      endLocation: {
+        ...data.endLocation,
+        description: object.description,
+        latitude: object.latitude,
+        longitude: object.longitude,
+      },
+    });
+  }
 
   function clearErrMsg() {
     setErrorMsg(null);
@@ -59,8 +102,8 @@ const ListRide = ({ navigation }) => {
 
   async function registerRide() {
     if (
-      data.startLocation == "" ||
-      data.endLocation == "" ||
+      data.startLocation.description == "" ||
+      data.endLocation.description == "" ||
       data.startTime == "" ||
       data.rideCost == "" ||
       data.capacity == ""
@@ -70,6 +113,9 @@ const ListRide = ({ navigation }) => {
     }
 
     console.log(data);
+
+    return;
+
     try {
       const response = await fetch(NGROK_TUNNEL + "/listRide", {
         method: "POST",
@@ -110,27 +156,49 @@ const ListRide = ({ navigation }) => {
             {errorMsg}
           </Text>
         ) : null}
-        <Text style={styles.text}>EndPoints</Text>
-        {/* <TextInput
-          style={input}
-          placeholder="Start Location"
-          onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, startLocation: text })}
-        /> */}
-        <Button
-          title="Add Start Location"
-          onPress={startLocOpenHandler}
-        ></Button>
-        <SetLocation
-          visible={isStartLocVisible}
-          closeModal={startLocCloseHandler}
-        ></SetLocation>
-        <TextInput
-          style={input}
-          placeholder="End Location"
-          onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, endLocation: text })}
-        />
+        <Text style={[styles.text, { marginBottom: 10 }]}>EndPoints</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <Pressable
+            style={[styles.locButton, { margin: 5, height: 50, flex: 1 }]}
+          >
+            <Text style={styles.buttontext} onPress={startLocOpenHandler}>
+              Add Start Point
+            </Text>
+          </Pressable>
+          <Text style={{ flex: 5, alignSelf: "center" }}>{startLocDesc}</Text>
+          <SetLocation
+            visible={isStartLocVisible}
+            confirm={setStartLocation}
+            closeModal={startLocCloseHandler}
+          ></SetLocation>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <Pressable
+            style={[styles.locButton, { margin: 5, height: 50, flex: 1 }]}
+          >
+            <Text style={styles.buttontext} onPress={endLocOpenHandler}>
+              Add End Point
+            </Text>
+          </Pressable>
+          <Text style={{ flex: 5, alignSelf: "center" }}>{endLocDesc}</Text>
+          <SetLocation
+            visible={isEndLocVisible}
+            confirm={setEndLocation}
+            closeModal={endLocCloseHandler}
+          ></SetLocation>
+        </View>
         <Text style={styles.text}>Other Details</Text>
         <TextInput
           style={input}
@@ -187,6 +255,10 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: "#000",
   },
+  buttontext: {
+    fontSize: 13,
+    color: "#000",
+  },
   logo: {
     width: "20%",
     height: undefined,
@@ -195,5 +267,23 @@ const styles = StyleSheet.create({
     borderColor: "#ffde59",
     borderRadius: 5,
     marginBottom: 10,
+  },
+  locButton: {
+    backgroundColor: "#fff",
+    color: "#000",
+    padding: 5,
+    borderRadius: 6,
+    borderColor: "#000",
+    borderWidth: 2,
+    fontSize: 25,
+    fontFamily: "Roboto",
+    fontWeight: "bold",
+    minWidth: 100,
+    minHeight: 50,
+    textAlign: "center",
+    margin: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
   },
 });
