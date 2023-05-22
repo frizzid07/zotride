@@ -11,6 +11,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useContext } from "react";
+import MapView from "react-native-maps";
+
+import SetLocation from "../modals/SetLocation";
 
 // Images
 import background from "../../assets/background.jpg";
@@ -26,6 +29,17 @@ import { AuthContext } from "../../server/context/authContext";
 const ListRide = ({ navigation }) => {
   const context = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const [isStartLocVisible, setStartLocVisible] = useState(false);
+  const [isEndLocVisible, setEndLocVisible] = useState(false);
+
+  function startLocOpenHandler() {
+    setStartLocVisible(true);
+  }
+
+  function startLocCloseHandler() {
+    setStartLocVisible(false);
+  }
 
   const [data, setData] = useState({
     rideId: "test",
@@ -93,12 +107,20 @@ const ListRide = ({ navigation }) => {
           </Text>
         ) : null}
         <Text style={styles.text}>EndPoints</Text>
-        <TextInput
+        {/* <TextInput
           style={input}
           placeholder="Start Location"
           onPressIn={clearErrMsg}
           onChangeText={(text) => setData({ ...data, startLocation: text })}
-        />
+        /> */}
+        <Button
+          title="Add Start Location"
+          onPress={startLocOpenHandler}
+        ></Button>
+        <SetLocation
+          visible={isStartLocVisible}
+          closeModal={startLocCloseHandler}
+        ></SetLocation>
         <TextInput
           style={input}
           placeholder="End Location"
