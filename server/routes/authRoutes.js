@@ -248,9 +248,10 @@ router.post("/auth", async (req, res) => {
         .json({ error: "You must be logged in, token invalid" });
     }
     const { _id } = payload;
-    var userData = await User.findById(_id).lean().exec();
+    const userData = await User.findById(_id).lean().exec();
+    console.log(userData);
     try {
-      res.send({ userData });
+        res.send({ userData });
     } catch (error) {
       console.log(error);
       return res.status(422).send({ error: error.message });

@@ -81,6 +81,8 @@ const DriverRegistration = ({ navigation }) => {
             },
             body: JSON.stringify(data)
           });
+          const rdata2 = await response2.json();
+          console.log(rdata2);
         } catch(error) {
           console.error(error);
         }

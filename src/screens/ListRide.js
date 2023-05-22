@@ -54,7 +54,6 @@ const ListRide = ({ navigation }) => {
       return;
     }
 
-    console.log(data);
     try {
       const response = await fetch(NGROK_TUNNEL + "/listRide", {
         method: "POST",
@@ -63,6 +62,7 @@ const ListRide = ({ navigation }) => {
         },
         body: JSON.stringify(data),
       });
+      console.log(response.ok)
 
       const rdata = await response.json();
       console.log(rdata);

@@ -19,6 +19,7 @@ const Login = ({ navigation }) => {
   const [isChecking, setIsChecking] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [user, setUser] = useState();
   const [data, setData] = useState({
     username: '',
     password: ''
@@ -28,13 +29,13 @@ const Login = ({ navigation }) => {
     const checkUser = async () => {
     try {
       setIsChecking(true);
-      const token = await AsyncStorage.getItem('token');
-      if(token) {
-        let authenticated = await context.authenticate({token: token});
-        if (authenticated) {
-          setIsSuccessful(true);
-          alert(`Logged in to registered account`);
-        }
+      let userVal = await AsyncStorage.getItem('user');
+      if(userVal) {
+        userVal = JSON.parse(userVal);
+        console.log(userVal);
+        setUser(userVal);
+        setData((data) => ({ ...data, username: userVal.email }));
+        setData((data) => ({ ...data, password: userVal.password }));
       }
     } catch (error) {
       console.error(error);
@@ -56,16 +57,20 @@ const Login = ({ navigation }) => {
         },
         body: JSON.stringify(data)
       });
-      console.log(response.ok);
-      if(response.ok) {
-        const rdata = await response.json();
-        console.log(rdata);
+      const rdata = await response.json();
+      console.log(rdata);
+      if (response.ok) {
+        console.log(`Token in Login ${JSON.stringify(rdata)}`)
         let authenticated = await context.authenticate(rdata);
         if (authenticated) {
           await AsyncStorage.setItem('token', JSON.stringify(rdata.token));
           setIsSuccessful(true);
           alert(`Logged in successfully`);
         }
+      }
+      else {
+        setErrorMsg(rdata.error);
+        alert('Login failed');
       }
     } catch (error) {
       setIsSuccessful(false);

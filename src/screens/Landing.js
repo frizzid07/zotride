@@ -18,11 +18,21 @@ import { submit } from "../common/button";
 
 import { AuthContext } from "../../server/context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Landing = ({ navigation }) => {
   const context = useContext(AuthContext);
-  // const token = route.params.userdata.token;
+  const [name, setName] = useState();
+
+  useEffect(() => {
+    const getUser = async() => {
+      let userVal = await AsyncStorage.getItem('user');
+      if(userVal) {
+        userVal = JSON.parse(userVal);
+        setName(userVal.firstName);
+      }
+    }
+    getUser();
+  }, [name]);
 
   async function isRegisteredDriver() {
     //Some API Call To check is user is a registered Driver
@@ -77,7 +87,7 @@ const Landing = ({ navigation }) => {
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
         <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
-          Welcome to ZotRide, {context.user.firstName}
+           Welcome to ZotRide, {name}
         </Text>
         <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
           Choose a Role

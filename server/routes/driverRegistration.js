@@ -58,7 +58,7 @@ router.put("/driverRegistration", async (req, res) => {
     }
 
     console.log('User registration updated successfully');
-    return res.status(200).send();
+    return res.status(200).send({updatedUser});
 
   } catch (err) {
     console.error(err);
