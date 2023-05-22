@@ -1,6 +1,7 @@
 import { View, TextInput, Button, StyleSheet, Modal, Text } from "react-native";
 import { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 function SetLocation(props) {
   const [mapRegion, setmapRegion] = useState({
@@ -11,8 +12,19 @@ function SetLocation(props) {
   });
 
   return (
-    <Modal visible={props.visible} animationType="slide" style={styles.modal}>
+    <Modal visible={props.visible} animationType="slide">
       <View style={styles.inputContainer}>
+        <GooglePlacesAutocomplete
+          placeholder="Search"
+          onPress={(data, details = null) => {
+            console.log(data, details);
+          }}
+          query={{
+            key: "AIzaSyCZ3WDFCoMW-7VjiNGQq1fqEXvPwrj_Lpg",
+            language: "en",
+          }}
+          styles={styles.autoComplete}
+        />
         <MapView style={styles.map} region={mapRegion}>
           <Marker coordinate={mapRegion} draggable={true}></Marker>
         </MapView>
@@ -27,17 +39,22 @@ function SetLocation(props) {
 export default SetLocation;
 
 const styles = StyleSheet.create({
-  modal: {
-    marginTop: 500,
-  },
   inputContainer: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
     marginBottom: 30,
     borderBottomWidth: 2,
     borderBottomColor: "pink",
+  },
+  autoComplete: {
+    container: {
+      flex: 0,
+      position: "absolute",
+      width: "100%",
+      zIndex: 1,
+    },
+    listView: {
+      backgroundColor: "white",
+    },
   },
   textBox: {
     borderWidth: 1,
