@@ -50,6 +50,7 @@ const ListRide = ({ navigation }) => {
     rideId: "test",
     driverId: context.user._id,
     passengers: [],
+    isActive: true,
     startLocation: {
       description: "",
       latitude: "",
