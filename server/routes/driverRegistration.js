@@ -66,6 +66,19 @@ router.put("/driverRegistration", async (req, res) => {
   }
 });
 
+router.get("/getDriver", async (req, res) => {
+  const id = req.query.driverId;
+  try {
+    const user = await User.findById(id).lean().exec();
+    console.log(user);
+    const driver = await Driver.findOne({ userId: id });
+    console.log(driver)
+    res.status(200).send({ user, driver });
+  } catch(error) {
+    return res.status(500).send({ error: error.message });
+  }
+})
+
 function validateInput(licenseNumber, userId, vehicleInformation) {
   if (!licenseNumber || !userId || !vehicleInformation) {
     return 0;

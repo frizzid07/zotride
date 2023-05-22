@@ -13,7 +13,6 @@ import {
 import React, { useState, useContext, useEffect } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-
 // Images
 import background from "../../assets/background.jpg";
 import logo from "../../assets/logo.png";
@@ -81,7 +80,7 @@ const FindRide = ({ navigation }) => {
     
           if (response.ok) {
             console.log("Ride found Successfully");
-            // navigation.navigate("Rides");
+            navigation.navigate("Rides", {rides: rdata});
           } else {
             alert("Could not find ride");
           }
