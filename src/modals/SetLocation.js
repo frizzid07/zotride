@@ -1,36 +1,72 @@
 import { View, TextInput, Button, StyleSheet, Modal, Text } from "react-native";
-import { useState } from "react";
+import React, { useState, createRef, useRef } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 function SetLocation(props) {
-  const [mapRegion, setmapRegion] = useState({
+  const latDelta = 0.0922;
+  const lngDelta = 0.0421;
+
+  const MapRef = React.useRef();
+
+  const [initialRegion, setinitialRegion] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+    latitudeDelta: latDelta,
+    longitudeDelta: lngDelta,
   });
+
+  const [searchRegion, setSearchRegion] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: latDelta,
+    longitudeDelta: lngDelta,
+  });
+
+  function changeSearchRegion(details) {
+    const lat = details.geometry.location.lat;
+    const lng = details.geometry.location.lng;
+    setSearchRegion({
+      latitude: lat,
+      longitude: lng,
+      latitudeDelta: latDelta,
+      longitudeDelta: lngDelta,
+    });
+    console.log("ChanginG Focus to new Address");
+    MapRef.current.animateToRegion({
+      latitude: lat,
+      longitude: lng,
+      latitudeDelta: latDelta,
+      longitudeDelta: lngDelta,
+    });
+  }
 
   return (
     <Modal visible={props.visible} animationType="slide">
-      <View style={styles.inputContainer}>
+      <View style={styles.mapContainer}>
         <GooglePlacesAutocomplete
           placeholder="Search"
-          onPress={(data, details = null) => {
-            console.log(data, details);
-          }}
+          fetchDetails={true}
+          onPress={(data, details) => changeSearchRegion(details)}
           query={{
             key: "AIzaSyCZ3WDFCoMW-7VjiNGQq1fqEXvPwrj_Lpg",
             language: "en",
+            components: "country:us",
           }}
           styles={styles.autoComplete}
         />
-        <MapView style={styles.map} region={mapRegion}>
-          <Marker coordinate={mapRegion} draggable={true}></Marker>
+        <MapView ref={MapRef} style={styles.map} initialRegion={searchRegion}>
+          <Marker coordinate={searchRegion} draggable={true}></Marker>
         </MapView>
       </View>
-      <View>
+      <View style={styles.buttonsContainer}>
         <Button title="Return" onPress={props.closeModal}></Button>
+        <Button
+          title="Confirm"
+          onPress={() => {
+            console.log("Set Locarion");
+          }}
+        ></Button>
       </View>
     </Modal>
   );
@@ -39,9 +75,9 @@ function SetLocation(props) {
 export default SetLocation;
 
 const styles = StyleSheet.create({
-  inputContainer: {
+  mapContainer: {
     flex: 1,
-    marginBottom: 30,
+    marginBottom: 10,
     borderBottomWidth: 2,
     borderBottomColor: "pink",
   },
@@ -62,8 +98,8 @@ const styles = StyleSheet.create({
     width: "90%",
     padding: 8,
   },
-  buttonsView: {
-    flexDirection: "row",
+  buttons: {
+    flex: 1,
   },
 
   button: {
@@ -73,5 +109,10 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginBottom: 10,
   },
 });

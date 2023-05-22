@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import React, { useState, useContext } from "react";
 import MapView from "react-native-maps";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import SetLocation from "../modals/SetLocation";
 
@@ -96,7 +97,10 @@ const ListRide = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background}></Image>
-      <ScrollView contentContainerStyle={styles.textContainer}>
+      <ScrollView
+        contentContainerStyle={styles.textContainer}
+        keyboardShouldPersistTaps="handled"
+      >
         <TouchableOpacity>
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
