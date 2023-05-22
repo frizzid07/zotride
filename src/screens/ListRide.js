@@ -10,9 +10,8 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useContext } from "react";
-import MapView from "react-native-maps";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import React, { useState, useContext, useEffect } from "react";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import SetLocation from "../modals/SetLocation";
 
@@ -33,24 +32,18 @@ const ListRide = ({ navigation }) => {
 
   const [isStartLocVisible, setStartLocVisible] = useState(false);
   const [isEndLocVisible, setEndLocVisible] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisible] = useState(false);
 
-  const [startLocDesc, setStartLocDesc] = useState("Start Location");
-  const [endLocDesc, setEndLocDesc] = useState("End Location");
+  const [startLocDesc, setStartLocDesc] = useState("Not Selected");
+  const [endLocDesc, setEndLocDesc] = useState("Not Selected");
+  const [startTime, setStartTime] = useState(new Date());
 
-  function startLocOpenHandler() {
-    setStartLocVisible(true);
+  function startLocVisibleHandler() {
+    setStartLocVisible(!isStartLocVisible);
   }
 
-  function startLocCloseHandler() {
-    setStartLocVisible(false);
-  }
-
-  function endLocOpenHandler() {
-    setEndLocVisible(true);
-  }
-
-  function endLocCloseHandler() {
-    setEndLocVisible(false);
+  function endLocVisibleHandler() {
+    setEndLocVisible(!isEndLocVisible);
   }
 
   const [data, setData] = useState({
@@ -63,7 +56,7 @@ const ListRide = ({ navigation }) => {
       longitude: "",
     },
     endLocation: { description: "", latitude: "", longitude: "" },
-    startTime: new Date(new Date().getTime() + 60 * 60 * 24 * 1000),
+    startTime: "",
     rideCost: "",
     capacity: "",
   });
@@ -100,6 +93,21 @@ const ListRide = ({ navigation }) => {
     setErrorMsg(null);
   }
 
+  function datePickerVisibleHandler() {
+    setTimePickerVisible(!isTimePickerVisible);
+  }
+
+  useEffect(() => {
+    setData({ ...data, startTime: startTime.toISOString().slice(0, -1) });
+  }, [startTime]);
+
+  const onDateChange = (selectedDate) => {
+    setTimePickerVisible(false);
+    if (selectedDate) {
+      setStartTime(selectedDate);
+    }
+  };
+
   async function registerRide() {
     if (
       data.startLocation.description == "" ||
@@ -113,7 +121,6 @@ const ListRide = ({ navigation }) => {
     }
 
     console.log(data);
-
     return;
 
     try {
@@ -156,7 +163,6 @@ const ListRide = ({ navigation }) => {
             {errorMsg}
           </Text>
         ) : null}
-        <Text style={[styles.text, { marginBottom: 10 }]}>EndPoints</Text>
         <View
           style={{
             flexDirection: "row",
@@ -167,7 +173,7 @@ const ListRide = ({ navigation }) => {
           <Pressable
             style={[styles.locButton, { margin: 5, height: 50, flex: 1 }]}
           >
-            <Text style={styles.buttontext} onPress={startLocOpenHandler}>
+            <Text style={styles.buttontext} onPress={startLocVisibleHandler}>
               Add Start Point
             </Text>
           </Pressable>
@@ -175,7 +181,7 @@ const ListRide = ({ navigation }) => {
           <SetLocation
             visible={isStartLocVisible}
             confirm={setStartLocation}
-            closeModal={startLocCloseHandler}
+            closeModal={startLocVisibleHandler}
           ></SetLocation>
         </View>
         <View
@@ -188,7 +194,7 @@ const ListRide = ({ navigation }) => {
           <Pressable
             style={[styles.locButton, { margin: 5, height: 50, flex: 1 }]}
           >
-            <Text style={styles.buttontext} onPress={endLocOpenHandler}>
+            <Text style={styles.buttontext} onPress={endLocVisibleHandler}>
               Add End Point
             </Text>
           </Pressable>
@@ -196,8 +202,32 @@ const ListRide = ({ navigation }) => {
           <SetLocation
             visible={isEndLocVisible}
             confirm={setEndLocation}
-            closeModal={endLocCloseHandler}
+            closeModal={endLocVisibleHandler}
           ></SetLocation>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <Pressable
+            style={[styles.locButton, { margin: 5, height: 50, flex: 1 }]}
+          >
+            <Text style={styles.buttontext} onPress={datePickerVisibleHandler}>
+              Start Time
+            </Text>
+          </Pressable>
+          <Text style={{ flex: 5, alignSelf: "center" }}>
+            {startTime.toLocaleString()}
+          </Text>
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="datetime"
+            onConfirm={onDateChange}
+            onCancel={datePickerVisibleHandler}
+          />
         </View>
         <Text style={styles.text}>Other Details</Text>
         <TextInput
@@ -214,7 +244,7 @@ const ListRide = ({ navigation }) => {
           onChangeText={(text) => setData({ ...data, capacity: text })}
           keyboardType="number-pad"
         />
-        <Pressable style={[submit, { marginTop: -5 }]}>
+        <Pressable style={[submit, { marginTop: 50 }]}>
           <Text style={styles.text} onPress={registerRide}>
             Register
           </Text>
