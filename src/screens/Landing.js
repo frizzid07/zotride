@@ -79,6 +79,10 @@ const Landing = ({ navigation }) => {
     }
   }
 
+  const passenger = () => {
+    navigation.navigate("FindRide");
+  }
+
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background}></Image>
@@ -96,9 +100,7 @@ const Landing = ({ navigation }) => {
           <Text style={styles.text}>Driver</Text>
         </Pressable>
         <Pressable
-          style={submit}
-          onPress={() => navigation.navigate("Passenger")}
-        >
+          style={submit} onPress={passenger}>
           <Text style={styles.text}>Passenger</Text>
         </Pressable>
         <Pressable

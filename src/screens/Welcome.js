@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, Button, Alert, Pressable, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // Images
 import background from '../../assets/background.jpg';
@@ -7,8 +7,21 @@ import logo from '../../assets/logo.png';
 
 // Common
 import {submit} from '../common/button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Welcome = ({ navigation }) => {
+  
+  useEffect(() => {
+    const clearAsyncStorage = async() => {
+      try {
+        await AsyncStorage.removeItem('user');
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      clearAsyncStorage();
+    }, []);
+
   return (
     <View style = {styles.container}>
       <Image style={styles.bg} source={background}></Image>
