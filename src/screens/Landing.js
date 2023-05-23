@@ -18,11 +18,21 @@ import { submit } from "../common/button";
 
 import { AuthContext } from "../../server/context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Landing = ({ navigation }) => {
   const context = useContext(AuthContext);
-  // const token = route.params.userdata.token;
+  const [name, setName] = useState();
+
+  useEffect(() => {
+    const getUser = async() => {
+      let userVal = await AsyncStorage.getItem('user');
+      if(userVal) {
+        userVal = JSON.parse(userVal);
+        setName(userVal.firstName);
+      }
+    }
+    getUser();
+  }, [name]);
 
   async function isRegisteredDriver() {
     //Some API Call To check is user is a registered Driver
@@ -53,19 +63,26 @@ const Landing = ({ navigation }) => {
     }
   }
 
-  async function driverRole() {
+  const driverRole = async () => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
-    const checkDriver = await isRegisteredDriver();
-    console.log(checkDriver);
-    if (context.user.isDriver) {
+    if(context.user.isDriver) {
       navigation.navigate("Driver");
-    } else if (checkDriver) {
-      context.user.isDriver = true;
-      navigation.navigate("Driver");
-    } else {
-      navigation.navigate("DriverRegistration");
     }
+    else {
+      const checkDriver = await isRegisteredDriver();
+      console.log(checkDriver);
+      
+      if (checkDriver) {
+        navigation.navigate("Driver");
+      } else {
+        navigation.navigate("DriverRegistration");
+      }
+    }
+  }
+
+  const passenger = () => {
+    navigation.navigate("FindRide");
   }
 
   return (
@@ -76,7 +93,7 @@ const Landing = ({ navigation }) => {
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
         <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
-          Welcome to ZotRide, {context.user.firstName}
+           Welcome to ZotRide, {name}
         </Text>
         <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
           Choose a Role
@@ -85,9 +102,7 @@ const Landing = ({ navigation }) => {
           <Text style={styles.text}>Driver</Text>
         </Pressable>
         <Pressable
-          style={submit}
-          onPress={() => navigation.navigate("Passenger")}
-        >
+          style={submit} onPress={passenger}>
           <Text style={styles.text}>Passenger</Text>
         </Pressable>
         <Pressable

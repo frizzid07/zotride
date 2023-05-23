@@ -29,6 +29,7 @@ const Login = ({ navigation }) => {
   const [isChecking, setIsChecking] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [user, setUser] = useState();
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -36,20 +37,15 @@ const Login = ({ navigation }) => {
 
   useEffect(() => {
     const checkUser = async () => {
-      try {
-        setIsChecking(true);
-        const token = await AsyncStorage.getItem("token");
-        if (token) {
-          let authenticated = await context.authenticate({ token: token });
-          if (authenticated) {
-            setIsSuccessful(true);
-            alert(`Logged in to registered account`);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsChecking(false);
+    try {
+      setIsChecking(true);
+      let userVal = await AsyncStorage.getItem('user');
+      if(userVal) {
+        userVal = JSON.parse(userVal);
+        console.log(userVal);
+        setUser(userVal);
+        setData((data) => ({ ...data, username: userVal.email }));
+        setData((data) => ({ ...data, password: userVal.password }));
       }
     };
     checkUser();
@@ -67,12 +63,10 @@ const Login = ({ navigation }) => {
         },
         body: JSON.stringify(data),
       });
-      console.log(response.ok);
-      console.log("Got some response");
+      const rdata = await response.json();
+      console.log(rdata);
       if (response.ok) {
-        const rdata = await response.json();
-        console.log(rdata);
-        console.log("Got Data");
+        console.log(`Token in Login ${JSON.stringify(rdata)}`)
         let authenticated = await context.authenticate(rdata);
         if (authenticated) {
           console.log("Awaiting Token storage in Aynsc Storage");
@@ -85,6 +79,10 @@ const Login = ({ navigation }) => {
         }
       } else {
         console.log("Response not ok");
+      }
+      else {
+        setErrorMsg(rdata.error);
+        alert('Login failed');
       }
     } catch (error) {
       setIsSuccessful(false);

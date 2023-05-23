@@ -120,10 +120,9 @@ const ListRide = ({ navigation }) => {
       setErrorMsg("Please Enter All Fields");
       return;
     }
-
+    
     console.log(data);
     return;
-
     try {
       const response = await fetch(NGROK_TUNNEL + "/listRide", {
         method: "POST",
@@ -132,6 +131,7 @@ const ListRide = ({ navigation }) => {
         },
         body: JSON.stringify(data),
       });
+      console.log(response.ok)
 
       const rdata = await response.json();
       console.log(rdata);
@@ -263,12 +263,10 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   textContainer: {
-    display: "flex",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-start",
-    height: "100%",
+    height: "100%"
   },
   innerContainer: {
     display: "flex",

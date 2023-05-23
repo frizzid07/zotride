@@ -9,10 +9,12 @@ import logo from '../../assets/logo.png';
 import {submit} from '../common/button';
 import {input} from '../common/input';
 
+import { AuthContext } from '../../server/context/authContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {NGROK_TUNNEL} from "@env";
 
 const Verify = ({ navigation, route }) => {
+    const context = useContext(AuthContext);
     const { userdata } = route.params;
 
     const [errorMsg, setErrorMsg] = useState(null);
@@ -31,30 +33,33 @@ const Verify = ({ navigation, route }) => {
 
         else if (userCode == actualCode) {
             console.log('Fetching Register API');
+            const userData = {
+                firstName: userdata.user[0]?.firstName,
+                lastName: userdata.user[0]?.lastName,
+                dayOfBirth: userdata.user[0]?.dayOfBirth,
+                monthOfBirth: userdata.user[0]?.monthOfBirth,
+                yearOfBirth: userdata.user[0]?.yearOfBirth,
+                isDriver: false,
+                mobileNumber: userdata.user[0]?.mobileNumber,
+                email: userdata.user[0]?.email,
+                password: userdata.user[0]?.password
+            }
             try {
                 const response = await fetch(NGROK_TUNNEL + "/register", {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({
-                    firstName: userdata.user[0]?.firstName,
-                    lastName: userdata.user[0]?.lastName,
-                    dayOfBirth: userdata.user[0]?.dayOfBirth,
-                    monthOfBirth: userdata.user[0]?.monthOfBirth,
-                    yearOfBirth: userdata.user[0]?.yearOfBirth,
-                    mobileNumber: userdata.user[0]?.mobileNumber,
-                    email: userdata.user[0]?.email,
-                    password: userdata.user[0]?.password
-                    })
+                  body: JSON.stringify(userData)
                 });
               
+                console.log(response.ok);
                 const data = await response.json();
                 console.log(data);
               
                 if (data.message === 'User Registered Successfully') {
-                  alert(data.message);
-                  await AsyncStorage.setItem('token', data.token);
+                    await AsyncStorage.setItem('user', JSON.stringify(userData));
+                    alert(data.message);
                   navigation.navigate('Login');
                 } else {
                   alert("Something went wrong !! Try Signing Up Again");
