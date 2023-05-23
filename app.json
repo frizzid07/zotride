@@ -21,6 +21,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "bundleIdentifier": "com.zotride",
+      "config":{
+        "googleMaps":{
+          "apiKey": "AIzaSyCZ3WDFCoMW-7VjiNGQq1fqEXvPwrj_Lpg"
+        }
       }
     },
     "web": {

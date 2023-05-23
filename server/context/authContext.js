@@ -37,6 +37,7 @@ const AuthProvider = ({children}) => {
             return isLoggedIn;
         }
     }
+  }
 
     async function logout() {
         setIsLoading(true);
@@ -56,22 +57,19 @@ const AuthProvider = ({children}) => {
             setIsLoading(false);
         }
     }
+  }
 
-    const value = {
-        token: token,
-        user: user,
-        isLoggedIn: isLoggedIn,
-        isLoading: isLoading,
-        authenticate: authenticate,
-        setIsLoggedIn: setIsLoggedIn,
-        logout: logout
-    };
+  const value = {
+    token: token,
+    user: user,
+    isLoggedIn: isLoggedIn,
+    isLoading: isLoading,
+    authenticate: authenticate,
+    setIsLoggedIn: setIsLoggedIn,
+    logout: logout,
+  };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
-}
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
 
 export default AuthProvider;
