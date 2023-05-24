@@ -9,7 +9,6 @@ router.post("/listRide", async (req, res) => {
   const {
     rideId,
     driverId,
-    passengers,
     startLocation,
     endLocation,
     startTime,
