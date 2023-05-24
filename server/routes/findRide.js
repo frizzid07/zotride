@@ -16,10 +16,10 @@ router.post("/findActiveRide", async (req, res) => {
 
     if (ride) {
       console.log("Current Driver has an active ride");
-      return res.status(200).send({ found: true });
+      return res.status(200).send({ ride });
     } else {
       console.log("Current Driver has no active ride");
-      return res.status(200).send({ found: false });
+      return res.status(200).send({});
     }
   } catch (err) {
     console.log(err);
