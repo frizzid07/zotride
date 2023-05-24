@@ -12,9 +12,9 @@ const AuthProvider = ({children}) => {
     const [user, setUser] = useState();
     
     async function authenticate(authToken) {
-        setIsLoggedIn(true);
         setIsLoading(true);
-        setToken(authToken);
+        setIsLoggedIn(true);
+        setToken(JSON.stringify(authToken));
         console.log(`In authcontext ${JSON.stringify(authToken)}`);
         try {
             let checkUser = await fetch(NGROK_TUNNEL+"/auth", {
@@ -24,11 +24,11 @@ const AuthProvider = ({children}) => {
                 },
                 body: JSON.stringify(authToken)
             });
-            checkUser = await checkUser.json()
-            console.log(typeof checkUser.userData)
-            if(checkUser !== undefined) {
-                setUser(checkUser.userData);
-                await AsyncStorage.setItem('user', JSON.stringify(checkUser.userData));
+            const userData = await checkUser.json();
+            console.log(userData);
+            if(userData !== undefined) {
+                setUser(userData.userData);
+                await AsyncStorage.setItem('user', JSON.stringify(userData.userData));
             }
         } catch(error) {
             console.log(`Login Error: ${error}`)
@@ -37,14 +37,12 @@ const AuthProvider = ({children}) => {
             return isLoggedIn;
         }
     }
-  }
 
     async function logout() {
         setIsLoading(true);
         try {
             await AsyncStorage.removeItem('user');
             const token = await AsyncStorage.getItem('token');
-            console.log(token)
             if(token) {
                 await AsyncStorage.removeItem('token');
             }
@@ -57,19 +55,22 @@ const AuthProvider = ({children}) => {
             setIsLoading(false);
         }
     }
-  }
 
-  const value = {
-    token: token,
-    user: user,
-    isLoggedIn: isLoggedIn,
-    isLoading: isLoading,
-    authenticate: authenticate,
-    setIsLoggedIn: setIsLoggedIn,
-    logout: logout,
-  };
+    const value = {
+        token: token,
+        user: user,
+        isLoggedIn: isLoggedIn,
+        isLoading: isLoading,
+        authenticate: authenticate,
+        setIsLoggedIn: setIsLoggedIn,
+        logout: logout
+    };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
 
 export default AuthProvider;
