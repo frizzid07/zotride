@@ -122,7 +122,6 @@ const ListRide = ({ navigation }) => {
     }
     
     console.log(data);
-    return;
     try {
       const response = await fetch(NGROK_TUNNEL + "/listRide", {
         method: "POST",

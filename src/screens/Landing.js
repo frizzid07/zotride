@@ -37,7 +37,6 @@ const Landing = ({ navigation }) => {
   async function isRegisteredDriver() {
     //Some API Call To check is user is a registered Driver
     console.log("Checking");
-    console.log("Checking2");
     try {
       const response = await fetch(NGROK_TUNNEL + "/checkDriverReg", {
         method: "POST",

@@ -23,7 +23,7 @@ function SetLocation(props) {
     longitudeDelta: lngDelta,
   });
 
-  const [description, setDescription] = useState("Not Selected");
+  const [description, setDescription] = useState("2204 Pine St, San Francisco, CA 94115");
 
   function changeSearchRegion(data, details) {
     // console.log(data);
