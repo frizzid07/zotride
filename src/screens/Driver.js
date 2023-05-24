@@ -6,7 +6,7 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 // Images
 import background from "../../assets/background.jpg";
@@ -15,9 +15,38 @@ import logo from "../../assets/logo.png";
 // Styles
 import { submit } from "../common/button";
 import { AuthContext } from "../../server/context/authContext";
+import { NGROK_TUNNEL } from "@env";
 
 const Driver = ({ navigation }) => {
   const context = useContext(AuthContext);
+  const [hasActive, setHasActive] = useState(false);
+
+  useEffect(async () => {
+    console.log("Checking if Driver has an Active ride");
+    try {
+      const response = await fetch(NGROK_TUNNEL + "/findActiveRide", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ driverId: context.user._id }),
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      if (result.found) {
+        console.log("Current Driver has Active Ride");
+        setHasActive(true);
+      } else {
+        console.log("Current Driver has no Active Ride");
+        setHasActive(false);
+      }
+    } catch (err) {
+      console.log("Some backend error");
+      console.log(err);
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -29,7 +58,8 @@ const Driver = ({ navigation }) => {
         <Text style={styles.text}>Welcome, {context.user.firstName}</Text>
         <Pressable
           style={[submit, { marginTop: 20 }]}
-          onPress={() => navigation.navigate("ListRide")}>
+          onPress={() => navigation.navigate("ListRide")}
+        >
           <Text style={styles.text}>Start a new trip</Text>
         </Pressable>
       </View>
