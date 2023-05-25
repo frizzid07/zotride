@@ -6,6 +6,7 @@ require("dotenv").config();
 
 router.post("/listRide", async (req, res) => {
   console.log("Received Listing Request");
+  console.log(req.body.data);
   const {
     rideId,
     driverId,

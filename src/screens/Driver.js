@@ -53,6 +53,7 @@ const Driver = ({ navigation }) => {
         console.log(err);
       }
     }
+    console.log("Checking");
     checkAtiveRide();
   }, []);
 

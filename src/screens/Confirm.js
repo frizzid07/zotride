@@ -78,7 +78,7 @@ import {
                       month: "long",
                       hour: "numeric",
                       minute: "numeric",
-                      timeZone: "America/Los_Angeles",
+                      timeZone: "UTC",
                     })}</Text>
             
             <Text style={[styles.text, {marginTop: 25, fontSize: 30}]}>Happy Journey!</Text>

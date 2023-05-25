@@ -88,7 +88,7 @@ const Rides = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background} />
-      <Text style={[styles.text, { marginBottom: 15, marginTop: 75 }]}>
+      <Text style={[styles.text, { marginBottom: 5, marginTop: 35 }]}>
         Available Rides
       </Text>
       {rides.length === 0 ? (
@@ -143,7 +143,7 @@ const Rides = ({ navigation, route }) => {
                       month: "long",
                       hour: "numeric",
                       minute: "numeric",
-                      timeZone: "America/Los_Angeles",
+                      timeZone: "UTC",
                     })}
                   </Text>
                 </Text>
@@ -161,12 +161,12 @@ const Rides = ({ navigation, route }) => {
                   <Pressable
                     style={[
                       submit,
-                      { fontSize: 20, minWidth: 100, backgroundColor: "green" },
+                      { fontSize: 20, minWidth: 100, backgroundColor: "green"},
                     ]}
                     onPress={()=>{bookRide(ride)}}
                   >
                     <Text
-                      style={[styles.text, { fontSize: 20, color: "#fff" }]}
+                      style={[styles.text, { fontSize: 20, color: "#fff"}]}
                     >
                       Book
                     </Text>
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   text: {
-    fontSize: 28,
+    fontSize: 25,
     color: "#000",
     alignSelf: "center",
   },
@@ -224,28 +224,28 @@ const styles = StyleSheet.create({
   },
   rideBox: {
     backgroundColor: "#ffffff",
-    padding: 8,
-    margin: 8,
+    padding: 5,
+    margin: 6,
     borderColor: "black",
   },
   rideContainer: {
     flexDirection: "row",
     alignItems: "center",
-    margin: 8,
+    margin: 6,
   },
   location: {
-    fontSize: 15,
-    marginLeft: 5,
+    fontSize: 12,
+    marginLeft: 2,
     flex: 2,
   },
   driver: {
-    fontSize: 15,
-    marginLeft: 5,
+    fontSize: 12,
+    marginLeft: 2,
     flex: 2,
   },
   capacity: {
-    fontSize: 15,
-    marginRight: 5,
+    fontSize: 12,
+    marginRight: 2,
     flex: 1,
   },
 });
