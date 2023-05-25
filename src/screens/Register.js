@@ -12,6 +12,7 @@ import {input} from '../common/input';
 import {NGROK_TUNNEL} from "@env";
 
 const Register = ({ navigation }) => {
+  const [confirm, setConfirm] = useState();
   const [fdata, setFdata] = useState({
     firstName: '',
     lastName: '',
@@ -21,7 +22,6 @@ const Register = ({ navigation }) => {
     mobileNumber: '',
     email: '',
     password: '',
-    cpassword: ''
   });
 
   const [errorMsg, setErrorMsg] = useState(null);
@@ -35,56 +35,47 @@ const Register = ({ navigation }) => {
         fdata.mobileNumber == '' ||
         fdata.email == '' ||
         fdata.password == '' ||
-        fdata.cpassword == '') {
+        confirm == '') {
         setErrorMsg('All fields are required');
         return;
     }
     else {
-        if (fdata.password != fdata.cpassword) {
+        if (fdata.password != confirm) {
             setErrorMsg('Password and Confirm Password must be same');
             return;
         }
         else {
-
-        await fetch(NGROK_TUNNEL+"/verify", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({firstName: fdata.firstName, 
-                  lastName: fdata.lastName,
-                  dayOfBirth: fdata.dayOfBirth,
-                  monthOfBirth: fdata.monthOfBirth,
-                  yearOfBirth: fdata.yearOfBirth,
-                  mobileNumber: fdata.mobileNumber,
-                  email: fdata.email,
-                  password: fdata.password})
-            }).then(res => res.json()).then(
-                    data => {
-                        console.log(data);
-                        if (data.error === 'Invalid Credentials') {
-                            alert('Invalid Credentials')
-                            setErrorMsg('Invalid Credentials');
-                            navigation.navigate('Register');
-                        }
-                        else if (data.message === "Verification Code Sent to your Email") {
-                            // console.log(data.udata);
-                            alert(data.message);
-                            navigation.navigate('Verify', { userdata: data.udata });
-                        }
-                        else {
-                          alert(data.error);
-                          setErrorMsg(data.error);
-                        }
-                    }
-                ).catch((error) => {
-                  // Handle any errors that occur
-                  alert(error.message);
-                  console.error('Error:', error);
-              }).finally(() => {
-                // Always make sure to unset the error message
-              });
-              }
+        console.log('Fetching Verify API');
+        try {
+          const response = await fetch(NGROK_TUNNEL+"/verify", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({fdata: fdata})
+          });
+          console.log(response.ok);
+          const data = await response.json();
+          console.log(data);
+        
+          if (data.error === 'Invalid Credentials') {
+            alert('Invalid Credentials');
+            setErrorMsg('Invalid Credentials');
+            navigation.navigate('Register');
+          } else if (data.message === "Verification Code Sent to your Email") {
+            alert(data.message);
+            navigation.navigate('Verify', { userdata: data.udata });
+          } else {
+            alert(data.error);
+            setErrorMsg(data.error);
+          }
+        } catch (error) {
+          // Handle any errors that occur
+          alert(error.message);
+          console.error('Error:', error);
+        } finally {
+          // Always make sure to unset the error message
+        }}
       }
   }
 
@@ -122,7 +113,7 @@ const Register = ({ navigation }) => {
         <TextInput style = {input} placeholder="Password" secureTextEntry={true} onPressIn={() => setErrorMsg(null)}
             onChangeText={(text) => setFdata({ ...fdata, password: text })}/>
         <TextInput style = {input} placeholder="Confirm Password" secureTextEntry={true} onPressIn={() => setErrorMsg(null)}
-            onChangeText={(text) => setFdata({ ...fdata, cpassword: text })}/>
+            onChangeText={(text) => setConfirm(text)}/>
         <Text style={{fontSize: 15, color: '#000', marginTop: 5, marginBottom: 10}}>Already have an account?&nbsp;
           <Text style={{color: '#004aad'}} onPress={() => navigation.navigate('Login')}>Login instead!</Text>
         </Text>

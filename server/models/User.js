@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     dayOfBirth: {type: Number},
     monthOfBirth: {type: Number},
     yearOfBirth: {type: Number},
+    isDriver: {type: Boolean, default: false},
     mobileNumber: {type: Number, required: [true, "Cannot be blank"], unique: true},
     email: {type: String, required: [true, "Cannot be blank"], unique: true},
     password: {type: String, required: [true, "Cannot be blank"]}
