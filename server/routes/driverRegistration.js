@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 router.post("/checkDriverReg", async (req, res) => {
-  const { userId } = req.body;
+  const { userId } = req.body.data;
   console.log(userId);
   try {
     const user = await Driver.findOne({ userId: userId });
@@ -50,19 +50,22 @@ router.post("/driverRegistration", async (req, res) => {
 router.put("/driverRegistration", async (req, res) => {
   const { licenseNumber, userId, vehicleInformation } = req.body.data;
   try {
-    console.log(`User ID ${userId}`)
-    const updatedUser = await User.findByIdAndUpdate(userId, {$set: {isDriver: true}}, {new: true, useFindAndModify: false});
+    console.log(`User ID ${userId}`);
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: { isDriver: true } },
+      { new: true, useFindAndModify: false }
+    );
 
     if (!updatedUser) {
-      return res.status(404).send({ error: 'User not found' });
+      return res.status(404).send({ error: "User not found" });
     }
 
-    console.log('User registration updated successfully');
-    return res.status(200).send({updatedUser});
-
+    console.log("User registration updated successfully");
+    return res.status(200).send({ updatedUser });
   } catch (err) {
     console.error(err);
-    return res.status(500).send({ error: 'Failed to update user' });
+    return res.status(500).send({ error: "Failed to update user" });
   }
 });
 
@@ -72,12 +75,12 @@ router.get("/getDriver", async (req, res) => {
     const user = await User.findById(id).lean().exec();
     console.log(user);
     const driver = await Driver.findOne({ userId: id });
-    console.log(driver)
+    console.log(driver);
     res.status(200).send({ user, driver });
-  } catch(error) {
+  } catch (error) {
     return res.status(500).send({ error: error.message });
   }
-})
+});
 
 function validateInput(licenseNumber, userId, vehicleInformation) {
   if (!licenseNumber || !userId || !vehicleInformation) {

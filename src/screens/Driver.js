@@ -34,7 +34,7 @@ const Driver = ({ navigation }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ driverId: context.user._id }),
+          body: JSON.stringify({ data: { driverId: context.user._id } }),
         });
 
         const result = await response.json();

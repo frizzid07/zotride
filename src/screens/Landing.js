@@ -24,13 +24,13 @@ const Landing = ({ navigation }) => {
   const [name, setName] = useState();
 
   useEffect(() => {
-    const getUser = async() => {
-      let userVal = await AsyncStorage.getItem('user');
-      if(userVal) {
+    const getUser = async () => {
+      let userVal = await AsyncStorage.getItem("user");
+      if (userVal) {
         userVal = JSON.parse(userVal);
         setName(userVal.firstName);
       }
-    }
+    };
     getUser();
   }, []);
 
@@ -43,7 +43,7 @@ const Landing = ({ navigation }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: context.user._id }),
+        body: JSON.stringify({ data: { userId: context.user._id } }),
       });
 
       const result = await response.json();
@@ -65,24 +65,23 @@ const Landing = ({ navigation }) => {
   const driverRole = async () => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
-    if(context.user.isDriver) {
+    if (context.user.isDriver) {
       navigation.navigate("Driver");
-    }
-    else {
+    } else {
       const checkDriver = await isRegisteredDriver();
       console.log(checkDriver);
-      
+
       if (checkDriver) {
         navigation.navigate("Driver");
       } else {
         navigation.navigate("DriverRegistration");
       }
     }
-  }
+  };
 
   const passenger = () => {
     navigation.navigate("FindRide");
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -92,7 +91,7 @@ const Landing = ({ navigation }) => {
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
         <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
-           Welcome to ZotRide, {name}
+          Welcome to ZotRide, {name}
         </Text>
         <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
           Choose a Role
@@ -100,8 +99,7 @@ const Landing = ({ navigation }) => {
         <Pressable style={submit} onPress={driverRole}>
           <Text style={styles.text}>Driver</Text>
         </Pressable>
-        <Pressable
-          style={submit} onPress={passenger}>
+        <Pressable style={submit} onPress={passenger}>
           <Text style={styles.text}>Passenger</Text>
         </Pressable>
         <Pressable
