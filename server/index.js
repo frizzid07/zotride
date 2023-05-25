@@ -17,6 +17,8 @@ const listRide = require('./routes/listRide');
 app.use(listRide)
 const findRide = require('./routes/findRide');
 app.use(findRide)
+const bookRide = require('./routes/bookRide');
+app.use(bookRide)
 const requireToken = require("./middleware/authTokenRequired");
 
 const driverRegistration = require("./routes/driverRegistration");
