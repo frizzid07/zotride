@@ -128,7 +128,7 @@ const ListRide = ({ navigation }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({data: data}),
       });
       console.log(response.ok)
 
@@ -229,7 +229,7 @@ const ListRide = ({ navigation }) => {
             onCancel={datePickerVisibleHandler}
           />
         </View>
-        <Text style={styles.text}>Other Details</Text>
+        <Text style={[styles.text, {marginTop: 15}]}>Other Details</Text>
         <TextInput
           style={input}
           placeholder="Ride Cost (USD)"
@@ -239,7 +239,7 @@ const ListRide = ({ navigation }) => {
         />
         <TextInput
           style={input}
-          placeholder="Passengers"
+          placeholder="Number of Passengers"
           onPressIn={clearErrMsg}
           onChangeText={(text) => setData({ ...data, capacity: text })}
           keyboardType="number-pad"

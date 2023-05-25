@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
     }
     }
     checkUser();
-  }, []);
+  }, [context]);
 
   async function loginUser() {
     try {
@@ -55,7 +55,7 @@ const Login = ({ navigation }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({data: data})
       });
       const rdata = await response.json();
       console.log(rdata);
@@ -141,68 +141,3 @@ const styles = StyleSheet.create({
         marginBottom: 40
     }
 });
-
-  
-  // async function fetchUser() {
-  //   console.log('Fetching Login API');
-  //   const response = await fetch(NGROK_TUNNEL+"/login", {
-  //     method: 'POST',
-  //     headers: {
-  //         'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(data)
-  //   });
-  //   return response.json();
-  // }
-  
-  // async function login() {
-  //   setIsChecking(true);
-  //   try {
-  //     let userJSON = fetchUser();
-  //     const user = context.authenticate(userJSON.token);
-  //     setIsSuccessful(true);
-  //     alert('Logged in successfully');
-  //     navigation.navigate('Landing', { userdata: user });
-  //     // navigation.navigate('Landing');
-  //   } catch(error) {
-  //     console.log(error);
-  //     alert(error);
-  //     setErrorMsg(error.message);
-  //   } finally {
-  //     setIsChecking(false);
-  //   }
-  // }
-
-    // async function Sendtobackend() {
-  //   // setLoading(true);
-  //   // setSuccessMsg(false);
-  //   // setErrorMsg(false);
-
-    // await fetch(NGROK_TUNNEL+"/login", {
-    //       method: 'POST',
-    //       headers: {
-    //           'Content-Type': 'application/json'
-    //       },
-    //       body: JSON.stringify(fdata)
-    //   })
-    //       .then(res => res.json()).then(
-    //           data => {
-    //               console.log(data);
-    //               if (data.error) {
-    //                   alert(data.error);
-    //                   setErrorMsg("Invalid Credentials");
-    //               }
-    //               else {
-    //                   alert('Logged in successfully');
-    //                   login(data.token);
-    //                   navigation.navigate('Landing', { userdata: data });
-    //               }
-    //           }
-    //       ).catch((error) => {
-    //         // Handle any errors that occur
-    //         console.error('Error:', error);
-    //         // setErrorMsg(true);
-    //     }).finally (()=> {
-    //       // setLoading(false);
-    //     });
-  //   }

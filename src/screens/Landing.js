@@ -32,7 +32,7 @@ const Landing = ({ navigation }) => {
       }
     }
     getUser();
-  }, [name]);
+  }, []);
 
   async function isRegisteredDriver() {
     //Some API Call To check is user is a registered Driver
