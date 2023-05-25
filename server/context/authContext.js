@@ -5,37 +5,36 @@ import { NGROK_TUNNEL } from "@env";
 
 export const AuthContext = createContext();
 
-const AuthProvider = ({children}) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [token, setToken] = useState();
-    const [user, setUser] = useState();
-    
-    async function authenticate(authToken) {
-        setIsLoading(true);
-        setIsLoggedIn(true);
-        setToken(JSON.stringify(authToken));
-        console.log(`In authcontext ${JSON.stringify(authToken)}`);
-        try {
-            let checkUser = await fetch(NGROK_TUNNEL+"/auth", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({authToken: authToken})
-            });
-            const userData = await checkUser.json();
-            console.log(userData);
-            if(userData !== undefined) {
-                setUser(userData.userData);
-                await AsyncStorage.setItem('user', JSON.stringify(userData.userData));
-            }
-        } catch(error) {
-            console.log(`Login Error: ${error}`)
-        } finally {
-            setIsLoading(false);
-            return isLoggedIn;
-        }
+const AuthProvider = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState();
+  const [user, setUser] = useState();
+
+  async function authenticate(authToken) {
+    setIsLoading(true);
+    setIsLoggedIn(true);
+    setToken(JSON.stringify(authToken));
+    console.log(`In authcontext ${JSON.stringify(authToken)}`);
+    try {
+      let checkUser = await fetch(NGROK_TUNNEL + "/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ authToken: authToken }),
+      });
+      const userData = await checkUser.json();
+      console.log(userData);
+      if (userData !== undefined) {
+        setUser(userData.userData);
+        await AsyncStorage.setItem("user", JSON.stringify(userData.userData));
+      }
+    } catch (error) {
+      console.log(`Login Error: ${error}`);
+    } finally {
+      setIsLoading(false);
+      return isLoggedIn;
     }
   }
 
