@@ -35,44 +35,9 @@ router.post("/findRide", async (req, res) => {
       )
     );
   });
+
+  return res.status(200).send(result);
 });
-router.post("/findActiveRide", async (req, res) => {
-  const { driverId } = req.body.data;
-  console.log(driverId);
-  try {
-    const ride = await Ride.findOne({ driverId: driverId, isActive: true });
-
-    if (ride) {
-      console.log("Current Driver has an active ride");
-      return res.status(200).send({ ride });
-    } else {
-      console.log("Current Driver has no active ride");
-      return res.status(200).send({});
-    }
-  } catch (err) {
-    console.log(err);
-    return res.status(422).json({ error: err });
-  }
-});
-
-// router.post("/findRide", async (req, res) => {
-//   const { startLocation, endLocation, startTime } = req.body.data;
-//   const time = new Date(startTime);
-//   const beginTime = new Date(
-//     time.getTime() - 30 * 60000 - time.getTimezoneOffset() * 60000
-//   );
-//   const endTime = new Date(
-//     time.getTime() + 30 * 60000 - time.getTimezoneOffset() * 60000
-//   );
-//   const condition = {
-//     startLocation: startLocation,
-//     endLocation: endLocation,
-//     startTime: { $gte: beginTime, $lte: endTime },
-//   };
-//   const result = await Ride.find(condition).exec();
-
-//   return res.status(200).send(result);
-// });
 
 function isWithinRadius(lat1, lon1, lat2, lon2, radius) {
   const earthRadius = 3958.8; // Radius of the Earth in miles
@@ -105,5 +70,24 @@ function isWithinRadius(lat1, lon1, lat2, lon2, radius) {
 function toRadians(degrees) {
   return (degrees * Math.PI) / 180;
 }
+
+router.post("/findActiveRide", async (req, res) => {
+  const { driverId } = req.body.data;
+  console.log(driverId);
+  try {
+    const ride = await Ride.findOne({ driverId: driverId, isActive: true });
+
+    if (ride) {
+      console.log("Current Driver has an active ride");
+      return res.status(200).send({ ride });
+    } else {
+      console.log("Current Driver has no active ride");
+      return res.status(200).send({});
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(422).json({ error: err });
+  }
+});
 
 module.exports = router;
