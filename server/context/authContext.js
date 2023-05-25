@@ -37,40 +37,37 @@ const AuthProvider = ({children}) => {
             return isLoggedIn;
         }
     }
+  }
 
-    async function logout() {
-        setIsLoading(true);
-        try {
-            await AsyncStorage.removeItem('user');
-            const token = await AsyncStorage.getItem('token');
-            if(token) {
-                await AsyncStorage.removeItem('token');
-            }
-            setIsLoggedIn(false);
-            setToken(null);
-            setUser(null);
-        } catch(error) {
-            console.log(`Logout Error: ${error}`)
-        } finally {
-            setIsLoading(false);
-        }
+  async function logout() {
+    setIsLoading(true);
+    try {
+      await AsyncStorage.removeItem("user");
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        await AsyncStorage.removeItem("token");
+      }
+      setIsLoggedIn(false);
+      setToken(null);
+      setUser(null);
+    } catch (error) {
+      console.log(`Logout Error: ${error}`);
+    } finally {
+      setIsLoading(false);
     }
+  }
 
-    const value = {
-        token: token,
-        user: user,
-        isLoggedIn: isLoggedIn,
-        isLoading: isLoading,
-        authenticate: authenticate,
-        setIsLoggedIn: setIsLoggedIn,
-        logout: logout
-    };
+  const value = {
+    token: token,
+    user: user,
+    isLoggedIn: isLoggedIn,
+    isLoading: isLoading,
+    authenticate: authenticate,
+    setIsLoggedIn: setIsLoggedIn,
+    logout: logout,
+  };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
-}
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
 
 export default AuthProvider;

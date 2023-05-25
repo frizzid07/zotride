@@ -15,6 +15,7 @@ router.post("/listRide", async (req, res) => {
     rideCost,
     capacity,
   } = req.body.data;
+  
   const ride = new Ride({
     rideId,
     driverId,
@@ -23,6 +24,7 @@ router.post("/listRide", async (req, res) => {
     startTime,
     rideCost,
     capacity,
+    isActive,
   });
 
   if (
@@ -43,7 +45,7 @@ router.post("/listRide", async (req, res) => {
     return res.status(422).send({ error: err.message });
   }
 
-  return res.status(200).json({ added: true});
+  return res.status(200).json({ added: true });
 });
 
 module.exports = router;
