@@ -56,6 +56,31 @@ const Driver = ({ navigation }) => {
     checkAtiveRide();
   }, []);
 
+  async function cancelRide() {
+    const id = activeRide._id;
+    console.log(id);
+    try {
+      const response = await fetch(NGROK_TUNNEL + "/deleteRide", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: { id: id } }),
+      });
+
+      const result = await response.json();
+
+      if (result.deleted) {
+        console.log("Ride Deleted");
+        setHasActive(false);
+      } else {
+        console.log("Could not Delete");
+      }
+    } catch (err) {
+      console.log("Error in deleting " + err);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background}></Image>
@@ -73,9 +98,12 @@ const Driver = ({ navigation }) => {
           </Pressable>
         )}
         {hasActive && (
-          <View style={{ alignItems: "center" }}>
+          <View style={{ width: "100%", marginTop: 50 }}>
             <Text>Your Currrent Ride</Text>
             <SingleRide ride={activeRide}></SingleRide>
+            <Pressable style={[submit, { marginTop: 20 }]} onPress={cancelRide}>
+              <Text style={styles.text}>Cancel Trip</Text>
+            </Pressable>
           </View>
         )}
       </View>
