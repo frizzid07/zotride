@@ -7,12 +7,12 @@ require("dotenv").config();
 const Ride = mongoose.model("Ride");
 
 router.put("/bookRide", async (req, res) => {
-  const { rideId, userId } = req.body.data;
-  const result = await Ride.find({ _id: rideId }).exec();
+  const { ride, userId } = req.body.data;
+  const result = await Ride.find({ _id: ride._id }).exec();
   const old_capacity = result[0].capacity;
 
   Ride.findOneAndUpdate(
-    { _id: rideId },
+    { _id: ride._id },
     { $push: { passengers: userId }, capacity: old_capacity - 1 },
     { new: true }
   ).exec();

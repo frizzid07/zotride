@@ -15,7 +15,7 @@ router.post("/findRide", async (req, res) => {
   const endTime = new Date(
     time.getTime() + 30 * 60000 - time.getTimezoneOffset() * 60000
   );
-  const condition = { startTime: { $gte: beginTime, $lte: endTime } };
+  const condition = { startTime: { $gte: beginTime, $lte: endTime }, capacity:{$gt:0} };
   const rides = await Ride.find(condition).exec();
   const result = rides.filter((ride) => {
     return (

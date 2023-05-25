@@ -20,8 +20,11 @@ import { submit } from "../common/button";
 
 import { NGROK_TUNNEL } from "@env";
 
+import { AuthContext } from "../../server/context/authContext";
+
 const Rides = ({ navigation, route }) => {
   console.log(`In rides ${JSON.stringify(route.params.rides)}`);
+  const context = useContext(AuthContext);
   const [rides, setRides] = useState(route.params.rides);
   const [drivers, setDrivers] = useState([]);
 
@@ -55,6 +58,32 @@ const Rides = ({ navigation, route }) => {
   useEffect(() => {
     fetchDrivers();
   }, []);
+
+  async function bookRide(ride) {
+    console.log("here")
+    try {
+      data = {
+        "ride":ride,
+        "userId":context.user._id
+      }
+      console.log("in book ride function")
+      const response = await fetch(NGROK_TUNNEL + "/bookRide", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: data }),
+      });
+      console.log(response.ok);
+      if(response.ok) {
+        navigation.navigate("Confirm", {ride: data});
+      } else {
+        console.log('Could not book a ride');
+      }
+    } catch (error) {
+      console.log("Error while booking ride "+error)
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -134,9 +163,7 @@ const Rides = ({ navigation, route }) => {
                       submit,
                       { fontSize: 20, minWidth: 100, backgroundColor: "green" },
                     ]}
-                    onPress={() => {
-                      console.log("Psych mf");
-                    }}
+                    onPress={()=>{bookRide(ride)}}
                   >
                     <Text
                       style={[styles.text, { fontSize: 20, color: "#fff" }]}
