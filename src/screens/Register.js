@@ -52,7 +52,7 @@ const Register = ({ navigation }) => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(fdata)
+            body: JSON.stringify({fdata: fdata})
           });
           console.log(response.ok);
           const data = await response.json();

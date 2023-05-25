@@ -21,6 +21,7 @@ import { submit } from "../common/button";
 import { NGROK_TUNNEL } from "@env";
 
 const Rides = ({navigation, route}) => {
+    console.log(`In rides ${JSON.stringify(route.params.rides)}`);
     const [rides, setRides] = useState(route.params.rides);
     const [drivers, setDrivers] = useState([]);
 
@@ -69,26 +70,39 @@ const Rides = ({navigation, route}) => {
                     <View key={index} style={styles.rideBox}>
                         <View style={styles.rideContainer}>
                         <Text style={styles.location}>
-                            <Text style={{fontWeight: "bold"}}>{ride.startLocation}</Text> to 
-                            <Text style={{fontWeight: "bold"}}> {ride.endLocation}</Text>
+                            <Text style={{fontWeight: "bold"}}>{ride.startLocation.description}</Text>
                         </Text>
-                        <Text style={styles.capacity}>Seats: <Text style={{fontWeight: "bold"}}>{ride.capacity}</Text></Text>
+                        <Text> to </Text>
+                        <Text style={styles.location}>
+                            <Text style={{fontWeight: "bold"}}> {ride.endLocation.description}</Text>
+                        </Text>
                         </View>
                         <View style={styles.rideContainer}>
                         <Text style={styles.driver}>
                             Ride: <Text style={{fontWeight: "bold"}}>{driver?.driver ? driver?.driver?.vehicleInformation[0]?.vehicleCompany
-+' '+driver?.driver?.vehicleInformation[0]?.vehicleModel : ''}</Text>
-                        </Text>
-                        <Text style={styles.capacity}>
-                            Fare: <Text style={{fontWeight: "bold"}}>${ride.rideCost}</Text>
-                        </Text>
-                        </View>
-                        <View style={styles.rideContainer}>
-                        <Text style={styles.driver}>
++' '+driver?.driver?.vehicleInformation[0]?.vehicleModel : ''}</Text>{'\n\n'}
                             Driver: <Text style={{fontWeight: "bold"}}>{driver?.user ? driver?.user?.firstName+' '+driver?.user?.lastName : ''}</Text>
                         </Text>
                         <Text style={styles.capacity}>
-                            Starts at <Text style={{fontWeight: "bold"}}>{ride.startTime.slice(11, 16)}</Text>
+                            Starts at{'\n'}<Text style={{fontWeight: "bold"}}>{new Date(ride.startTime).toLocaleString(undefined, {
+                              weekday: 'short',
+                              day: 'numeric',
+                              month: 'long',
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              timeZone: 'America/Los_Angeles'
+                            })}</Text>
+                        </Text>
+                        </View>
+                        <View style={styles.rideContainer}>
+                        <Text style={styles.capacity}>Open Seats: <Text style={{fontWeight: "bold"}}>{ride.capacity}</Text></Text>
+                        <Text style={styles.capacity}>
+                            Fare: <Text style={{fontWeight: "bold"}}>${ride.rideCost}</Text>
+                        </Text>
+                        <Text style={[styles.driver, {flex: 1}]}>
+                        <Pressable style={[submit, {fontSize: 20, minWidth: 100, backgroundColor: 'green'}]} onPress={() => {}}>
+                            <Text style={[styles.text, {fontSize: 20, color: '#fff'}]}>Book</Text>
+                        </Pressable>
                         </Text>
                         </View>
                     </View>
@@ -116,7 +130,7 @@ const styles = StyleSheet.create({
         height: "100%"
       },
       text: {
-        fontSize: 32,
+        fontSize: 28,
         color: '#000',
         alignSelf: "center"
     },
@@ -134,27 +148,27 @@ const styles = StyleSheet.create({
     },
     rideBox: {
         backgroundColor: '#ffffff',
-        padding: 10,
-        margin: 10,
+        padding: 8,
+        margin: 8,
         borderColor: 'black'
     },
     rideContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        margin: 10,
+        margin: 8,
       },
       location: {
-        fontSize: 18,
+        fontSize: 15,
         marginLeft: 5,
         flex: 2
       },
       driver: {
-        fontSize: 18,
+        fontSize: 15,
         marginLeft: 5,
         flex: 2
       },
       capacity: {
-        fontSize: 18,
+        fontSize: 15,
         marginRight: 5,
         flex: 1
       }

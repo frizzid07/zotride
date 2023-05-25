@@ -26,7 +26,7 @@ router.post("/checkDriverReg", async (req, res) => {
 });
 
 router.post("/driverRegistration", async (req, res) => {
-  const { licenseNumber, userId, vehicleInformation } = req.body;
+  const { licenseNumber, userId, vehicleInformation } = req.body.data;
   const driver = new Driver({
     licenseNumber,
     userId,
@@ -48,7 +48,7 @@ router.post("/driverRegistration", async (req, res) => {
 });
 
 router.put("/driverRegistration", async (req, res) => {
-  const { licenseNumber, userId, vehicleInformation } = req.body;
+  const { licenseNumber, userId, vehicleInformation } = req.body.data;
   try {
     console.log(`User ID ${userId}`)
     const updatedUser = await User.findByIdAndUpdate(userId, {$set: {isDriver: true}}, {new: true, useFindAndModify: false});

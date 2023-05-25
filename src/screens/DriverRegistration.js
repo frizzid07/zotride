@@ -67,7 +67,7 @@ const DriverRegistration = ({ navigation }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({data: data})
       });
       const rdata = await response.json();
       console.log(rdata);
@@ -79,7 +79,7 @@ const DriverRegistration = ({ navigation }) => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({data: data})
           });
           const rdata2 = await response2.json();
           console.log(rdata2);
