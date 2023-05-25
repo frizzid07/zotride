@@ -120,7 +120,7 @@ const ListRide = ({ navigation }) => {
       setErrorMsg("Please Enter All Fields");
       return;
     }
-    
+
     console.log(data);
     try {
       const response = await fetch(NGROK_TUNNEL + "/listRide", {
@@ -128,9 +128,9 @@ const ListRide = ({ navigation }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({data: data}),
+        body: JSON.stringify({ data: data }),
       });
-      console.log(response.ok)
+      console.log(response.ok);
 
       const rdata = await response.json();
       console.log(rdata);
@@ -138,7 +138,7 @@ const ListRide = ({ navigation }) => {
       if (rdata.added) {
         alert("Ride added successfully");
         console.log("Ride Added Successfully");
-        navigation.navigate("Driver");
+        navigation.navigate("Landing");
       } else {
         alert("Could not add ride");
       }
@@ -229,7 +229,7 @@ const ListRide = ({ navigation }) => {
             onCancel={datePickerVisibleHandler}
           />
         </View>
-        <Text style={[styles.text, {marginTop: 15}]}>Other Details</Text>
+        <Text style={[styles.text, { marginTop: 15 }]}>Other Details</Text>
         <TextInput
           style={input}
           placeholder="Ride Cost (USD)"
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    height: "100%"
+    height: "100%",
   },
   innerContainer: {
     display: "flex",

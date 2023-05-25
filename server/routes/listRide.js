@@ -14,8 +14,9 @@ router.post("/listRide", async (req, res) => {
     startTime,
     rideCost,
     capacity,
+    isActive,
   } = req.body.data;
-  
+
   const ride = new Ride({
     rideId,
     driverId,
