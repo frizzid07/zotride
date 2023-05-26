@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const Ride = mongoose.model("Ride");
+const User = mongoose.model("User");
 
 router.put("/bookRide", async (req, res) => {
   const { ride, userId } = req.body.data;
@@ -14,6 +15,12 @@ router.put("/bookRide", async (req, res) => {
   Ride.findOneAndUpdate(
     { _id: ride._id },
     { $push: { passengers: userId }, capacity: old_capacity - 1 },
+    { new: true }
+  ).exec();
+
+  User.findOneAndUpdate(
+    { _id: userId },
+    { $push: { past_rides: ride._id } },
     { new: true }
   ).exec();
 

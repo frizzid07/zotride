@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     isDriver: {type: Boolean, default: false},
     mobileNumber: {type: Number, required: [true, "Cannot be blank"], unique: true},
     email: {type: String, required: [true, "Cannot be blank"], unique: true},
-    password: {type: String, required: [true, "Cannot be blank"]}
+    password: {type: String, required: [true, "Cannot be blank"]},
+    past_rides:{type:[]}
 }, {timestamps: true});
 
 userSchema.pre('save', async function (next) {
