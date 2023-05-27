@@ -49,6 +49,9 @@ const FindRide = ({ navigation }) => {
     endRadius: "",
   });
 
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  const { DateTime } = require('luxon');
+
   function startLocVisibleHandler() {
     setStartLocVisible(!isStartLocVisible);
   }
@@ -94,7 +97,7 @@ const FindRide = ({ navigation }) => {
   }
 
   useEffect(() => {
-    setData({ ...data, startTime: startTime.toISOString().slice(0, -1) });
+    setData({ ...data, startTime: DateTime.fromISO(startTime.toISOString(), { zone: 'utc' }).setZone('America/Los_Angeles') });
   }, [startTime]);
 
   const onDateChange = (selectedDate) => {
@@ -221,7 +224,7 @@ const FindRide = ({ navigation }) => {
             </Text>
           </Pressable>
           <Text style={{ flex: 5, alignSelf: "center" }}>
-            {startTime.toLocaleString()}
+            {startTime.toLocaleString('en-US', options)}
           </Text>
           <DateTimePickerModal
             isVisible={isTimePickerVisible}

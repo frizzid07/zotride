@@ -74,6 +74,7 @@ const DriverRegistration = ({ navigation }) => {
       if (rdata.success) {
         console.log("Driver Registered Successfully");
         try {
+          console.log({data: data.userId});
           const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
             method: "PUT",
             headers: {

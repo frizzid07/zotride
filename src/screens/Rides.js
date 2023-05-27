@@ -27,6 +27,8 @@ const Rides = ({ navigation, route }) => {
   const [rides, setRides] = useState(route.params.rides);
   const [drivers, setDrivers] = useState([]);
 
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  
   const fetchDrivers = async () => {
     const driverData = [];
 
@@ -141,14 +143,7 @@ const Rides = ({ navigation, route }) => {
                 <Text style={styles.capacity}>
                   Starts at{"\n"}
                   <Text style={{ fontWeight: "bold" }}>
-                    {new Date(ride.startTime).toLocaleString(undefined, {
-                      weekday: "short",
-                      day: "numeric",
-                      month: "long",
-                      hour: "numeric",
-                      minute: "numeric",
-                      timeZone: "UTC",
-                    })}
+                    {new Date(ride.startTime).toLocaleString('en-US', options)}
                   </Text>
                 </Text>
               </View>

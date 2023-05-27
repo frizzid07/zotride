@@ -34,48 +34,53 @@ const Landing = ({ navigation }) => {
     getUser();
   }, []);
 
-  async function isRegisteredDriver() {
-    //Some API Call To check is user is a registered Driver
-    console.log("Checking");
+  const isRegisteredDriver = async () => {
     try {
-      const response = await fetch(NGROK_TUNNEL + "/checkDriverReg", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data: { userId: context.user._id } }),
-      });
-
-      const result = await response.json();
-      console.log(result);
-
-      if (result.found) {
-        console.log("Current user is Registered Driver");
+      const response = await fetch(
+        NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`,
+        {
+          method: "GET",
+        }
+      );
+      console.log(response.ok)
+      const rdata = await response.json()
+      console.log(rdata);
+      if(rdata.driver !== null) {
+        console.log('Driver Record found');
         return true;
       } else {
-        console.log("Current user needs to register as a driver");
-        return false;
+        try {
+          const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({data: {userId: context.user._id}})
+          });
+          console.log(response2.ok)
+          const rdata2 = await response2.json();
+          console.log(rdata2);
+        } catch(error) {
+          console.error(error);
+        }
       }
-    } catch (err) {
-      console.log("Some backend error");
-      console.log(err);
+    } catch(error) {
+      console.log(error);
     }
+    return false;
   }
-
+  
   const driverRole = async () => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
     if (context.user.isDriver) {
-      navigation.navigate("Driver");
-    } else {
       const checkDriver = await isRegisteredDriver();
-      console.log(checkDriver);
-
-      if (checkDriver) {
+      if(checkDriver)
         navigation.navigate("Driver");
-      } else {
+      else
         navigation.navigate("DriverRegistration");
-      }
+    } else {
+      navigation.navigate("DriverRegistration");
     }
   };
 

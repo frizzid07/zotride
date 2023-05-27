@@ -25,7 +25,7 @@ const Driver = ({ navigation }) => {
   const [activeRide, setActiveRide] = useState({});
 
   useEffect(() => {
-    async function checkAtiveRide() {
+    async function checkActiveRide() {
       console.log("Checking if Driver has an Active ride");
       console.log(context.user._id);
       try {
@@ -54,7 +54,7 @@ const Driver = ({ navigation }) => {
       }
     }
     console.log("Checking");
-    checkAtiveRide();
+    checkActiveRide();
   }, []);
 
   async function cancelRide() {
