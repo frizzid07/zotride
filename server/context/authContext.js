@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
   async function authenticate(authToken) {
     setIsLoading(true);
     setIsLoggedIn(true);
-    setToken(JSON.stringify(authToken));
+    setToken(authToken);
     console.log(`In authcontext ${JSON.stringify(authToken)}`);
     try {
       let checkUser = await fetch(NGROK_TUNNEL + "/auth", {
@@ -22,8 +22,9 @@ const AuthProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ authToken: authToken }),
+        body: JSON.stringify(authToken),
       });
+      console.log(checkUser.ok);
       const userData = await checkUser.json();
       console.log(userData);
       if (userData !== undefined) {

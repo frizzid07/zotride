@@ -50,7 +50,7 @@ const Verify = ({ navigation, route }) => {
                   headers: {
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({userData: userData})
+                  body: JSON.stringify(userData)
                 });
               
                 console.log(response.ok);

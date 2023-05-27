@@ -26,35 +26,35 @@ import {
   
   const Confirm = ({ navigation, route }) => {
     const context = useContext(AuthContext);
-    const [ride, setRide] = useState(route.params.ride.ride);
+    const [ride, setRide] = useState(route.params?.ride);
     const [car, setCar] = useState();
     const [name, setName] = useState();
 
     useEffect(() => {
-        async function getDetails() {
-            try {
-                const response = await fetch(
-                    NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
-                    {
-                      method: "GET",
-                    }
-                  );
-                  console.log(response.ok);
-                  if (response.ok) {
-                    const driver = await response.json();
-                    console.log(driver);
-                    setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
-                        " " +
-                        driver?.driver?.vehicleInformation[0]?.vehicleModel);
-                    setName(driver.user.firstName+' '+driver.user.lastName);
-                  } else {
-                    console.error("Failed to fetch driver data");
-                  }
-                } catch (error) {
-                  console.error(error);
-                }
-        }
-        getDetails();
+      async function getDetails() {
+        try {
+          const response = await fetch(
+              NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
+              {
+                method: "GET",
+              }
+            );
+            console.log(response.ok);
+            if (response.ok) {
+              const driver = await response.json();
+              console.log(driver);
+              setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
+                  " " +
+                  driver?.driver?.vehicleInformation[0]?.vehicleModel);
+              setName(driver.user.firstName+' '+driver.user.lastName);
+            } else {
+              console.error("Failed to fetch driver data");
+            }
+          } catch (error) {
+            console.error(error);
+          }
+      }
+      getDetails();
     }, [])
 
     return (

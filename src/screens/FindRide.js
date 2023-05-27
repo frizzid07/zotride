@@ -121,14 +121,13 @@ const FindRide = ({ navigation }) => {
     }
 
     try {
-      console.log({ data: data });
       console.log("Checking");
       const response = await fetch(NGROK_TUNNEL + "/findRide", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: data }),
+        body: JSON.stringify(data),
       });
       console.log(response.ok);
 
