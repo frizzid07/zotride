@@ -41,10 +41,11 @@ const Rides = ({ navigation, route }) => {
           }
         );
         console.log(response.ok);
+        console.log('One more');
         if (response.ok) {
           const driver = await response.json();
-          console.log(driver);
           driverData.push(driver);
+          console.log(driver);
         } else {
           console.error("Failed to fetch driver data");
         }

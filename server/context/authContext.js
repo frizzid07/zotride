@@ -22,7 +22,7 @@ const AuthProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(authToken),
+        body: JSON.stringify({authToken: authToken}),
       });
       console.log(checkUser.ok);
       const userData = await checkUser.json();
@@ -30,13 +30,15 @@ const AuthProvider = ({ children }) => {
       if (userData !== undefined) {
         setUser(userData.userData);
         await AsyncStorage.setItem("user", JSON.stringify(userData.userData));
+        console.log('Added user to async');
+        return true;
       }
     } catch (error) {
       console.log(`Login Error: ${error}`);
     } finally {
       setIsLoading(false);
-      return isLoggedIn;
     }
+    return false;
   }
 
   async function logout() {

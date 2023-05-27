@@ -35,6 +35,7 @@ const Landing = ({ navigation }) => {
   }, []);
 
   const isRegisteredDriver = async () => {
+    console.log('Checking Driver');
     try {
       const response = await fetch(
         NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`,

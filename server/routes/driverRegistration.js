@@ -69,6 +69,7 @@ router.put("/driverRegistration", async (req, res) => {
 
 router.get("/getDriver", async (req, res) => {
   const id = req.query.driverId;
+  console.log(`ID inside Get Driver ${id} ${JSON.stringify(id)}`);
   try {
     const user = await User.findById(id).lean().exec();
     console.log(user);

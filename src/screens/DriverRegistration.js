@@ -69,6 +69,7 @@ const DriverRegistration = ({ navigation }) => {
         },
         body: JSON.stringify({data: data})
       });
+      console.log(response.ok);
       const rdata = await response.json();
       console.log(rdata);
       if (rdata.success) {
@@ -82,6 +83,7 @@ const DriverRegistration = ({ navigation }) => {
             },
             body: JSON.stringify({data: data})
           });
+          console.log(response2.ok);
           const rdata2 = await response2.json();
           console.log(rdata2);
         } catch(error) {

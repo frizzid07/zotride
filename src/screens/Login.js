@@ -65,13 +65,15 @@ const Login = ({ navigation }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({data: data})
       });
       const rdata = await response.json();
       console.log(rdata);
+      console.log('One more');
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
         let authenticated = await context.authenticate(rdata);
+        console.log(authenticated);
         if (authenticated) {
           await AsyncStorage.setItem("token", JSON.stringify(rdata.token));
           setIsSuccessful(true);

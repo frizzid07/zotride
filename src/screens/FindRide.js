@@ -133,9 +133,9 @@ const FindRide = ({ navigation }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
-
       const rdata = await response.json();
       console.log("Hi");
+      console.log("One more");
       if (response.ok) {
         console.log("Ride found Successfully");
         navigation.navigate("Rides", { rides: rdata });

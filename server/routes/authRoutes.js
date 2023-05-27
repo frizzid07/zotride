@@ -195,7 +195,7 @@ router.post("/verify", (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body.data;
   if (!username || !password) {
     return res
       .status(422)
@@ -234,7 +234,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/auth", async (req, res) => {
-  const { token } = req.body;
+  const { token } = req.body.authToken;
   if (!token) {
     return res
       .status(401)
