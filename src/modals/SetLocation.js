@@ -76,7 +76,10 @@ function SetLocation(props) {
       </View>
       <View style={styles.buttonsContainer}>
         <Button title="Return" onPress={props.closeModal}></Button>
-        <Button title="Confirm" onPress={confirmLocation}></Button>
+        <Button title="Confirm" onPress={() => {
+          confirmLocation();
+          props.closeModal();
+        }}></Button>
       </View>
     </Modal>
   );
