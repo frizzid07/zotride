@@ -69,11 +69,10 @@ const Login = ({ navigation }) => {
       });
       const rdata = await response.json();
       console.log(rdata);
-      console.log('One more');
+      console.log('In Login');
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
         let authenticated = await context.authenticate(rdata);
-        console.log(authenticated);
         if (authenticated) {
           await AsyncStorage.setItem("token", JSON.stringify(rdata.token));
           setIsSuccessful(true);

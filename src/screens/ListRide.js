@@ -133,10 +133,10 @@ const ListRide = ({ navigation }) => {
         },
         body: JSON.stringify({ data: data }),
       });
-      console.log(response.ok);
 
       const rdata = await response.json();
       console.log(rdata);
+      console.log('In List Ride');
 
       if (rdata.added) {
         alert("Ride added successfully");

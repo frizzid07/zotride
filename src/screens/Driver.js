@@ -36,9 +36,9 @@ const Driver = ({ navigation }) => {
           },
           body: JSON.stringify({ data: { driverId: context.user._id } }),
         });
-        console.log(response.ok);
         const result = await response.json();
         console.log(result);
+        console.log('In Active Ride');
 
         if (result.ride) {
           console.log("Current Driver has Active Ride");
@@ -53,7 +53,6 @@ const Driver = ({ navigation }) => {
         console.log(err);
       }
     }
-    console.log("Checking");
     checkActiveRide();
   }, []);
 
@@ -70,6 +69,7 @@ const Driver = ({ navigation }) => {
       });
 
       const result = await response.json();
+      console.log(result)
 
       if (result.deleted) {
         console.log("Ride Deleted");
@@ -79,6 +79,25 @@ const Driver = ({ navigation }) => {
       }
     } catch (err) {
       console.log("Error in deleting " + err);
+    }
+  }
+
+  const editReg = async () => {
+    try {
+      const response = await fetch(NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      console.log(response.ok);
+      const rdata = await response.json();
+      console.log(rdata);
+      console.log(`New Data ${JSON.stringify(rdata.driver)}`);
+      navigation.navigate('DriverRegistration', {driver: rdata.driver});
+    } catch(error) {
+      console.log("Could not edit record");
+      alert(error)
     }
   }
 
@@ -93,8 +112,26 @@ const Driver = ({ navigation }) => {
       console.log(response.ok);
       if (response.ok) {
         console.log("Driver Deleted");
+        try {
+          context.user.isDriver = false;
+          const response = await fetch(NGROK_TUNNEL + "/driverRegistration", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({data: {userId: context.user._id}})
+          });
+          const rdata = await response.json();
+          console.log(rdata);
+          console.log('In Driver Registration again');
+        } catch(error) {
+          console.error(error);
+        }
         alert("Driver Record Deleted");
         navigation.navigate("Landing");
+      } else {
+        console.log("Some error in registering");
+        navigation.navigate("DriverRegistration");
       }
     } catch(error) {
       console.log("Could not delete record");
@@ -132,7 +169,7 @@ const Driver = ({ navigation }) => {
         <View style={{ width: "100%", marginTop: 20 }}>
           <Pressable
             style={[submit, { backgroundColor: 'blue' }]}
-            onPress={() => {}}
+            onPress={editReg}
           >
             <Text style={[styles.text, { color: 'white' }]}>Edit Registration Details</Text>
           </Pressable>

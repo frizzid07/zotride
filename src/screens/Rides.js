@@ -41,7 +41,6 @@ const Rides = ({ navigation, route }) => {
           }
         );
         console.log(response.ok);
-        console.log('One more');
         if (response.ok) {
           const driver = await response.json();
           driverData.push(driver);
@@ -76,9 +75,9 @@ const Rides = ({ navigation, route }) => {
         },
         body: JSON.stringify(data),
       });
-      console.log(response.ok);
       const rdata = await response.json();
       console.log(rdata);
+      console.log('In Book Ride')
       if(response.ok) {
         alert(rdata.success);
         navigation.navigate("Confirm", { ride: ride });

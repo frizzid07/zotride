@@ -43,9 +43,10 @@ const Landing = ({ navigation }) => {
           method: "GET",
         }
       );
-      console.log(response.ok)
+
       const rdata = await response.json()
       console.log(rdata);
+      console.log('In Landing')
       if(rdata.driver !== null) {
         console.log('Driver Record found');
         return true;
@@ -58,9 +59,9 @@ const Landing = ({ navigation }) => {
             },
             body: JSON.stringify({data: {userId: context.user._id}})
           });
-          console.log(response2.ok)
           const rdata2 = await response2.json();
           console.log(rdata2);
+          console.log('In PUT query');
         } catch(error) {
           console.error(error);
         }
@@ -76,6 +77,7 @@ const Landing = ({ navigation }) => {
     console.log("Drive Role Function Called");
     if (context.user.isDriver) {
       const checkDriver = await isRegisteredDriver();
+      console.log(checkDriver);
       if(checkDriver)
         navigation.navigate("Driver");
       else
@@ -84,11 +86,7 @@ const Landing = ({ navigation }) => {
       navigation.navigate("DriverRegistration");
     }
   };
-
-  const passenger = () => {
-    navigation.navigate("FindRide");
-  };
-
+  
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background}></Image>
@@ -105,7 +103,7 @@ const Landing = ({ navigation }) => {
         <Pressable style={submit} onPress={driverRole}>
           <Text style={styles.text}>Driver</Text>
         </Pressable>
-        <Pressable style={submit} onPress={passenger}>
+        <Pressable style={submit} onPress={() => {navigation.navigate("FindRide");}}>
           <Text style={styles.text}>Passenger</Text>
         </Pressable>
         <Pressable

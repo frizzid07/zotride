@@ -24,13 +24,12 @@ const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({authToken: authToken}),
       });
-      console.log(checkUser.ok);
       const userData = await checkUser.json();
       console.log(userData);
+      console.log('In context');
       if (userData !== undefined) {
         setUser(userData.userData);
         await AsyncStorage.setItem("user", JSON.stringify(userData.userData));
-        console.log('Added user to async');
         return true;
       }
     } catch (error) {
@@ -46,6 +45,7 @@ const AuthProvider = ({ children }) => {
     try {
       await AsyncStorage.removeItem("user");
       const token = await AsyncStorage.getItem("token");
+      console.log(token);
       if (token) {
         await AsyncStorage.removeItem("token");
       }

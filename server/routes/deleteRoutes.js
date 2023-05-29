@@ -8,7 +8,7 @@ const Driver = mongoose.model("Driver");
 
 router.post("/deleteRide", async (req, res) => {
   const { id } = req.body.data;
-  Ride.deleteOne({ _id: id })
+  await Ride.deleteOne({ _id: id })
     .then(() => {
       console.log("Deleted the Ride");
       res.status(200).send({ deleted: true });
@@ -22,7 +22,7 @@ router.post("/deleteRide", async (req, res) => {
 router.delete("/deleteDriver", async (req, res) => {
   const id = req.query.driverId;
   console.log(`Driver to be deleted: ${id}`)
-  Driver.deleteOne({ userId: id })
+  await Driver.deleteOne({ userId: id })
     .then(() => {
       console.log("Deleted Driver Info");
       res.status(200).send();
