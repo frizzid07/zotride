@@ -53,6 +53,7 @@ const Verify = ({ navigation, route }) => {
                   body: JSON.stringify(userData)
                 });
               
+                console.log(response.ok);
                 const data = await response.json();
                 console.log(data);
                 console.log('In Verify');

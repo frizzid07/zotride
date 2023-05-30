@@ -69,12 +69,12 @@ const Login = ({ navigation }) => {
       });
       const rdata = await response.json();
       console.log(rdata);
-      console.log('In Login');
+      console.log('Dodging error');
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
         let authenticated = await context.authenticate(rdata);
+        console.log(authenticated);
         if (authenticated) {
-          await AsyncStorage.setItem("token", JSON.stringify(rdata.token));
           setIsSuccessful(true);
           alert(`Logged in successfully`);
         }
