@@ -43,10 +43,10 @@ const Landing = ({ navigation }) => {
           method: "GET",
         }
       );
+      console.log(response.ok);
       const rdata = await response.json()
       console.log(rdata);
       console.log('In Landing');
-      console.log('Still here');
       if(rdata.driver !== null) {
         console.log('Driver Record found');
         return true;
@@ -59,6 +59,7 @@ const Landing = ({ navigation }) => {
             },
             body: JSON.stringify({data: {userId: context.user._id}})
           });
+          console.log(response2.ok);
           const rdata2 = await response2.json();
           console.log(rdata2);
           console.log('In PUT query');

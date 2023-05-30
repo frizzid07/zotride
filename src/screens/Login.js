@@ -60,16 +60,19 @@ const Login = ({ navigation }) => {
     try {
       setIsChecking(true);
       console.log(`In Login ${data}, ${JSON.stringify(data)}`);
+      console.log("Logging in");
       const response = await fetch(NGROK_TUNNEL + "/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({data: data})
+        body: JSON.stringify({ data: data }),
       });
       console.log(response.ok)
       const rdata = await response.json();
       console.log(rdata);
+      console.log("Dodging error");
+      console.log("One more");
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
         let authenticated = await context.authenticate(rdata);
@@ -150,35 +153,34 @@ const Login = ({ navigation }) => {
 export default Login;
 
 const styles = StyleSheet.create({
-
-    container: {
-        width: '100%',
-        height: '100%'
-    },
-    textContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%'
-    },
-    bg: {
-        position: 'absolute',
-        top: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: -1
-    },
-    text: {
-        fontSize: 25,
-        color: '#000'
-    },
-    logo: {
-        width: '40%',
-        height: undefined,
-        aspectRatio: 1,
-        borderWidth: 2,
-        borderColor: '#ffde59',
-        borderRadius: 5,
-        marginBottom: 40
-    }
+  container: {
+    width: "100%",
+    height: "100%",
+  },
+  textContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+  },
+  bg: {
+    position: "absolute",
+    top: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: -1,
+  },
+  text: {
+    fontSize: 25,
+    color: "#000",
+  },
+  logo: {
+    width: "40%",
+    height: undefined,
+    aspectRatio: 1,
+    borderWidth: 2,
+    borderColor: "#ffde59",
+    borderRadius: 5,
+    marginBottom: 40,
+  },
 });

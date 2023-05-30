@@ -142,6 +142,7 @@ const DriverRegistration = ({ navigation, route }) => {
         console.log(response.ok);
         const rdata = await response.json();
         console.log(rdata);
+        console.log('One more');
         if (rdata.success) {
           console.log("Driver Registered Successfully");
           try {
@@ -155,6 +156,7 @@ const DriverRegistration = ({ navigation, route }) => {
             console.log(response2.ok);
             const rdata2 = await response2.json();
             console.log(rdata2);
+            console.log('One more');
           } catch(error) {
             console.error(error);
           }
