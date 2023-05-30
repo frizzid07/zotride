@@ -27,14 +27,12 @@ const Driver = ({ navigation }) => {
   useEffect(() => {
     async function checkActiveRide() {
       console.log("Checking if Driver has an Active ride");
-      console.log(context.user._id);
       try {
-        const response = await fetch(NGROK_TUNNEL + "/findActiveRide", {
-          method: "POST",
+        const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: { driverId: context.user._id } }),
+          }
         });
         const result = await response.json();
         console.log(result);
@@ -56,16 +54,33 @@ const Driver = ({ navigation }) => {
     checkActiveRide();
   }, []);
 
-  async function cancelRide() {
-    const id = activeRide._id;
-    console.log(id);
+  async function editRide() {
     try {
-      const response = await fetch(NGROK_TUNNEL + "/deleteRide", {
-        method: "POST",
+      const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data: { id: id } }),
+        }
+      });
+      const result = await response.json();
+      console.log(result);
+
+      if (result.ride) {
+        console.log(`New Data ${JSON.stringify(result.ride)}`);
+        navigation.navigate('ListRide', {ride: result.ride});
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function cancelRide() {
+    try {
+      const response = await fetch(NGROK_TUNNEL + `/deleteRide?rideId=${activeRide._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        }
       });
 
       const result = await response.json();
@@ -75,7 +90,7 @@ const Driver = ({ navigation }) => {
         console.log("Ride Deleted");
         setHasActive(false);
       } else {
-        console.log("Could not Delete");
+        console.log(`Could not Delete due to ${result.error}`);
       }
     } catch (err) {
       console.log("Error in deleting " + err);
@@ -144,11 +159,11 @@ const Driver = ({ navigation }) => {
       <Image style={styles.bg} source={background}></Image>
       <View style={styles.textContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("Welcome")}>
-          <Image style={styles.logo} source={logo} />
+          <Image style={[styles.logo, {width: "25%"}]} source={logo} />
         </TouchableOpacity>
         <Text style={styles.text}>Welcome, {context.user.firstName}</Text>
         {!hasActive && (
-          <View style={{ width: "100%", marginTop: 25 }}>
+          <View style={{ width: "75%", marginTop: 25 }}>
             <Pressable
               style={submit}
               onPress={() => navigation.navigate("ListRide")}
@@ -158,26 +173,31 @@ const Driver = ({ navigation }) => {
           </View>
         )}
         {hasActive && (
-          <View style={{ width: "100%", marginTop: 25 }}>
-            <Text>Your Currrent Ride</Text>
+          <View style={{ width: "100%", marginTop: 15 }}>
+            <Text style={styles.text}>Your Current Ride</Text>
             <SingleRide ride={activeRide}></SingleRide>
-            <Pressable style={[submit, { marginTop: 10 }]} onPress={cancelRide}>
-              <Text style={styles.text}>Cancel Trip</Text>
-            </Pressable>
+            <View style={{ width: "75%", marginTop: 15, alignSelf: 'center' }}>
+              <Pressable style={[submit, { backgroundColor: 'blue' }]} onPress={editRide}>
+                <Text style={[styles.text, { color: 'white' }]}>Modify Trip</Text>
+              </Pressable>
+              <Pressable style={[submit, { backgroundColor: 'red', marginTop: -5 }]} onPress={cancelRide}>
+                <Text style={[styles.text, { color: 'white' }]}>Cancel Trip</Text>
+              </Pressable>
+            </View>
           </View>
         )}
-        <View style={{ width: "100%", marginTop: 20 }}>
+        <View style={{ width: "75%", marginTop: 15 }}>
           <Pressable
             style={[submit, { backgroundColor: 'blue' }]}
             onPress={editReg}
           >
-            <Text style={[styles.text, { color: 'white' }]}>Edit Registration Details</Text>
+            <Text style={[styles.text, { color: 'white' }]}>Edit Registration</Text>
           </Pressable>
           <Pressable
             style={[submit, { backgroundColor: 'red', marginTop: -5 }]}
             onPress={deleteReg}
           >
-            <Text style={[styles.text, { color: 'white' }]}>Delete Registration Details</Text>
+            <Text style={[styles.text, { color: 'white' }]}>Delete Registration</Text>
           </Pressable>
         </View>
       </View>

@@ -66,8 +66,6 @@ const Rides = ({ navigation, route }) => {
       "userId": context.user._id
     }
     try {
-      console.log("in book ride function");
-      console.log(data);
       const response = await fetch(NGROK_TUNNEL + "/bookRide", {
         method: "PUT",
         headers: {
@@ -75,6 +73,7 @@ const Rides = ({ navigation, route }) => {
         },
         body: JSON.stringify(data),
       });
+      console.log(response.ok)
       const rdata = await response.json();
       console.log(rdata);
       console.log('In Book Ride')

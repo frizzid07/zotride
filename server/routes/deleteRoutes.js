@@ -6,16 +6,17 @@ require("dotenv").config();
 const Ride = mongoose.model("Ride");
 const Driver = mongoose.model("Driver");
 
-router.post("/deleteRide", async (req, res) => {
-  const { id } = req.body.data;
+router.delete("/deleteRide", async (req, res) => {
+  const id = req.query.rideId;
+  console.log(`Ride to be cancelled: ${id}`);
   await Ride.deleteOne({ _id: id })
     .then(() => {
-      console.log("Deleted the Ride");
+      console.log("Cancelled the Ride");
       res.status(200).send({ deleted: true });
     })
     .catch((err) => {
-      console.log("Could not delete the Ride " + err);
-      res.status(422).send({ deleted: false });
+      console.log("Could not cancel the Ride " + err);
+      res.status(422).send({ deleted: false, error: err });
     });
 });
 

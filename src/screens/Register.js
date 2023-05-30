@@ -56,8 +56,8 @@ const Register = ({ navigation }) => {
           });
           console.log(response.ok);
           const data = await response.json();
-          console.log(data);
           console.log('In Register');
+          console.log(data);
         
           if (data.error === 'Invalid Credentials') {
             alert('Invalid Credentials');

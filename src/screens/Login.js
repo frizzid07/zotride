@@ -67,9 +67,9 @@ const Login = ({ navigation }) => {
         },
         body: JSON.stringify({data: data})
       });
+      console.log(response.ok)
       const rdata = await response.json();
       console.log(rdata);
-      console.log('Dodging error');
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
         let authenticated = await context.authenticate(rdata);
