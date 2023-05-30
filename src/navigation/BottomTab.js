@@ -7,6 +7,7 @@ import { useContext } from "react";
 
 import Driver from "../screens/Driver";
 import FindRide from "../screens/FindRide";
+import PastRides from "../screens/PastRides";
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +42,7 @@ export default MyTabs = () => {
       {context.user.isDriver && (
         <Tab.Screen name="Driver" component={Driver}></Tab.Screen>
       )}
-      <Tab.Screen name="Profile" component={FindRide}></Tab.Screen>
+      <Tab.Screen name="Profile" component={PastRides}></Tab.Screen>
     </Tab.Navigator>
   );
 };

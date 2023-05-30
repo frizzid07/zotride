@@ -24,7 +24,6 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails }) => {
       </View>
       {expanded && 
       <RideDetails rideDetails={rideDetails} driverDetails={driverDetails} passengerDetails={passengerDetails}></RideDetails>}
-      <RideDetails rideDetails={rideDetails} driverDetails={driverDetails} passengerDetails={passengerDetails}></RideDetails>}
       </TouchableOpacity>
   );
 };

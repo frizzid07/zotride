@@ -7,14 +7,12 @@ import FindRide from "../screens/FindRide";
 import Rides from "../screens/Rides";
 import DriverRegistration from "../screens/DriverRegistration";
 import ListRide from "../screens/ListRide";
-import PastRides from "../screens/PastRides";
 
 const Stack = createNativeStackNavigator();
 
 export default AppStack = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Past Rides" component={PastRides} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>      
       <Stack.Screen name="Landing" component={Landing} />
       <Stack.Screen name="Driver" component={Driver} />
       <Stack.Screen name="FindRide" component={FindRide} />
