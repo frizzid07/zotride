@@ -177,28 +177,28 @@ const Driver = ({ navigation }) => {
           <View style={{ width: "100%", marginTop: 15 }}>
             <Text style={styles.text}>Your Current Ride</Text>
             <SingleRide ride={activeRide}></SingleRide>
-            <View style={{ width: "75%", marginTop: 15, alignSelf: 'center' }}>
-              <Pressable style={[submit, { backgroundColor: 'blue' }]} onPress={editRide}>
-                <Text style={[styles.text, { color: 'white' }]}>Modify Trip</Text>
+            <View style={{ width: "60%", marginTop: 15, alignSelf: 'center' }}>
+              <Pressable style={[submit, { backgroundColor: '#004aac' }]} onPress={editRide}>
+                <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Modify Trip</Text>
               </Pressable>
-              <Pressable style={[submit, { backgroundColor: 'red', marginTop: -5 }]} onPress={cancelRide}>
-                <Text style={[styles.text, { color: 'white' }]}>Cancel Trip</Text>
+              <Pressable style={[submit, { backgroundColor: "#ebd25f", marginTop: -5 }]} onPress={cancelRide}>
+                <Text style={[styles.text, { color: 'black', fontSize: 20 }]}>Cancel Trip</Text>
               </Pressable>
             </View>
           </View>
         )}
-        <View style={{ width: "75%", marginTop: 15 }}>
+        <View style={{ width: "60%", marginTop: 15 }}>
           <Pressable
-            style={[submit, { backgroundColor: 'blue' }]}
+            style={[submit, { backgroundColor: '#004aac' }]}
             onPress={editReg}
           >
-            <Text style={[styles.text, { color: 'white' }]}>Edit Registration</Text>
+            <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Edit Registration</Text>
           </Pressable>
           <Pressable
-            style={[submit, { backgroundColor: 'red', marginTop: -5 }]}
+            style={[submit, { backgroundColor: "#ebd25f", marginTop: -5 }]}
             onPress={deleteReg}
           >
-            <Text style={[styles.text, { color: 'white' }]}>Delete Registration</Text>
+            <Text style={[styles.text, { color: 'black', fontSize: 20 }]}>Delete Registration</Text>
           </Pressable>
         </View>
       </View>
