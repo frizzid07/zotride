@@ -139,9 +139,9 @@ const DriverRegistration = ({ navigation, route }) => {
           },
           body: JSON.stringify({data: data})
         });
+        console.log(response.ok);
         const rdata = await response.json();
         console.log(rdata);
-        console.log('In Driver Registration');
         if (rdata.success) {
           console.log("Driver Registered Successfully");
           try {
@@ -152,9 +152,9 @@ const DriverRegistration = ({ navigation, route }) => {
               },
               body: JSON.stringify({data: data})
             });
+            console.log(response2.ok);
             const rdata2 = await response2.json();
             console.log(rdata2);
-            console.log('In Driver Registration again');
           } catch(error) {
             console.error(error);
           }

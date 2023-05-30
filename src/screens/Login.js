@@ -68,6 +68,7 @@ const Login = ({ navigation }) => {
         },
         body: JSON.stringify({ data: data }),
       });
+      console.log(response.ok)
       const rdata = await response.json();
       console.log(rdata);
       console.log("Dodging error");
