@@ -46,7 +46,7 @@ const Landing = ({ navigation }) => {
       console.log(response.ok);
       const rdata = await response.json()
       console.log(rdata);
-      console.log('In Landing')
+      console.log('In Landing');
       if(rdata.driver !== null) {
         console.log('Driver Record found');
         return true;
@@ -63,6 +63,7 @@ const Landing = ({ navigation }) => {
           const rdata2 = await response2.json();
           console.log(rdata2);
           console.log('In PUT query');
+          console.log('Still here');
         } catch(error) {
           console.error(error);
         }

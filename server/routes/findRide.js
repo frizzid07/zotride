@@ -72,11 +72,10 @@ function toRadians(degrees) {
   return (degrees * Math.PI) / 180;
 }
 
-router.post("/findActiveRide", async (req, res) => {
-  const { driverId } = req.body.data;
-  console.log(driverId);
+router.get("/findActiveRide", async (req, res) => {
+  const id = req.query.driverId;
   try {
-    const ride = await Ride.findOne({ driverId: driverId, isActive: true });
+    const ride = await Ride.findOne({ driverId: id, isActive: true });
 
     if (ride) {
       console.log("Current Driver has an active ride");
@@ -107,7 +106,6 @@ router.get("/getRides", async (req, res) => {
       }
       pastRides.push({"rideDetails":ride[0],"driverDetails":driverDetails});
     }
-    console.log(pastRides)
     return res.status(200).send(pastRides);
     
   } catch (err) {

@@ -26,9 +26,10 @@ import { input } from "../common/input";
 import { NGROK_TUNNEL } from "@env";
 import { AuthContext } from "../../server/context/authContext";
 
-const ListRide = ({ navigation }) => {
+const ListRide = ({ navigation, route }) => {
   const context = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState(null);
+  const { DateTime } = require('luxon');
 
   const [isStartLocVisible, setStartLocVisible] = useState(false);
   const [isEndLocVisible, setEndLocVisible] = useState(false);
@@ -38,16 +39,8 @@ const ListRide = ({ navigation }) => {
   const [endLocDesc, setEndLocDesc] = useState("Not Selected");
   const [startTime, setStartTime] = useState(new Date());
 
-  function startLocVisibleHandler() {
-    setStartLocVisible(!isStartLocVisible);
-  }
-
-  function endLocVisibleHandler() {
-    setEndLocVisible(!isEndLocVisible);
-  }
-
+  const [fillData, setFillData] = useState(route?.params?.ride);
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-  const { DateTime } = require('luxon');
 
   const [data, setData] = useState({
     rideId: "test",
@@ -64,6 +57,72 @@ const ListRide = ({ navigation }) => {
     rideCost: "",
     capacity: "",
   });
+
+  function fetchDesc(fillData) {
+    setStartLocDesc(fillData.startLocation.description);
+    setEndLocDesc(fillData.endLocation.description);
+    setStartTime(new Date(fillData.startTime).toLocaleString('en-US', options));
+  }
+
+  useEffect(() => {
+    console.log(`Filldata value ${fillData} ${JSON.stringify(fillData)}`);
+
+    if(fillData !== undefined) {
+      setData((data) => ({
+        ...data,
+        rideCost: fillData.rideCost,
+        capacity: fillData.capacity,
+        startTime: fillData.startTime,
+        startLocation: {
+          ...data.startLocation,
+          description: fillData.startLocation.description,
+          latitude: fillData.startLocation.latitude,
+          longitude: fillData.startLocation.longitude
+        },
+        endLocation: {
+          ...data.endLocation,
+          description: fillData.endLocation.description,
+          latitude: fillData.endLocation.latitude,
+          longitude: fillData.endLocation.longitude
+        }
+      }));
+      fetchDesc(fillData);
+    }
+  }, []);
+
+  const checkEditedData = (editData) => {
+    if(data.startTime != fillData.startTime)
+      editData.startTime = data.startTime;
+    if(data.rideCost != fillData.rideCost)
+      editData.rideCost = data.rideCost;
+    if(data.capacity != fillData.capacity)
+      editData.capacity = data.capacity;
+    if(data.startLocation.description != fillData.startLocation.description) {
+      editData.startLocation = {};
+      if(data.startLocation.description != fillData.startLocation.description) {
+        editData.startLocation.description = data.startLocation.description;
+        editData.startLocation.latitude = data.startLocation.latitude;
+        editData.startLocation.longitude = data.startLocation.longitude;
+      }
+    }
+    if(data.endLocation.description != fillData.endLocation.description) {
+      editData.endLocation = {};
+      if(data.endLocation.description != fillData.endLocation.description) {
+        editData.endLocation.description = data.endLocation.description;
+        editData.endLocation.latitude = data.endLocation.latitude;
+        editData.endLocation.longitude = data.endLocation.longitude;
+      }
+    }
+    return editData;
+  }
+  
+  function startLocVisibleHandler() {
+    setStartLocVisible(!isStartLocVisible);
+  }
+
+  function endLocVisibleHandler() {
+    setEndLocVisible(!isEndLocVisible);
+  }
 
   function setStartLocation(object) {
     console.log(object);
@@ -101,12 +160,9 @@ const ListRide = ({ navigation }) => {
     setTimePickerVisible(!isTimePickerVisible);
   }
 
-  useEffect(() => {
-    setData({ ...data, startTime: DateTime.fromISO(startTime.toISOString(), { zone: 'utc' }).setZone('America/Los_Angeles') });
-  }, [startTime]);
-
   const onDateChange = (selectedDate) => {
     setTimePickerVisible(false);
+    console.log(`Selected Date ${selectedDate} ${typeof selectedDate}`);
     if (selectedDate) {
       setStartTime(selectedDate);
     }
@@ -124,29 +180,62 @@ const ListRide = ({ navigation }) => {
       return;
     }
 
-    try {
-      console.log(data);
-      const response = await fetch(NGROK_TUNNEL + "/listRide", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data: data }),
-      });
-      console.log(response.ok);
-      const rdata = await response.json();
-      console.log(rdata);
-      console.log('In List Ride');
+    if(fillData !== undefined) {
+      const editData = await checkEditedData({});
+      console.log(`New Edit Data ${editData} ${JSON.stringify(editData)}`);
 
-      if (rdata.added) {
-        alert("Ride added successfully");
-        console.log("Ride Added Successfully");
-        navigation.navigate("Landing");
-      } else {
-        alert("Could not add ride");
+      if(Object.keys(editData).length === 0) {
+        setErrorMsg("No Changes Made");
+        alert("No edits made");
+        return;
       }
-    } catch (error) {
-      console.log("Some error in registering the Ride " + error);
+
+      try {
+        const response = await fetch(NGROK_TUNNEL + `/editRide?driverId=${context.user._id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({editData: editData}),
+        });
+        console.log(response.ok);
+        if (response.ok) {
+          console.log("Ride Updated");
+          alert("Trip Updated");
+          navigation.navigate("Driver");
+        }
+      } catch(error) {
+        console.log("Could not update trip");
+        alert(error);
+      }
+    }
+    
+    else {
+      try {
+        console.log(data);
+        const response = await fetch(NGROK_TUNNEL + "/listRide", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: data }),
+        });
+        console.log(response.ok);
+        const rdata = await response.json();
+        console.log(rdata);
+        console.log('In List Ride');
+        console.log('One more');
+
+        if (rdata.added) {
+          alert("Ride added successfully");
+          console.log("Ride Added Successfully");
+          navigation.navigate("Landing");
+        } else {
+          alert("Could not add ride");
+        }
+      } catch (error) {
+        console.log("Some error in registering the Ride " + error);
+      }
     }
   }
 
@@ -239,6 +328,7 @@ const ListRide = ({ navigation }) => {
           onPressIn={clearErrMsg}
           onChangeText={(text) => setData({ ...data, rideCost: text })}
           keyboardType="number-pad"
+          value={data.rideCost.toString()}
         />
         <TextInput
           style={input}
@@ -246,6 +336,7 @@ const ListRide = ({ navigation }) => {
           onPressIn={clearErrMsg}
           onChangeText={(text) => setData({ ...data, capacity: text })}
           keyboardType="number-pad"
+          value={data.capacity.toString()}
         />
         <Pressable style={[submit, { marginTop: 50 }]}>
           <Text style={styles.text} onPress={registerRide}>
@@ -291,7 +382,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "20%",
+    width: "15%",
     height: undefined,
     aspectRatio: 1,
     borderWidth: 1,
