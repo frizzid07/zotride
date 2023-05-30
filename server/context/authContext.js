@@ -24,8 +24,10 @@ const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({authToken: authToken}),
       });
+      console.log(checkUser.ok);
       const userData = await checkUser.json();
       console.log(userData.userData);
+      console.log('One more');
       if (userData !== undefined) {
         setUser(userData.userData);
         AsyncStorage.setItem("user", JSON.stringify(userData.userData));

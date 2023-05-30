@@ -132,6 +132,7 @@ const FindRide = ({ navigation }) => {
         },
         body: JSON.stringify(data),
       });
+      console.log(response.ok);
       const rdata = await response.json();
       console.log('In Find Ride');
       if (response.ok) {
