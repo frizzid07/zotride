@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const Ride = mongoose.model("Ride");
+const User = mongoose.model("User");
 
 router.post("/findRide", async (req, res) => {
   const { startLocation, endLocation, startTime, startRadius, endRadius } =
@@ -88,6 +89,54 @@ router.post("/findActiveRide", async (req, res) => {
     console.log(err);
     return res.status(422).json({ error: err });
   }
+});
+
+router.get("/getRides", async (req, res) => {
+  const userId  = req.query.userId;
+  try {
+    const user = await User.find({ _id: userId}).exec();
+    const pastRides = []
+    for(let i=0;i<user[0].past_rides.length;i++){
+      const ride = await Ride.find({ _id: user[0].past_rides[i]}).exec();
+      const driver = await User.find({ _id: ride[0].driverId}).exec();
+      console.log("driver user id "+ride[0].driverId)
+      const driverDetails = {
+        "firstName":driver[0].firstName,
+        "lastName":driver[0].lastName,
+        "mobile":driver[0].mobileNumber
+      }
+      pastRides.push({"rideDetails":ride[0],"driverDetails":driverDetails});
+    }
+    console.log(pastRides)
+    return res.status(200).send(pastRides);
+    
+  } catch (err) {
+    return res.status(422).json({ error: err });
+  }
+
+});
+
+router.get("/getDriverRides", async (req, res) => {
+  const driverId  = req.query.driverId;
+  try {
+    const rides = await Ride.find({ driverId: driverId}).exec();
+    const pastRides = []
+    for(let i=0;i<rides.length;i++){
+      let passengers = [];
+      for(let j=0;j<rides[i].passengers.length;j++){
+        const passenger = await User.find({ _id: rides[i].passengers[j]}).exec();
+        passengers.push({"firstName":passenger[0].firstName,"lastName":passenger[0].lastName});
+
+      }
+
+      pastRides.push({"rideDetails":rides[i],"passengerDetails":passengers});
+    }
+    return res.status(200).send(pastRides);
+    
+  } catch (err) {
+    return res.status(422).json({ error: err });
+  }
+
 });
 
 module.exports = router;
