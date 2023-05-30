@@ -5,23 +5,10 @@ import { Ionicons } from "react-native-vector-icons";
 import { AuthContext } from "../../server/context/authContext";
 import { useContext } from "react";
 
+import Driver from "../screens/Driver";
+import FindRide from "../screens/FindRide";
+
 const Tab = createBottomTabNavigator();
-
-function Profile() {
-  return (
-    <View>
-      <Text>Hello World!</Text>
-    </View>
-  );
-}
-
-function Driver() {
-  return (
-    <View>
-      <Text>Hello Driver!</Text>
-    </View>
-  );
-}
 
 export default MyTabs = () => {
   const context = useContext(AuthContext);
@@ -54,7 +41,7 @@ export default MyTabs = () => {
       {context.user.isDriver && (
         <Tab.Screen name="Driver" component={Driver}></Tab.Screen>
       )}
-      <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
+      <Tab.Screen name="Profile" component={FindRide}></Tab.Screen>
     </Tab.Navigator>
   );
 };

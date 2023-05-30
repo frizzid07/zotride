@@ -129,14 +129,15 @@ const Driver = ({ navigation }) => {
         console.log("Driver Deleted");
         try {
           context.user.isDriver = false;
-          const response = await fetch(NGROK_TUNNEL + "/driverRegistration", {
+          const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({data: {userId: context.user._id}})
           });
-          const rdata = await response.json();
+          console.log(response2.ok);
+          const rdata = await response2.json();
           console.log(rdata);
           console.log('In Driver Registration again');
         } catch(error) {

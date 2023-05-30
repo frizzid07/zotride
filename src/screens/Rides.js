@@ -73,7 +73,8 @@ const Rides = ({ navigation, route }) => {
         },
         body: JSON.stringify(data),
       });
-      console.log(response.ok)
+      console.log(response.ok);
+      console.log('One more');
       const rdata = await response.json();
       console.log(rdata);
       console.log('In Book Ride')

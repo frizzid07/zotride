@@ -29,6 +29,7 @@ const AuthProvider = ({ children }) => {
       console.log(userData.userData);
       console.log("We are checking");
       console.log('One more');
+      console.log('Save us senpai');
       if (userData !== undefined) {
         setUser(userData.userData);
         AsyncStorage.setItem("user", JSON.stringify(userData.userData));

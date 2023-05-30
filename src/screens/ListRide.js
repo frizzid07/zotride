@@ -224,6 +224,7 @@ const ListRide = ({ navigation, route }) => {
         const rdata = await response.json();
         console.log(rdata);
         console.log('In List Ride');
+        console.log('One more');
 
         if (rdata.added) {
           alert("Ride added successfully");

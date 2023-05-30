@@ -55,6 +55,7 @@ const Register = ({ navigation }) => {
             body: JSON.stringify(fdata)
           });
           console.log(response.ok);
+          console.log('Fallen soldier');
           const data = await response.json();
           console.log('In Register');
           console.log(data);
