@@ -107,7 +107,6 @@ router.get("/getRides", async (req, res) => {
       }
       pastRides.push({"rideDetails":ride[0],"driverDetails":driverDetails});
     }
-    console.log(pastRides)
     return res.status(200).send(pastRides);
     
   } catch (err) {

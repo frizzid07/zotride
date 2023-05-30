@@ -5,7 +5,7 @@ import {
   } from "react-native";
 
   
-  const RideDetails = ({rideDetails, driverDetails, passengerDetails, isDriver}) => {
+  const RideDetails = ({rideDetails, driverDetails, passengerDetails}) => {
     return (
       <View style={styles.rideBox}>
         <View style={styles.rideContainer}>

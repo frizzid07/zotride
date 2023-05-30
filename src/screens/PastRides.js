@@ -25,6 +25,7 @@ import {
       const getRides = async () => {
 
         try {
+          console.log("hi hi")
           const response = await fetch(
             NGROK_TUNNEL + `/getRides?userId=${context.user._id}`,
             {
