@@ -8,7 +8,7 @@ const User = mongoose.model("User");
 
 router.post("/findRide", async (req, res) => {
   const { startLocation, endLocation, startTime, startRadius, endRadius } =
-    req.body.data;
+    req.body;
   const time = new Date(startTime);
   const beginTime = new Date(
     time.getTime() - 30 * 60000

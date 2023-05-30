@@ -10,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 // Images
 import background from "../../assets/background.jpg";
@@ -23,13 +23,11 @@ import { input } from "../common/input";
 import { NGROK_TUNNEL } from "@env";
 import { AuthContext } from "../../server/context/authContext";
 
-const DriverRegistration = ({ navigation }) => {
+const DriverRegistration = ({ navigation, route }) => {
   const context = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  function clearErrMsg() {
-    setErrorMsg(null);
-  }
+  const [fillData, setFillData] = useState(route?.params?.driver);
 
   const [data, setData] = useState({
     userId: context.user._id,
@@ -43,6 +41,52 @@ const DriverRegistration = ({ navigation }) => {
     },
   });
 
+  useEffect(() => {
+    console.log(`Filldata value ${fillData} ${JSON.stringify(fillData)}`);
+
+    if(fillData !== undefined) {
+      setData((data) => ({
+        ...data,
+        licenseNumber: fillData.licenseNumber,
+        vehicleInformation: {
+          ...data.vehicleInformation,
+          vehicleNumber: fillData.vehicleInformation[0]?.vehicleNumber,
+          vehicleCompany: fillData.vehicleInformation[0]?.vehicleCompany,
+          vehicleModel: fillData.vehicleInformation[0]?.vehicleModel,
+          vehicleColor: fillData.vehicleInformation[0]?.vehicleColor,
+          vehicleCapacity: fillData.vehicleInformation[0]?.vehicleCapacity,
+        },
+      }));
+
+      console.log(`New Data Value ${data}`);
+    }
+  }, []);
+
+  const checkEditedData = (editData) => {
+      if(data.licenseNumber != fillData.licenseNumber)
+        editData.licenseNumber = data.licenseNumber;
+      if(data.vehicleInformation.vehicleNumber != fillData.vehicleInformation[0]?.vehicleNumber || data.vehicleInformation.vehicleCompany != fillData.vehicleInformation[0]?.vehicleCompany 
+        || data.vehicleInformation.vehicleModel != fillData.vehicleInformation[0]?.vehicleModel || data.vehicleInformation.vehicleColor != fillData.vehicleInformation[0]?.vehicleColor 
+        || data.vehicleInformation.vehicleCapacity != fillData.vehicleInformation[0]?.vehicleCapacity ) {
+        editData.vehicleInformation = [{}];
+        if(data.vehicleInformation.vehicleNumber != fillData.vehicleInformation[0]?.vehicleNumber)
+          editData.vehicleInformation[0].vehicleNumber = data.vehicleInformation.vehicleNumber;
+        if(data.vehicleInformation.vehicleCompany != fillData.vehicleInformation[0]?.vehicleCompany)
+          editData.vehicleInformation[0].vehicleCompany = data.vehicleInformation.vehicleCompany;
+        if(data.vehicleInformation.vehicleModel != fillData.vehicleInformation[0]?.vehicleModel)
+          editData.vehicleInformation[0].vehicleModel = data.vehicleInformation.vehicleModel;
+        if(data.vehicleInformation.vehicleColor != fillData.vehicleInformation[0]?.vehicleColor)
+          editData.vehicleInformation[0].vehicleColor = data.vehicleInformation.vehicleColor;
+        if(data.vehicleInformation.vehicleCapacity != fillData.vehicleInformation[0]?.vehicleCapacity)
+          editData.vehicleInformation[0].vehicleCapacity = data.vehicleInformation.vehicleCapacity;
+      }
+      return editData;
+  }
+
+  function clearErrMsg() {
+    setErrorMsg(null);
+  }
+  
   async function registerDriver() {
     if (
       data.licenseNumber == "" ||
@@ -56,44 +100,73 @@ const DriverRegistration = ({ navigation }) => {
       return;
     }
 
-    console.log(data);
+    if(fillData !== undefined) {
+      const editData = await checkEditedData({});
+      console.log(`New Edit Data ${editData} ${JSON.stringify(editData)}`);
 
-    // Further logic to call the api and save driver details
-    //Let's assume we have successfully saved the driver details
-
-    try {
-      const response = await fetch(NGROK_TUNNEL + "/driverRegistration", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({data: data})
-      });
-      const rdata = await response.json();
-      console.log(rdata);
-      if (rdata.success) {
-        console.log("Driver Registered Successfully");
-        try {
-          const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({data: data})
-          });
-          const rdata2 = await response2.json();
-          console.log(rdata2);
-        } catch(error) {
-          console.error(error);
-        }
-        navigation.navigate("Driver");
-      } else {
-        console.log("Some error in registering");
-        navigation.navigate("DriverRegistration");
+      if(Object.keys(editData).length === 0) {
+        setErrorMsg("No Changes Made");
+        alert("No edits made");
+        return;
       }
-    } catch (error) {
-      console.log("Some error in registering as Driver " + error);
-    } finally {}
+    
+      try {
+        const response = await fetch(NGROK_TUNNEL + `/editDriver?driverId=${context.user._id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({editData: editData}),
+        });
+        console.log(response.ok);
+        if (response.ok) {
+          console.log("Driver Updated");
+          alert("Driver Record Updated");
+          navigation.navigate("Landing");
+        }
+      } catch(error) {
+        console.log("Could not update record");
+        alert(error);
+      }
+    }
+
+    else {
+      try {
+        const response = await fetch(NGROK_TUNNEL + "/driverRegistration", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({data: data})
+        });
+        const rdata = await response.json();
+        console.log(rdata);
+        console.log('In Driver Registration');
+        if (rdata.success) {
+          console.log("Driver Registered Successfully");
+          try {
+            const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({data: data})
+            });
+            const rdata2 = await response2.json();
+            console.log(rdata2);
+            console.log('In Driver Registration again');
+          } catch(error) {
+            console.error(error);
+          }
+          navigation.navigate("Driver");
+        } else {
+          console.log("Some error in registering");
+          navigation.navigate("DriverRegistration");
+        }
+      } catch (error) {
+        console.log("Some error in registering as Driver " + error);
+      } finally {}
+    }
   }
 
   return (
@@ -117,6 +190,7 @@ const DriverRegistration = ({ navigation }) => {
           placeholder="License Number"
           onPressIn={clearErrMsg}
           onChangeText={(text) => setData({ ...data, licenseNumber: text })}
+          value={data.licenseNumber}
         />
         <Text style={styles.text}>Vehicle Number</Text>
         <TextInput
@@ -132,6 +206,7 @@ const DriverRegistration = ({ navigation }) => {
               },
             })
           }
+          value={data.vehicleInformation.vehicleNumber}
         />
 
         <Text style={styles.text}>Car Details</Text>
@@ -148,6 +223,7 @@ const DriverRegistration = ({ navigation }) => {
               },
             })
           }
+          value={data.vehicleInformation.vehicleCompany}
         />
         <TextInput
           style={input}
@@ -162,6 +238,7 @@ const DriverRegistration = ({ navigation }) => {
               },
             })
           }
+          value={data.vehicleInformation.vehicleModel}
         />
         <TextInput
           style={input}
@@ -176,6 +253,7 @@ const DriverRegistration = ({ navigation }) => {
               },
             })
           }
+          value={data.vehicleInformation.vehicleColor}
         />
         <TextInput
           style={input}
@@ -190,6 +268,7 @@ const DriverRegistration = ({ navigation }) => {
               },
             })
           }
+          value={data.vehicleInformation.vehicleCapacity.toString()}
           keyboardType="number-pad"
         />
         <Pressable style={[submit, { marginTop: -5 }]}>

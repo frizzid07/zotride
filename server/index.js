@@ -21,8 +21,11 @@ const bookRide = require("./routes/bookRide");
 app.use(bookRide);
 const requireToken = require("./middleware/authTokenRequired");
 
-const deleteRideRoute = require("./routes/deleteRide");
-app.use(deleteRideRoute);
+const editRoutes = require("./routes/editRoutes");
+app.use(editRoutes);
+
+const deleteRoutes = require("./routes/deleteRoutes");
+app.use(deleteRoutes);
 
 const driverRegistration = require("./routes/driverRegistration");
 app.use(driverRegistration);

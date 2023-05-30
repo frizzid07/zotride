@@ -7,20 +7,8 @@ import logo from '../../assets/logo.png';
 
 // Common
 import {submit} from '../common/button';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Welcome = ({ navigation }) => {
-  
-  useEffect(() => {
-    const clearAsyncStorage = async() => {
-      try {
-        await AsyncStorage.removeItem('user');
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      clearAsyncStorage();
-    }, []);
 
   return (
     <View style = {styles.container}>

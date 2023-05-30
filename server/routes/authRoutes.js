@@ -77,7 +77,7 @@ router.post("/register", async (req, res) => {
     mobileNumber,
     email,
     password,
-  } = req.body.userData;
+  } = req.body;
   if (
     !firstName ||
     !lastName ||
@@ -132,7 +132,7 @@ router.post("/verify", (req, res) => {
     mobileNumber,
     email,
     password,
-  } = req.body.fdata;
+  } = req.body;
   if (
     !firstName ||
     !lastName ||
@@ -251,7 +251,7 @@ router.post("/auth", async (req, res) => {
     const userData = await User.findById(_id).lean().exec();
     console.log(userData);
     try {
-        res.send({ userData });
+        res.status(200).send({ userData });
     } catch (error) {
       console.log(error);
       return res.status(422).send({ error: error.message });

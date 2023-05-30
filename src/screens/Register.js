@@ -52,11 +52,12 @@ const Register = ({ navigation }) => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({fdata: fdata})
+            body: JSON.stringify(fdata)
           });
           console.log(response.ok);
           const data = await response.json();
           console.log(data);
+          console.log('In Register');
         
           if (data.error === 'Invalid Credentials') {
             alert('Invalid Credentials');

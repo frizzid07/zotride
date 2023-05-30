@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
   async function authenticate(authToken) {
     setIsLoading(true);
     setIsLoggedIn(true);
-    setToken(JSON.stringify(authToken));
+    setToken(authToken.token);
     console.log(`In authcontext ${JSON.stringify(authToken)}`);
     try {
       let checkUser = await fetch(NGROK_TUNNEL + "/auth", {
@@ -22,30 +22,29 @@ const AuthProvider = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ authToken: authToken }),
+        body: JSON.stringify({authToken: authToken}),
       });
       const userData = await checkUser.json();
-      console.log(userData);
+      console.log(userData.userData);
       if (userData !== undefined) {
         setUser(userData.userData);
-        await AsyncStorage.setItem("user", JSON.stringify(userData.userData));
+        AsyncStorage.setItem("user", JSON.stringify(userData.userData));
+        AsyncStorage.setItem("token", authToken.token);
+        return true;
       }
     } catch (error) {
       console.log(`Login Error: ${error}`);
     } finally {
       setIsLoading(false);
-      return isLoggedIn;
     }
+    return false;
   }
 
-  async function logout() {
+  function logout() {
     setIsLoading(true);
     try {
-      await AsyncStorage.removeItem("user");
-      const token = await AsyncStorage.getItem("token");
-      if (token) {
-        await AsyncStorage.removeItem("token");
-      }
+      AsyncStorage.removeItem("user");
+      AsyncStorage.removeItem("token");
       setIsLoggedIn(false);
       setToken(null);
       setUser(null);

@@ -48,21 +48,19 @@ router.post("/driverRegistration", async (req, res) => {
 });
 
 router.put("/driverRegistration", async (req, res) => {
-  const { licenseNumber, userId, vehicleInformation } = req.body.data;
+  const { userId } = req.body.data;
+  console.log(`User ID inside ${userId}`);
   try {
-    console.log(`User ID ${userId}`);
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $set: { isDriver: true } },
-      { new: true, useFindAndModify: false }
-    );
-
-    if (!updatedUser) {
+    const updatedUser = await User.findOne({ _id: userId });
+    console.log(updatedUser);
+    if(updatedUser) {
+      updatedUser.isDriver = !updatedUser.isDriver;
+      await updatedUser.save();
+      console.log("User registration updated successfully");
+      return res.status(200).send({ updatedUser });
+    } else {
       return res.status(404).send({ error: "User not found" });
     }
-
-    console.log("User registration updated successfully");
-    return res.status(200).send({ updatedUser });
   } catch (err) {
     console.error(err);
     return res.status(500).send({ error: "Failed to update user" });
@@ -71,6 +69,7 @@ router.put("/driverRegistration", async (req, res) => {
 
 router.get("/getDriver", async (req, res) => {
   const id = req.query.driverId;
+  console.log(`ID inside Get Driver ${id} ${JSON.stringify(id)}`);
   try {
     const user = await User.findById(id).lean().exec();
     console.log(user);

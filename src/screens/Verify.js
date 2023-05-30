@@ -50,12 +50,13 @@ const Verify = ({ navigation, route }) => {
                   headers: {
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({userData: userData})
+                  body: JSON.stringify(userData)
                 });
               
                 console.log(response.ok);
                 const data = await response.json();
                 console.log(data);
+                console.log('In Verify');
               
                 if (data.message === 'User Registered Successfully') {
                     await AsyncStorage.setItem('user', JSON.stringify(userData));

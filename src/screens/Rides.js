@@ -23,11 +23,12 @@ import { NGROK_TUNNEL } from "@env";
 import { AuthContext } from "../../server/context/authContext";
 
 const Rides = ({ navigation, route }) => {
-  console.log(`In rides ${JSON.stringify(route.params.rides)}`);
   const context = useContext(AuthContext);
   const [rides, setRides] = useState(route.params.rides);
   const [drivers, setDrivers] = useState([]);
 
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  
   const fetchDrivers = async () => {
     const driverData = [];
 
@@ -42,8 +43,8 @@ const Rides = ({ navigation, route }) => {
         console.log(response.ok);
         if (response.ok) {
           const driver = await response.json();
-          console.log(driver);
           driverData.push(driver);
+          console.log(driver);
         } else {
           console.error("Failed to fetch driver data");
         }
@@ -60,27 +61,32 @@ const Rides = ({ navigation, route }) => {
   }, []);
 
   async function bookRide(ride) {
-    console.log("here")
+    const data = {
+      "rideId": ride._id,
+      "userId": context.user._id
+    }
     try {
-      data = {
-        "ride":ride,
-        "userId":context.user._id
-      }
-      console.log("in book ride function")
+      console.log("in book ride function");
+      console.log(data);
       const response = await fetch(NGROK_TUNNEL + "/bookRide", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: data }),
+        body: JSON.stringify(data),
       });
-      console.log(response.ok);
+      const rdata = await response.json();
+      console.log(rdata);
+      console.log('In Book Ride')
       if(response.ok) {
-        navigation.navigate("Confirm", {ride: data});
+        alert(rdata.success);
+        navigation.navigate("Confirm", { ride: ride });
       } else {
-        console.log('Could not book a ride');
+        alert(rdata.error);
+        console.log("Error while booking ride")
       }
     } catch (error) {
+      alert(error);
       console.log("Error while booking ride "+error)
     }
   };
@@ -88,7 +94,7 @@ const Rides = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background} />
-      <Text style={[styles.text, { marginBottom: 5, marginTop: 35 }]}>
+      <Text style={[styles.text, { marginBottom: 5, marginTop: 50 }]}>
         Available Rides
       </Text>
       {rides.length === 0 ? (
@@ -103,14 +109,14 @@ const Rides = ({ navigation, route }) => {
           return (
             <View key={index} style={styles.rideBox}>
               <View style={styles.rideContainer}>
-                <Text style={styles.location}>
+                <Text style={[styles.location, {textAlign: 'left'}]}>
                   <Text style={{ fontWeight: "bold" }}>
                     {ride.startLocation.description}
                   </Text>
                 </Text>
-                <Text> to </Text>
-                <Text style={styles.location}>
-                  <Text style={{ fontWeight: "bold" }}>
+                <Text style={styles.text}> to </Text>
+                <Text style={[styles.location, {textAlign: 'right'}]}>
+                  <Text style={{ fontWeight: "bold"}}>
                     {" "}
                     {ride.endLocation.description}
                   </Text>
@@ -137,14 +143,7 @@ const Rides = ({ navigation, route }) => {
                 <Text style={styles.capacity}>
                   Starts at{"\n"}
                   <Text style={{ fontWeight: "bold" }}>
-                    {new Date(ride.startTime).toLocaleString(undefined, {
-                      weekday: "short",
-                      day: "numeric",
-                      month: "long",
-                      hour: "numeric",
-                      minute: "numeric",
-                      timeZone: "UTC",
-                    })}
+                    {new Date(ride.startTime).toLocaleString('en-US', options)}
                   </Text>
                 </Text>
               </View>
@@ -235,7 +234,6 @@ const styles = StyleSheet.create({
   },
   location: {
     fontSize: 12,
-    marginLeft: 2,
     flex: 2,
   },
   driver: {

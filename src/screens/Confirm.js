@@ -21,40 +21,40 @@ import {
   
   import { AuthContext } from "../../server/context/authContext";
   import { NGROK_TUNNEL } from "@env";
-  import AsyncStorage from "@react-native-async-storage/async-storage";
-  // import { useAsyncStorage } from '@react-native-async-storage/async-storage';
   
   const Confirm = ({ navigation, route }) => {
     const context = useContext(AuthContext);
-    const [ride, setRide] = useState(route.params.ride.ride);
+    const [ride, setRide] = useState(route.params?.ride);
     const [car, setCar] = useState();
     const [name, setName] = useState();
 
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
     useEffect(() => {
-        async function getDetails() {
-            try {
-                const response = await fetch(
-                    NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
-                    {
-                      method: "GET",
-                    }
-                  );
-                  console.log(response.ok);
-                  if (response.ok) {
-                    const driver = await response.json();
-                    console.log(driver);
-                    setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
-                        " " +
-                        driver?.driver?.vehicleInformation[0]?.vehicleModel);
-                    setName(driver.user.firstName+' '+driver.user.lastName);
-                  } else {
-                    console.error("Failed to fetch driver data");
-                  }
-                } catch (error) {
-                  console.error(error);
-                }
-        }
-        getDetails();
+      async function getDetails() {
+        try {
+          const response = await fetch(
+              NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
+              {
+                method: "GET",
+              }
+            );
+            console.log(response.ok);
+            if (response.ok) {
+              const driver = await response.json();
+              console.log(driver);
+              setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
+                  " " +
+                  driver?.driver?.vehicleInformation[0]?.vehicleModel);
+              setName(driver.user.firstName+' '+driver.user.lastName);
+            } else {
+              console.error("Failed to fetch driver data");
+            }
+          } catch (error) {
+            console.error(error);
+          }
+      }
+      getDetails();
     }, [])
 
     return (
@@ -72,14 +72,7 @@ import {
             <Text style={styles.text}>{name}'s{'\n'}{car}</Text>
             <Text style={[styles.text, {fontSize: 15, marginTop: 10}]}>has been booked for</Text>
             
-            <Text style={[styles.text, {marginTop: 10}]}>{new Date(ride.startTime).toLocaleString(undefined, {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                      hour: "numeric",
-                      minute: "numeric",
-                      timeZone: "UTC",
-                    })}</Text>
+            <Text style={[styles.text, {marginTop: 10}]}>{new Date(ride.startTime).toLocaleString('en-US', options)}</Text>
             
             <Text style={[styles.text, {marginTop: 25, fontSize: 30}]}>Happy Journey!</Text>
             
