@@ -7,11 +7,7 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails }) => {
   const [expanded, setExpanded] = useState(false);
   const from = rideDetails.startLocation.description.substring(0,12);
   const to = rideDetails.endLocation.description.substring(0,12);
-  const isDriver = false;
 
-  if (driverDetails !== undefined){
-    isDriver = true;
-  }
 
   const toggleExpanded = () => {
     setExpanded(!expanded);
@@ -27,7 +23,7 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails }) => {
         </TouchableOpacity>
       </View>
       {expanded && 
-      <RideDetails rideDetails={rideDetails} driverDetails={driverDetails} passengerDetails={passengerDetails} isDriver={isDriver}></RideDetails>}
+      <RideDetails rideDetails={rideDetails} driverDetails={driverDetails} passengerDetails={passengerDetails}></RideDetails>}
       </TouchableOpacity>
   );
 };

@@ -24,6 +24,7 @@ const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({authToken: authToken}),
       });
+      console.log(checkUser.ok);
       const userData = await checkUser.json();
       console.log(userData.userData);
       if (userData !== undefined) {
