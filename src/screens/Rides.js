@@ -43,8 +43,8 @@ const Rides = ({ navigation, route }) => {
         console.log(response.ok);
         if (response.ok) {
           const driver = await response.json();
-          driverData.push(driver);
           console.log(driver);
+          driverData.push(driver);
         } else {
           console.error("Failed to fetch driver data");
         }
@@ -74,10 +74,11 @@ const Rides = ({ navigation, route }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
-      console.log('One more');
       const rdata = await response.json();
       console.log(rdata);
-      console.log('In Book Ride')
+      console.log('In Book Ride');
+      console.log('One more');
+      console.log('Why are we here? Just to suffer?');
       if(response.ok) {
         alert(rdata.success);
         navigation.navigate("Confirm", { ride: ride });

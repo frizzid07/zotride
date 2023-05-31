@@ -54,10 +54,10 @@ const Verify = ({ navigation, route }) => {
                 });
               
                 console.log(response.ok);
-                console.log('One more');
                 const data = await response.json();
-                console.log('In Verify');
                 console.log(data);
+                console.log('In Verify');
+                console.log('One more');
               
                 if (data.message === 'User Registered Successfully') {
                     await AsyncStorage.setItem('user', JSON.stringify(userData));

@@ -91,27 +91,27 @@ router.get("/findActiveRide", async (req, res) => {
 });
 
 router.get("/getRides", async (req, res) => {
-  const userId  = req.query.userId;
+  const userId = req.query.userId;
   try {
-    const user = await User.find({ _id: userId}).exec();
+    const user = await User.findOne({ _id: userId}).exec();
+    console.log(`User ID: ${user}`);
     const pastRides = []
-    for(let i=0;i<user[0].past_rides.length;i++){
-      const ride = await Ride.find({ _id: user[0].past_rides[i]}).exec();
-      const driver = await User.find({ _id: ride[0].driverId}).exec();
-      console.log("driver user id "+ride[0].driverId)
+    for(let i=0;i<user.past_rides.length;i++){
+      const ride = await Ride.findOne({ _id: user.past_rides[i]}).exec();
+      console.log(`Ride is ${ride}`);
+      const driver = await User.findOne({ _id: ride.driverId}).exec();
+      console.log(`Driver is ${driver}`);
       const driverDetails = {
-        "firstName":driver[0].firstName,
-        "lastName":driver[0].lastName,
-        "mobile":driver[0].mobileNumber
+        "firstName":driver.firstName,
+        "lastName":driver.lastName,
+        "mobile":driver.mobileNumber
       }
-      pastRides.push({"rideDetails":ride[0],"driverDetails":driverDetails});
+      pastRides.push({"rideDetails":ride,"driverDetails":driverDetails});
     }
     return res.status(200).send(pastRides);
-    
   } catch (err) {
     return res.status(422).json({ error: err });
   }
-
 });
 
 router.get("/getDriverRides", async (req, res) => {
@@ -122,15 +122,12 @@ router.get("/getDriverRides", async (req, res) => {
     for(let i=0;i<rides.length;i++){
       let passengers = [];
       for(let j=0;j<rides[i].passengers.length;j++){
-        const passenger = await User.find({ _id: rides[i].passengers[j]}).exec();
-        passengers.push({"firstName":passenger[0].firstName,"lastName":passenger[0].lastName});
-
+        const passenger = await User.findOne({ _id: rides[i].passengers[j]}).exec();
+        passengers.push({"firstName":passenger.firstName,"lastName":passenger.lastName});
       }
-
       pastRides.push({"rideDetails":rides[i],"passengerDetails":passengers});
     }
     return res.status(200).send(pastRides);
-    
   } catch (err) {
     return res.status(422).json({ error: err });
   }

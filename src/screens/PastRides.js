@@ -19,7 +19,7 @@ import {
   const PastRides = ({navigation}) => {
     const context = useContext(AuthContext);
     const [pastRides, setPastRides] = useState([]);
-
+    const [pastDrives, setPastDrives] = useState([]);
 
     useEffect(() => {
       const getRides = async () => {
@@ -32,8 +32,11 @@ import {
               method: "GET",
             }
           );
+          console.log('Save us');
+          console.log(response.ok)
           if (response.ok) {
             const rides = await response.json();
+            console.log(rides);
             setPastRides(rides);
           } else {
             console.error("Failed to fetch driver data");
@@ -42,14 +45,40 @@ import {
           console.log("erorr in get rides "+error)
         }
       };
+
+      const getDriverRides = async () => {
+        try {
+          console.log("hi hi")
+          const response = await fetch(
+            NGROK_TUNNEL + `/getDriverRides?driverId=${context.user._id}`,
+            {
+              method: "GET",
+            }
+          );
+          console.log('Save us');
+          console.log(response.ok)
+          if (response.ok) {
+            const rides = await response.json();
+            console.log(rides);
+            setPastDrives(rides);
+          } else {
+            console.error("Failed to fetch driver data");
+          }
+        } catch (error) {
+          console.log("erorr in get rides "+error)
+        }
+      };
+
       getRides();
+      getDriverRides();
     }, []);
 
     return (
       <View style = {styles.container}>
         <Image style={styles.bg} source={background}></Image>
         <ScrollView>
-            <Text style={styles.text}> Past rides</Text>
+            <Text style={[styles.text, {textAlign: "center", fontSize: 32}]}>Past Rides</Text>
+            <Text style={[styles.text, {marginTop: 20, marginLeft: 10}]}>As a Passenger</Text>
             {pastRides.length === 0 ? (
               <Text
                 style={[styles.text, { fontSize: 25, margin: 20, color: "gray" }]}
@@ -58,6 +87,16 @@ import {
               </Text>
             ):(
               <Accordion data={pastRides} />
+            )}
+            <Text style={[styles.text, {marginTop: 20, marginLeft: 10}]}>As a Driver</Text>
+            {pastDrives.length === 0 ? (
+              <Text
+                style={[styles.text, { fontSize: 25, margin: 20, color: "gray" }]}
+              >
+                No available rides
+              </Text>
+            ):(
+              <Accordion data={pastDrives} />
             )}
         </ScrollView>
       </View>
@@ -80,6 +119,6 @@ import {
     text: {
       fontSize: 25,
       color: "#000",
-      marginTop: "20%"
+      marginTop: "15%"
     }
   });

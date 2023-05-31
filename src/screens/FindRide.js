@@ -136,6 +136,7 @@ const FindRide = ({ navigation }) => {
       const rdata = await response.json();
       console.log('In Find Ride');
       console.log('One more');
+      console.log('When does the suffering end?');
       if (response.ok) {
         console.log("Ride found Successfully");
         navigation.navigate("Rides", { rides: rdata });

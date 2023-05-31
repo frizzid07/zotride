@@ -43,6 +43,7 @@ import {
             if (response.ok) {
               const driver = await response.json();
               console.log(driver);
+              console.log('One more');
               setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
                   " " +
                   driver?.driver?.vehicleInformation[0]?.vehicleModel);

@@ -105,9 +105,9 @@ const Driver = ({ navigation }) => {
           "Content-Type": "application/json",
         }
       });
-      console.log(response.ok);
       const rdata = await response.json();
       console.log(rdata);
+      console.log(response.ok);
       console.log(`New Data ${JSON.stringify(rdata.driver)}`);
       navigation.navigate('DriverRegistration', {driver: rdata.driver});
     } catch(error) {
@@ -136,9 +136,9 @@ const Driver = ({ navigation }) => {
             },
             body: JSON.stringify({data: {userId: context.user._id}})
           });
-          console.log(response2.ok);
           const rdata = await response2.json();
           console.log(rdata);
+          console.log(response2.ok);
           console.log('In Driver Registration again');
         } catch(error) {
           console.error(error);

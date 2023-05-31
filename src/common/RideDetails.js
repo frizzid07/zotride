@@ -15,15 +15,14 @@ import {
             </Text>
           </Text>
           <Text> to </Text>
-          <Text style={styles.location}>
-            <Text style={{ fontWeight: "bold" }}>
-              {" "}
+          <Text style={[styles.location, {textAlign: 'right'}]}>
+            <Text style={{ fontWeight: "bold"}}>
               {rideDetails.endLocation.description}
             </Text>
           </Text>
         </View>
         <View style={styles.rideContainer}>
-          <Text style={styles.capacity}>
+          <Text style={[styles.driver, {flex: 4}]}>
             Starts at{"\n"}
             <Text style={{ fontWeight: "bold" }}>
               {new Date(rideDetails.startTime).toLocaleString(undefined, {
@@ -36,19 +35,44 @@ import {
               })}
             </Text>
           </Text>
-        </View>
-        <View style={styles.rideContainer}>
-          <Text style={styles.capacity}>
-            Seats: <Text style={{ fontWeight: "bold" }}>{rideDetails.capacity}</Text>
-          </Text>
-          <Text style={styles.capacity}>
-            Fare: <Text style={{ fontWeight: "bold" }}>${rideDetails.rideCost}</Text>
-          </Text>
-        </View>
-        <View style={styles.rideContainer}>
-          <Text style={styles.capacity}>
-            Driver: <Text style={{ fontWeight: "bold" }}>{driverDetails.firstName} {driverDetails.lastName}</Text>
-          </Text>
+          {driverDetails && (
+          <>
+            <Text style={[styles.driver, { flex: 3 }]}>
+              Driver{"\n"}
+              <Text style={{ fontWeight: "bold" }}>
+                {driverDetails.firstName} {driverDetails.lastName}
+              </Text>
+            </Text>
+            <Text style={[styles.capacity, { flex: 1, textAlign: 'right' }]}>
+              Fare{"\n"}
+              <Text style={{ fontWeight: "bold" }}>
+                ${rideDetails.rideCost}
+              </Text>
+            </Text>
+          </>
+        )}
+          {passengerDetails && (
+            <>
+              <Text style={[styles.driver, { flex: 3, marginLeft: 15 }]}>
+                Passengers{"\n"}
+                {passengerDetails.length === 0 ? (
+                  <Text style={{ color: "gray" }}>Empty</Text>
+                ) : (
+                  passengerDetails.map((passenger, i) => (
+                    <Text key={i} style={{ fontWeight: "bold" }}>
+                      {passenger.firstName} {passenger.lastName}{"\n"}
+                    </Text>
+                  ))
+                )}
+              </Text>
+              <Text style={[styles.capacity, { flex: 2, textAlign: 'right' }]}>
+                Earnings{"\n"}
+                <Text style={{ fontWeight: "bold" }}>
+                  ${passengerDetails.length * rideDetails.rideCost}
+                </Text>
+              </Text>
+            </>
+          )}
         </View>
       </View>
     );
@@ -102,7 +126,6 @@ import {
     },
     capacity: {
       fontSize: 15,
-      marginRight: 5,
       flex: 1,
     },
   });

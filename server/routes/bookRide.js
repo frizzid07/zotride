@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const Ride = mongoose.model("Ride");
@@ -19,17 +18,18 @@ router.put("/bookRide", async (req, res) => {
       console.log('Passenger already exists');
       return res.status(422).send({error: 'You are already a passenger in this ride'});
     } else {
-      Ride.updateOne(
+      await Ride.updateOne(
         { _id: rideId },
         { $addToSet: { passengers: userId }, capacity: old_capacity - 1 },
         { new: true }
       ).exec();
-
-  User.findOneAndUpdate(
-    { _id: userId },
-    { $push: { past_rides: ride._id } },
-    { new: true }
-  ).exec();
+      console.log('Updated Ride');
+      await User.findOneAndUpdate(
+        { _id: userId },
+        { $push: { past_rides: rideId } },
+        { new: true }
+      ).exec();
+      console.log('Updated User');
       return res.status(200).send({success: 'Seat booked successfully!'});
     }
   } else {

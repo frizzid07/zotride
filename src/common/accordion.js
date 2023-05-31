@@ -8,7 +8,6 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails }) => {
   const from = rideDetails.startLocation.description.substring(0,12);
   const to = rideDetails.endLocation.description.substring(0,12);
 
-
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };

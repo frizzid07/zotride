@@ -164,6 +164,7 @@ const ListRide = ({ navigation, route }) => {
     setTimePickerVisible(false);
     console.log(`Selected Date ${selectedDate} ${typeof selectedDate}`);
     if (selectedDate) {
+      setData({ ...data, startTime: new Date(selectedDate).toISOString() });
       setStartTime(selectedDate);
     }
   };
@@ -176,6 +177,7 @@ const ListRide = ({ navigation, route }) => {
       data.rideCost == "" ||
       data.capacity == ""
     ) {
+      console.log(`List Ride data ${JSON.stringify(data)}`);
       setErrorMsg("Please Enter All Fields");
       return;
     }
@@ -221,10 +223,10 @@ const ListRide = ({ navigation, route }) => {
           body: JSON.stringify({ data: data }),
         });
         console.log(response.ok);
+        console.log('One more');
         const rdata = await response.json();
         console.log(rdata);
         console.log('In List Ride');
-        console.log('One more');
 
         if (rdata.added) {
           alert("Ride added successfully");
