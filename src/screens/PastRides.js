@@ -25,18 +25,20 @@ import {
       const getRides = async () => {
 
         try {
-          console.log("hi hi")
           const response = await fetch(
             NGROK_TUNNEL + `/getRides?userId=${context.user._id}`,
             {
               method: "GET",
             }
           );
-          console.log('Save us');
-          console.log(response.ok)
+          console.log(response.ok);
+          console.log('Debug');
+          console.log('Debug');
           if (response.ok) {
             const rides = await response.json();
             console.log(rides);
+            console.log('Debug');
+            console.log('Debug');
             setPastRides(rides);
           } else {
             console.error("Failed to fetch driver data");
@@ -48,18 +50,20 @@ import {
 
       const getDriverRides = async () => {
         try {
-          console.log("hi hi")
           const response = await fetch(
             NGROK_TUNNEL + `/getDriverRides?driverId=${context.user._id}`,
             {
               method: "GET",
             }
           );
-          console.log('Save us');
-          console.log(response.ok)
+          console.log(response.ok);
+          console.log('Debug');
+          console.log('Debug');
           if (response.ok) {
             const rides = await response.json();
             console.log(rides);
+            console.log('Debug');
+            console.log('Debug');
             setPastDrives(rides);
           } else {
             console.error("Failed to fetch driver data");
@@ -77,7 +81,7 @@ import {
       <View style = {styles.container}>
         <Image style={styles.bg} source={background}></Image>
         <ScrollView>
-            <Text style={[styles.text, {textAlign: "center", fontSize: 32}]}>Past Rides</Text>
+            <Text style={[styles.text, {textAlign: "center", fontSize: 32}]}>Current/Past Rides</Text>
             <Text style={[styles.text, {marginTop: 20, marginLeft: 10}]}>As a Passenger</Text>
             {pastRides.length === 0 ? (
               <Text

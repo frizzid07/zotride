@@ -19,6 +19,7 @@ import background from "../../assets/background.jpg";
 import { submit } from "../common/button";
 
 import { NGROK_TUNNEL } from "@env";
+import axios from "axios";
 
 import { AuthContext } from "../../server/context/authContext";
 
@@ -42,8 +43,11 @@ const Rides = ({ navigation, route }) => {
         );
         console.log(response.ok);
         if (response.ok) {
+          console.log('Debug');
           const driver = await response.json();
           console.log(driver);
+          console.log('Debug');
+          console.log('Debug');
           driverData.push(driver);
         } else {
           console.error("Failed to fetch driver data");
@@ -74,14 +78,18 @@ const Rides = ({ navigation, route }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
       console.log('In Book Ride');
-      console.log('One more');
-      console.log('Why are we here? Just to suffer?');
+      console.log('Debug');
+      console.log('Debug');
+      // "access_token": "A21AAIiE8EZlhKbEQmpUVZiDVuAu2k5EKRIdRhFINWCN3ky8n2XuWLBfDXKywBL_FJgxRQDH3aBNMdq9W1QQQS6RNuBaJOoGg",
       if(response.ok) {
-        alert(rdata.success);
-        navigation.navigate("Confirm", { ride: ride });
+        // alert(rdata.success);
+        navigation.navigate("Payment", {ride: ride});
+        // navigation.navigate("Confirm", { ride: ride });
       } else {
         alert(rdata.error);
         console.log("Error while booking ride")

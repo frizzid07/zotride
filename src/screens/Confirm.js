@@ -40,10 +40,12 @@ import {
               }
             );
             console.log(response.ok);
+            console.log('Debug');
             if (response.ok) {
+              console.log('Debug');
+              console.log('Debug');
               const driver = await response.json();
               console.log(driver);
-              console.log('One more');
               setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
                   " " +
                   driver?.driver?.vehicleInformation[0]?.vehicleModel);

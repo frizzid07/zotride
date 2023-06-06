@@ -43,10 +43,13 @@ const Landing = ({ navigation }) => {
           method: "GET",
         }
       );
+      console.log(response.ok);
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json()
       console.log(rdata);
-      console.log(response.ok);
       console.log('In Landing');
+      console.log('Debug');
       if(rdata.driver !== null) {
         console.log('Driver Record found');
         return true;
@@ -59,11 +62,12 @@ const Landing = ({ navigation }) => {
             },
             body: JSON.stringify({data: {userId: context.user._id}})
           });
-          const rdata2 = await response2.json();
           console.log(response2.ok);
+          console.log('Debug');
+          const rdata2 = await response2.json();
           console.log(rdata2);
-          console.log('In PUT query');
-          console.log('Still here');
+          console.log('Debug');
+          console.log('Debug');
         } catch(error) {
           console.error(error);
         }

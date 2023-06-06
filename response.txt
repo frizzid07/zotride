@@ -1,0 +1,162 @@
+{
+   "config":{
+      "adapter":[
+         "xhr",
+         "http"
+      ],
+      "data":"{\"payer_id\":\"PS2MFWPZZHLFC\"}",
+      "env":{
+         "Blob":[
+            "Function Blob"
+         ],
+         "FormData":[
+            "Function FormData"
+         ]
+      },
+      "headers":[
+         "Object"
+      ],
+      "maxBodyLength":-1,
+      "maxContentLength":-1,
+      "method":"post",
+      "timeout":0,
+      "transformRequest":[
+         [
+            "Function transformRequest"
+         ]
+      ],
+      "transformResponse":[
+         [
+            "Function transformResponse"
+         ]
+      ],
+      "transitional":{
+         "clarifyTimeoutError":false,
+         "forcedJSONParsing":true,
+         "silentJSONParsing":true
+      },
+      "url":"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MR7ZYRI1DW95855DV200001G/execute",
+      "validateStatus":[
+         "Function validateStatus"
+      ],
+      "xsrfCookieName":"XSRF-TOKEN",
+      "xsrfHeaderName":"X-XSRF-TOKEN"
+   },
+   "data":{
+      "cart":"16670100U0184263N",
+      "create_time":"2023-06-06T20:51:16Z",
+      "failed_transactions":[
+         
+      ],
+      "id":"PAYID-MR7ZYRI1DW95855DV200001G",
+      "intent":"sale",
+      "links":[
+         [
+            "Object"
+         ]
+      ],
+      "payer":{
+         "payer_info":[
+            "Object"
+         ],
+         "payment_method":"paypal",
+         "status":"VERIFIED"
+      },
+      "state":"approved",
+      "transactions":[
+         [
+            "Object"
+         ]
+      ],
+      "update_time":"2023-06-06T20:51:26Z"
+   },
+   "headers":{
+      "application_id":"APP-80W284485P519543T",
+      "border-ip":"10.96.33.232",
+      "cache-control":"max-age=0, no-cache, no-store, must-revalidate",
+      "caller_acct_num":"KJQFP4DXU3YG2",
+      "content-length":"2195",
+      "content-type":"application/json;charset=UTF-8",
+      "date":"Tue, 06 Jun 2023 20:51:26 GMT",
+      "paypal-debug-id":"6f4e1191e5631",
+      "server":"nginx/1.18.0 (Ubuntu)",
+      "strict-transport-security":"max-age=31536000; includeSubDomains"
+   },
+   "request":{
+      "DONE":4,
+      "HEADERS_RECEIVED":2,
+      "LOADING":3,
+      "OPENED":1,
+      "UNSENT":0,
+      "_aborted":false,
+      "_cachedResponse":"undefined",
+      "_hasError":false,
+      "_headers":{
+         "accept":"application/json, text/plain, */*",
+         "authorization":"Bearer A21AALbjbziv6AzxOWDdBU2GWIpWcrzyOu0Gh-rm6STgXS3WcSghTBr4NP9xjCUjnKZ05GgvUIr6c4ZcR--Gkq8lweFj3fbvg",
+         "content-type":"application/json"
+      },
+      "_incrementalEvents":false,
+      "_lowerCaseResponseHeaders":{
+         "application_id":"APP-80W284485P519543T",
+         "border-ip":"10.96.33.232",
+         "cache-control":"max-age=0, no-cache, no-store, must-revalidate",
+         "caller_acct_num":"KJQFP4DXU3YG2",
+         "content-length":"2195",
+         "content-type":"application/json;charset=UTF-8",
+         "date":"Tue, 06 Jun 2023 20:51:26 GMT",
+         "paypal-debug-id":"6f4e1191e5631",
+         "server":"nginx/1.18.0 (Ubuntu)",
+         "strict-transport-security":"max-age=31536000; includeSubDomains"
+      },
+      "_method":"POST",
+      "_perfKey":"network_XMLHttpRequest_https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MR7ZYRI1DW95855DV200001G/execute",
+      "_performanceLogger":{
+         "_closed":false,
+         "_extras":[
+            "Object"
+         ],
+         "_pointExtras":[
+            "Object"
+         ],
+         "_points":[
+            "Object"
+         ],
+         "_timespans":[
+            "Object"
+         ]
+      },
+      "_requestId":null,
+      "_response":"{\"id\":\"PAYID-MR7ZYRI1DW95855DV200001G\",\"intent\":\"sale\",\"state\":\"approved\",\"cart\":\"16670100U0184263N\",\"payer\":{\"payment_method\":\"paypal\",\"status\":\"VERIFIED\",\"payer_info\":{\"email\":\"user1@zotride.com\",\"first_name\":\"ZotRide\",\"last_name\":\"User\",\"payer_id\":\"PS2MFWPZZHLFC\",\"shipping_address\":{\"recipient_name\":\"ZotRide User\",\"line1\":\"1 Main St\",\"city\":\"San Jose\",\"state\":\"CA\",\"postal_code\":\"95131\",\"country_code\":\"US\"},\"country_code\":\"US\"}},\"transactions\":[{\"amount\":{\"total\":\"1.00\",\"currency\":\"USD\",\"details\":{\"subtotal\":\"1.00\",\"tax\":\"0.00\",\"shipping\":\"0.00\",\"insurance\":\"0.00\",\"handling_fee\":\"0.00\",\"shipping_discount\":\"0.00\",\"discount\":\"0.00\"}},\"payee\":{\"merchant_id\":\"KJQFP4DXU3YG2\",\"email\":\"cashier@zotride.com\"},\"description\":\"This is the payment description.\",\"soft_descriptor\":\"PAYPAL *TEST STORE\",\"item_list\":{\"shipping_address\":{\"recipient_name\":\"ZotRide User\",\"line1\":\"1 Main St\",\"city\":\"San Jose\",\"state\":\"CA\",\"postal_code\":\"95131\",\"country_code\":\"US\"}},\"related_resources\":[{\"sale\":{\"id\":\"6B778516A0453562K\",\"state\":\"completed\",\"amount\":{\"total\":\"1.00\",\"currency\":\"USD\",\"details\":{\"subtotal\":\"1.00\",\"tax\":\"0.00\",\"shipping\":\"0.00\",\"insurance\":\"0.00\",\"handling_fee\":\"0.00\",\"shipping_discount\":\"0.00\",\"discount\":\"0.00\"}},\"payment_mode\":\"INSTANT_TRANSFER\",\"protection_eligibility\":\"ELIGIBLE\",\"protection_eligibility_type\":\"ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE\",\"transaction_fee\":{\"value\":\"0.52\",\"currency\":\"USD\"},\"parent_payment\":\"PAYID-MR7ZYRI1DW95855DV200001G\",\"create_time\":\"2023-06-06T20:51:26Z\",\"update_time\":\"2023-06-06T20:51:26Z\",\"links\":[{\"href\":\"https://api.sandbox.paypal.com/v1/payments/sale/6B778516A0453562K\",\"rel\":\"self\",\"method\":\"GET\"},{\"href\":\"https://api.sandbox.paypal.com/v1/payments/sale/6B778516A0453562K/refund\",\"rel\":\"refund\",\"method\":\"POST\"},{\"href\":\"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MR7ZYRI1DW95855DV200001G\",\"rel\":\"parent_payment\",\"method\":\"GET\"}],\"soft_descriptor\":\"PAYPAL *TEST STORE\"}}]}],\"failed_transactions\":[],\"create_time\":\"2023-06-06T20:51:16Z\",\"update_time\":\"2023-06-06T20:51:26Z\",\"links\":[{\"href\":\"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MR7ZYRI1DW95855DV200001G\",\"rel\":\"self\",\"method\":\"GET\"}]}",
+      "_responseType":"",
+      "_sent":true,
+      "_subscriptions":[
+         
+      ],
+      "_timedOut":false,
+      "_trackingName":"unknown",
+      "_url":"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MR7ZYRI1DW95855DV200001G/execute",
+      "readyState":4,
+      "responseHeaders":{
+         "application_id":"APP-80W284485P519543T",
+         "border-ip":"10.96.33.232",
+         "cache-control":"max-age=0, no-cache, no-store, must-revalidate",
+         "caller_acct_num":"KJQFP4DXU3YG2",
+         "content-length":"2195",
+         "content-type":"application/json;charset=UTF-8",
+         "date":"Tue, 06 Jun 2023 20:51:26 GMT",
+         "paypal-debug-id":"6f4e1191e5631",
+         "server":"nginx/1.18.0 (Ubuntu)",
+         "strict-transport-security":"max-age=31536000; includeSubDomains"
+      },
+      "responseURL":"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MR7ZYRI1DW95855DV200001G/execute",
+      "status":200,
+      "timeout":0,
+      "upload":{
+         
+      },
+      "withCredentials":true
+   },
+   "status":200,
+   "statusText":"undefined"
+}

@@ -223,10 +223,11 @@ const ListRide = ({ navigation, route }) => {
           body: JSON.stringify({ data: data }),
         });
         console.log(response.ok);
-        console.log('One more');
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
         console.log('In List Ride');
+        console.log('Debug');
 
         if (rdata.added) {
           alert("Ride added successfully");

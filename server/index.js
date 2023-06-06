@@ -19,7 +19,7 @@ const findRide = require("./routes/findRide");
 app.use(findRide);
 const bookRide = require("./routes/bookRide");
 app.use(bookRide);
-const requireToken = require("./middleware/authTokenRequired");
+// const requireToken = require("./middleware/authTokenRequired");
 
 const editRoutes = require("./routes/editRoutes");
 app.use(editRoutes);
@@ -30,9 +30,23 @@ app.use(deleteRoutes);
 const driverRegistration = require("./routes/driverRegistration");
 app.use(driverRegistration);
 
+// const paypal = require("./middleware/paypal");
+// app.use(paypal);
+
 app.get("/", (req, res) => {
   res.send(res.body);
 });
+
+app.get('/paypal/success', (req, res) => {
+  // Retrieve the screen name or identifier from your server logic
+  res.redirect('../src/screens/SuccessPayment');
+});
+
+app.get('/paypal/cancel', (req, res) => {
+  // Retrieve the screen name or identifier from your server logic
+  res.redirect('../src/screens/CancelPayment');
+});
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

@@ -34,9 +34,13 @@ const Driver = ({ navigation }) => {
             "Content-Type": "application/json",
           }
         });
+        console.log(response.ok);
+        console.log('Debug');
         const result = await response.json();
         console.log(result);
         console.log('In Active Ride');
+        console.log('Debug');
+        console.log('Debug');
 
         if (result.ride) {
           console.log("Current Driver has Active Ride");
@@ -62,8 +66,12 @@ const Driver = ({ navigation }) => {
           "Content-Type": "application/json",
         }
       });
+      console.log(response.ok);
+      console.log('Debug');
       const result = await response.json();
       console.log(result);
+      console.log('Debug');
+      console.log('Debug');
 
       if (result.ride) {
         console.log(`New Data ${JSON.stringify(result.ride)}`);
@@ -82,9 +90,13 @@ const Driver = ({ navigation }) => {
           "Content-Type": "application/json",
         }
       });
-
+      console.log(response.ok);
+      console.log('Debug');
+      console.log('Debug');
       const result = await response.json();
-      console.log(result)
+      console.log(result);
+      console.log('Debug');
+      console.log('Debug');
 
       if (result.deleted) {
         console.log("Ride Deleted");
@@ -105,10 +117,12 @@ const Driver = ({ navigation }) => {
           "Content-Type": "application/json",
         }
       });
+      console.log(response.ok);
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
-      console.log(response.ok);
-      console.log(`New Data ${JSON.stringify(rdata.driver)}`);
+      console.log('Debug');
+      console.log('Debug');
       navigation.navigate('DriverRegistration', {driver: rdata.driver});
     } catch(error) {
       console.log("Could not edit record");
@@ -136,10 +150,12 @@ const Driver = ({ navigation }) => {
             },
             body: JSON.stringify({data: {userId: context.user._id}})
           });
+          console.log(response2.ok);
+          console.log('Debug');
           const rdata = await response2.json();
           console.log(rdata);
-          console.log(response2.ok);
-          console.log('In Driver Registration again');
+          console.log('Debug');
+          console.log('Debug');
         } catch(error) {
           console.error(error);
         }

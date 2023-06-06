@@ -39,7 +39,10 @@ const Login = ({ navigation }) => {
     const checkUser = async () => {
       try {
         setIsChecking(true);
+        console.log('Debug');
         let userVal = await AsyncStorage.getItem("user");
+        console.log('One more');
+        console.log('Debug');
         if (userVal) {
           userVal = JSON.parse(userVal);
           console.log(userVal);
@@ -60,7 +63,6 @@ const Login = ({ navigation }) => {
     try {
       setIsChecking(true);
       console.log(`In Login ${data}, ${JSON.stringify(data)}`);
-      console.log("Logging in");
       const response = await fetch(NGROK_TUNNEL + "/login", {
         method: "POST",
         headers: {
@@ -69,14 +71,14 @@ const Login = ({ navigation }) => {
         body: JSON.stringify({ data: data }),
       });
       console.log(response.ok);
-      console.log("Dodging error");
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
-      console.log("One more");
+      console.log('Debug');
+      console.log('Debug');
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
         let authenticated = await context.authenticate(rdata);
-        console.log(authenticated);
         if (authenticated) {
           setIsSuccessful(true);
           alert(`Logged in successfully`);

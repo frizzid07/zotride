@@ -133,10 +133,11 @@ const FindRide = ({ navigation }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
+      console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
-      console.log('One more');
-      console.log('When does the suffering end?');
+      console.log('Debug');
+      console.log('Debug');
       if (response.ok) {
         console.log("Ride found Successfully");
         navigation.navigate("Rides", { rides: rdata });
