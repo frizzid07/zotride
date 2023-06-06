@@ -22,60 +22,69 @@ import {
     const [pastDrives, setPastDrives] = useState([]);
 
     useEffect(() => {
-      const getRides = async () => {
+      const refreshListener = navigation.addListener('focus', () => {
+        getRides();
+        getDriverRides();
+      });
+  
+      return refreshListener;
+    }, [navigation]);
+    
+    const getRides = async () => {
 
-        try {
-          const response = await fetch(
-            NGROK_TUNNEL + `/getRides?userId=${context.user._id}`,
-            {
-              method: "GET",
-            }
-          );
-          console.log(response.ok);
-          console.log('Debug');
-          console.log('Debug');
-          if (response.ok) {
-            const rides = await response.json();
-            console.log(rides);
-            console.log('Debug');
-            console.log('Debug');
-            setPastRides(rides);
-          } else {
-            console.error("Failed to fetch driver data");
+      try {
+        const response = await fetch(
+          NGROK_TUNNEL + `/getRides?userId=${context.user._id}`,
+          {
+            method: "GET",
           }
-        } catch (error) {
-          console.log("erorr in get rides "+error)
+        );
+        console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        if (response.ok) {
+          const rides = await response.json();
+          console.log(rides);
+          console.log('Debug');
+          console.log('Debug');
+          setPastRides(rides);
+        } else {
+          console.error("Failed to fetch driver data");
         }
-      };
+      } catch (error) {
+        console.log("erorr in get rides "+error)
+      }
+    };
 
-      const getDriverRides = async () => {
-        try {
-          const response = await fetch(
-            NGROK_TUNNEL + `/getDriverRides?driverId=${context.user._id}`,
-            {
-              method: "GET",
-            }
-          );
-          console.log(response.ok);
-          console.log('Debug');
-          console.log('Debug');
-          if (response.ok) {
-            const rides = await response.json();
-            console.log(rides);
-            console.log('Debug');
-            console.log('Debug');
-            setPastDrives(rides);
-          } else {
-            console.error("Failed to fetch driver data");
+    const getDriverRides = async () => {
+      try {
+        const response = await fetch(
+          NGROK_TUNNEL + `/getDriverRides?driverId=${context.user._id}`,
+          {
+            method: "GET",
           }
-        } catch (error) {
-          console.log("erorr in get rides "+error)
+        );
+        console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        if (response.ok) {
+          const rides = await response.json();
+          console.log(rides);
+          console.log('Debug');
+          console.log('Debug');
+          setPastDrives(rides);
+        } else {
+          console.error("Failed to fetch driver data");
         }
-      };
+      } catch (error) {
+        console.log("erorr in get rides "+error)
+      }
+    };
 
-      getRides();
-      getDriverRides();
-    }, []);
+    // useEffect(() => {
+    //   getRides();
+    //   getDriverRides();
+    // }, []);
 
     return (
       <View style = {styles.container}>

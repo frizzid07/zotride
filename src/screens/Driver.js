@@ -25,38 +25,47 @@ const Driver = ({ navigation }) => {
   const [activeRide, setActiveRide] = useState({});
 
   useEffect(() => {
-    async function checkActiveRide() {
-      console.log("Checking if Driver has an Active ride");
-      try {
-        const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        });
-        console.log(response.ok);
-        console.log('Debug');
-        const result = await response.json();
-        console.log(result);
-        console.log('In Active Ride');
-        console.log('Debug');
-        console.log('Debug');
+    const refreshListener = navigation.addListener('focus', () => {
+      checkActiveRide();
+    });
 
-        if (result.ride) {
-          console.log("Current Driver has Active Ride");
-          setActiveRide(result.ride);
-          setHasActive(true);
-        } else {
-          console.log("Current Driver has no Active Ride");
-          setHasActive(false);
+    return refreshListener;
+  }, [navigation]);
+  
+  async function checkActiveRide() {
+    console.log("Checking if Driver has an Active ride");
+    try {
+      const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         }
-      } catch (err) {
-        console.log("Some backend error");
-        console.log(err);
+      });
+      console.log(response.ok);
+      console.log('Debug');
+      const result = await response.json();
+      console.log(result);
+      console.log('In Active Ride');
+      console.log('Debug');
+      console.log('Debug');
+
+      if (result.ride) {
+        console.log("Current Driver has Active Ride");
+        setActiveRide(result.ride);
+        setHasActive(true);
+      } else {
+        console.log("Current Driver has no Active Ride");
+        setHasActive(false);
       }
+    } catch (err) {
+      console.log("Some backend error");
+      console.log(err);
     }
-    checkActiveRide();
-  }, []);
+  }
+
+  // useEffect(() => {
+  //   checkActiveRide();
+  // }, []);
 
   async function editRide() {
     try {
