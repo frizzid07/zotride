@@ -1,4 +1,5 @@
-import { View, TextInput, Button, StyleSheet, Modal, Text, Slider } from "react-native";
+import { View, TextInput, Button, StyleSheet, Modal, Text } from "react-native";
+import Slider from '@react-native-community/slider';
 import React, { useState, createRef, useRef } from "react";
 
 function RideFilters(props) {
