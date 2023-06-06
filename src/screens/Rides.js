@@ -22,10 +22,13 @@ import { NGROK_TUNNEL } from "@env";
 
 import { AuthContext } from "../../server/context/authContext";
 
+import RideFilters from "../modals/RideFilters";
+
 const Rides = ({ navigation, route }) => {
   const context = useContext(AuthContext);
   const [rides, setRides] = useState(route.params.rides);
   const [drivers, setDrivers] = useState([]);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
   
@@ -91,6 +94,15 @@ const Rides = ({ navigation, route }) => {
       console.log("Error while booking ride "+error)
     }
   };
+
+  const closeFilterModal = () => {
+    setFilterModalVisible(false);
+  };
+
+  function changePreferencesHandler () {
+    setFilterModalVisible(true)
+  }
+
 
   return (
     <View style={styles.container}>
@@ -182,12 +194,12 @@ const Rides = ({ navigation, route }) => {
           submit,
           { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
         ]}
-        onPress={() => {
-          navigation.navigate("FindRide");
-        }}
+        onPress={changePreferencesHandler}
       >
         <Text style={{ fontSize: 20 }}>Change Ride Preferences</Text>
       </Pressable>
+      {filterModalVisible  && <RideFilters visible={filterModalVisible} onClose = {closeFilterModal}></RideFilters>}
+      
     </View>
   );
 };

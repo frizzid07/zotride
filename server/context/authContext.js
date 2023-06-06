@@ -26,6 +26,7 @@ const AuthProvider = ({ children }) => {
       });
       console.log(checkUser.ok);
       console.log('Save us senpai');
+      console.log("save please")
       const userData = await checkUser.json();
       console.log(userData.userData);
       console.log("We are checking");
