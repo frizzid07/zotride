@@ -7,16 +7,18 @@ const Ride = mongoose.model("Ride");
 const User = mongoose.model("User");
 
 router.post("/findRide", async (req, res) => {
-  const { startLocation, endLocation, startTime, startRadius, endRadius } =
+  const { startLocation, endLocation, startTime, startRadius, endRadius, timeWindow, rideCostLower, rideCostHigher, maxCapacity} =
     req.body;
   const time = new Date(startTime);
   const beginTime = new Date(
-    time.getTime() - 30 * 60000
+    time.getTime() - timeWindow
   );
   const endTime = new Date(
-    time.getTime() + 30 * 60000
+    time.getTime() + timeWindow
   );
-  const condition = { startTime: { $gte: beginTime, $lte: endTime }, capacity:{$gt:0} };
+  const condition = { startTime: { $gte: beginTime, $lte: endTime }, capacity:{$gt:0, $lte:maxCapacity},
+                      rideCost: {$gte:rideCostLower, $lte:rideCostHigher} };
+
   const rides = await Ride.find(condition).exec();
   const result = rides.filter((ride) => {
     return (
