@@ -20,15 +20,6 @@ import {
     const context = useContext(AuthContext);
     const [pastRides, setPastRides] = useState([]);
     const [pastDrives, setPastDrives] = useState([]);
-
-    useEffect(() => {
-      const refreshListener = navigation.addListener('focus', () => {
-        getRides();
-        getDriverRides();
-      });
-  
-      return refreshListener;
-    }, [navigation]);
     
     const getRides = async () => {
 
@@ -42,9 +33,11 @@ import {
         console.log(response.ok);
         console.log('Debug');
         console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
           const rides = await response.json();
           console.log(rides);
+          console.log('Debug');
           console.log('Debug');
           console.log('Debug');
           setPastRides(rides);
@@ -72,6 +65,7 @@ import {
           console.log(rides);
           console.log('Debug');
           console.log('Debug');
+          console.log('Debug');
           setPastDrives(rides);
         } else {
           console.error("Failed to fetch driver data");
@@ -81,10 +75,19 @@ import {
       }
     };
 
-    // useEffect(() => {
-    //   getRides();
-    //   getDriverRides();
-    // }, []);
+    useEffect(() => {
+      const refreshListener = navigation.addListener('focus', () => {
+        getRides();
+        getDriverRides();
+      });
+  
+      return refreshListener;
+    }, [navigation]);
+    
+    useEffect(() => {
+      getRides();
+      getDriverRides();
+    }, []);
 
     return (
       <View style = {styles.container}>
@@ -94,7 +97,7 @@ import {
             <Text style={[styles.text, {marginTop: 20, marginLeft: 10}]}>As a Passenger</Text>
             {pastRides.length === 0 ? (
               <Text
-                style={[styles.text, { fontSize: 25, margin: 20, color: "gray" }]}
+                style={[styles.text, { fontSize: 25, margin: 20, color: "gray", marginTop: 20 }]}
               >
                 No available rides
               </Text>
@@ -104,7 +107,7 @@ import {
             <Text style={[styles.text, {marginTop: 20, marginLeft: 10}]}>As a Driver</Text>
             {pastDrives.length === 0 ? (
               <Text
-                style={[styles.text, { fontSize: 25, margin: 20, color: "gray" }]}
+                style={[styles.text, { fontSize: 25, margin: 20, color: "gray", marginTop: 20 }]}
               >
                 No available rides
               </Text>

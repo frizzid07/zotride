@@ -48,6 +48,7 @@ const Landing = ({ navigation }) => {
       console.log('Debug');
       const rdata = await response.json()
       console.log(rdata);
+      console.log('Debug');
       console.log('In Landing');
       console.log('Debug');
       if(rdata.driver !== null) {
@@ -63,6 +64,7 @@ const Landing = ({ navigation }) => {
             body: JSON.stringify({data: {userId: context.user._id}})
           });
           console.log(response2.ok);
+          console.log('Debug');
           console.log('Debug');
           const rdata2 = await response2.json();
           console.log(rdata2);

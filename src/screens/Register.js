@@ -61,6 +61,7 @@ const Register = ({ navigation }) => {
           console.log('In Register');
           console.log(data);
           console.log('Debug');
+          console.log('Debug');
         
           if (data.error === 'Invalid Credentials') {
             alert('Invalid Credentials');

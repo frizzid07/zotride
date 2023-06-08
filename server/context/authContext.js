@@ -11,6 +11,10 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState();
   const [user, setUser] = useState();
 
+  const updateUser = (userData) => {
+    setUser(prevUser => ({ ...prevUser, ...userData }));
+  };
+
   async function authenticate(authToken) {
     setIsLoading(true);
     setIsLoggedIn(true);
@@ -27,8 +31,11 @@ const AuthProvider = ({ children }) => {
       console.log(checkUser.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
       const userData = await checkUser.json();
       console.log(userData.userData);
+      console.log('Debug');
+      console.log('Debug');
       console.log('Debug');
       if (userData !== undefined) {
         setUser(userData.userData);
@@ -62,6 +69,7 @@ const AuthProvider = ({ children }) => {
   const value = {
     token: token,
     user: user,
+    updateUser: updateUser,
     isLoggedIn: isLoggedIn,
     isLoading: isLoading,
     authenticate: authenticate,

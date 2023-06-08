@@ -46,6 +46,7 @@ import {
               console.log('Debug');
               const driver = await response.json();
               console.log(driver);
+              console.log('Debug');
               setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
                   " " +
                   driver?.driver?.vehicleInformation[0]?.vehicleModel);

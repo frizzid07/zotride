@@ -141,12 +141,14 @@ const DriverRegistration = ({ navigation, route }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
         console.log('Debug');
         console.log('Debug');
         if (rdata.success) {
           console.log("Driver Registered Successfully");
+          context.updateUser({ isDriver: true});
           try {
             const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
               method: "PUT",
@@ -156,6 +158,7 @@ const DriverRegistration = ({ navigation, route }) => {
               body: JSON.stringify({data: data})
             });
             console.log(response2.ok);
+            console.log('Debug');
             console.log('Debug');
             const rdata2 = await response2.json();
             console.log(rdata2);

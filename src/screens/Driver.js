@@ -24,14 +24,6 @@ const Driver = ({ navigation }) => {
   const [hasActive, setHasActive] = useState(false);
   const [activeRide, setActiveRide] = useState({});
 
-  useEffect(() => {
-    const refreshListener = navigation.addListener('focus', () => {
-      checkActiveRide();
-    });
-
-    return refreshListener;
-  }, [navigation]);
-  
   async function checkActiveRide() {
     console.log("Checking if Driver has an Active ride");
     try {
@@ -42,6 +34,7 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       const result = await response.json();
       console.log(result);
@@ -63,9 +56,17 @@ const Driver = ({ navigation }) => {
     }
   }
 
-  // useEffect(() => {
-  //   checkActiveRide();
-  // }, []);
+  useEffect(() => {
+    checkActiveRide();
+  }, []);
+
+  useEffect(() => {
+    const refreshListener = navigation.addListener('focus', () => {
+      checkActiveRide();
+    });
+
+    return refreshListener;
+  }, [navigation]);
 
   async function editRide() {
     try {
@@ -76,6 +77,7 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       const result = await response.json();
       console.log(result);
@@ -106,6 +108,7 @@ const Driver = ({ navigation }) => {
       console.log(result);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
 
       if (result.deleted) {
         console.log("Ride Deleted");
@@ -127,6 +130,7 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
@@ -150,8 +154,8 @@ const Driver = ({ navigation }) => {
       console.log(response.ok);
       if (response.ok) {
         console.log("Driver Deleted");
+        context.updateUser({ isDriver: false});
         try {
-          context.user.isDriver = false;
           const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
             method: "PUT",
             headers: {
@@ -160,6 +164,8 @@ const Driver = ({ navigation }) => {
             body: JSON.stringify({data: {userId: context.user._id}})
           });
           console.log(response2.ok);
+          console.log('Debug');
+          console.log('Debug');
           console.log('Debug');
           const rdata = await response2.json();
           console.log(rdata);
@@ -200,7 +206,7 @@ const Driver = ({ navigation }) => {
         )}
         {hasActive && (
           <View style={{ width: "100%", marginTop: 15 }}>
-            <Text style={styles.text}>Your Current Ride</Text>
+            <Text style={[styles.text, {fontSize: 20}]}>Your Current Ride</Text>
             <SingleRide ride={activeRide}></SingleRide>
             <View style={{ width: "60%", marginTop: 15, alignSelf: 'center' }}>
               <Pressable style={[submit, { backgroundColor: '#004aac' }]} onPress={editRide}>

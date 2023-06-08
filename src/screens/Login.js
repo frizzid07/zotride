@@ -40,6 +40,7 @@ const Login = ({ navigation }) => {
       try {
         setIsChecking(true);
         console.log('Debug');
+        console.log('Debug');
         let userVal = await AsyncStorage.getItem("user");
         console.log('One more');
         console.log('Debug');
@@ -72,8 +73,11 @@ const Login = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       if (response.ok) {
