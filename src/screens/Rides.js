@@ -10,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 
 // Images
 import background from "../../assets/background.jpg";
@@ -29,6 +29,15 @@ const Rides = ({ navigation, route }) => {
   const [rides, setRides] = useState(route.params.rides);
   const [drivers, setDrivers] = useState([]);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [filters, setFilters] = useState({
+    "startRadius":5,
+    "endRadius":5,
+    "timeWindow":30,
+    "maxCapacity":4,
+    "maxCost":100
+  });
+  const isInitialRender = useRef(true);
+
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
   
@@ -62,6 +71,52 @@ const Rides = ({ navigation, route }) => {
   useEffect(() => {
     fetchDrivers();
   }, []);
+
+  
+
+  useEffect( () => {
+
+    async function filterRides () {
+    try {
+      var requestBody = {
+        "startLocation":route.params.initialParams.startLocation,
+        "endLocation":route.params.initialParams.endLocation,
+        "startRadius":filters.startRadius,
+        "endRadius":filters.endRadius,
+        "startTime":route.params.initialParams.startTime,
+        "timeWindow":filters.timeWindow,
+        "maxRideCost":filters.maxCost,
+        "maxCapacity":filters.maxCapacity
+      }
+      const response = await fetch(NGROK_TUNNEL + "/filterRides", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      console.log("mandatory log");
+      if (!response.ok) {
+        alert("Could not filter rides");
+      }
+      setRides(data);
+    } catch (error) {
+      console.log("Some error in filtering rides API " + error);
+    }
+    }
+
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      console.log("first render, do not call find rides")
+      return;
+    }
+    console.log('Filters changed, call filter ride API');
+    console.log("filters set to "+JSON.stringify(filters));
+    
+    filterRides();
+    
+  }, [filters]);
 
   async function bookRide(ride) {
     const data = {
@@ -101,6 +156,10 @@ const Rides = ({ navigation, route }) => {
 
   function changePreferencesHandler () {
     setFilterModalVisible(true)
+  }
+
+  function handleFilters (filterValues) {
+    setFilters(filterValues);
   }
 
 
@@ -198,7 +257,7 @@ const Rides = ({ navigation, route }) => {
       >
         <Text style={{ fontSize: 20 }}>Change Ride Preferences</Text>
       </Pressable>
-      {filterModalVisible  && <RideFilters visible={filterModalVisible} onClose = {closeFilterModal}></RideFilters>}
+      {filterModalVisible  && <RideFilters visible={filterModalVisible} onClose = {closeFilterModal} handleFilters={handleFilters} default={filters}></RideFilters>}
       
     </View>
   );

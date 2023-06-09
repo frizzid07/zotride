@@ -43,17 +43,19 @@ router.post("/findRide", async (req, res) => {
 });
 
 router.post("/filterRides", async (req, res) => {
-  const { startLocation, endLocation, startTime, startRadius, endRadius, timeWindow, rideCostLower, rideCostHigher, maxCapacity} =
+  const { DateTime } = require('luxon');
+  const { startLocation, endLocation, startTime, startRadius, endRadius, timeWindow, maxRideCost, maxCapacity} =
     req.body;
-  const time = new Date(startTime);
+  const time = new Date(new Date(startTime).toISOString());
+  // const time = DateTime.fromISO(startTimeDate.toISOString(), { zone: 'utc' }).setZone('America/Los_Angeles')
   const beginTime = new Date(
-    time.getTime() - timeWindow
+    time.getTime() - timeWindow * 60000
   );
   const endTime = new Date(
-    time.getTime() + timeWindow
+    time.getTime() + timeWindow * 60000
   );
   const condition = { startTime: { $gte: beginTime, $lte: endTime }, capacity:{$gt:0, $lte:maxCapacity},
-                      rideCost: {$gte:rideCostLower, $lte:rideCostHigher} };
+                      rideCost: {$lte:maxRideCost} };
 
   const rides = await Ride.find(condition).exec();
 

@@ -124,6 +124,8 @@ const FindRide = ({ navigation }) => {
     try {
       console.log("Checking");
       console.log("log error")
+      console.log("Checking");
+      console.log("log error");
       const response = await fetch(NGROK_TUNNEL + "/findRide", {
         method: "POST",
         headers: {
@@ -132,13 +134,16 @@ const FindRide = ({ navigation }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
+      console.log('In Find Ride');
+      console.log('One more');
+      console.log('When does the suffering end?');
       const rdata = await response.json();
       console.log('In Find Ride');
       console.log('One more');
       console.log('When does the suffering end?');
       if (response.ok) {
         console.log("Ride found Successfully");
-        navigation.navigate("Rides", { rides: rdata });
+        navigation.navigate("Rides", { rides: rdata, initialParams: {"startLocation":data.startLocation, "endLocation":data.endLocation,"startTime":data.startTime}});
       } else {
         alert("Could not find ride");
       }
