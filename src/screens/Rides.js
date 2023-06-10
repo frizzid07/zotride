@@ -253,9 +253,20 @@ const Rides = ({ navigation, route }) => {
           submit,
           { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
         ]}
-        onPress={changePreferencesHandler}
+        onPress={() => {
+          navigation.navigate("FindRide");
+        }}
       >
         <Text style={{ fontSize: 20 }}>Change Ride Preferences</Text>
+      </Pressable>
+      <Pressable
+        style={[
+          submit,
+          { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
+        ]}
+        onPress={changePreferencesHandler}
+      >
+        <Text style={{ fontSize: 20 }}>Manage Filters</Text>
       </Pressable>
       {filterModalVisible  && <RideFilters visible={filterModalVisible} onClose = {closeFilterModal} handleFilters={handleFilters} default={filters}></RideFilters>}
       
