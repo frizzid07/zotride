@@ -7,17 +7,58 @@ const Ride = mongoose.model("Ride");
 const User = mongoose.model("User");
 
 router.post("/findRide", async (req, res) => {
-  const { startLocation, endLocation, startTime, startRadius, endRadius } =
+  const { startLocation, endLocation, startTime} =
     req.body;
   const time = new Date(startTime);
   const beginTime = new Date(
-    time.getTime() - 30 * 60000
+    time.getTime() - 30
   );
   const endTime = new Date(
-    time.getTime() + 30 * 60000
+    time.getTime() + 30
   );
-  const condition = { startTime: { $gte: beginTime, $lte: endTime }, capacity:{$gt:0} };
+  const condition = { startTime: { $gte: beginTime, $lte: endTime }};
+
   const rides = await Ride.find(condition).exec();
+
+  const result = rides.filter((ride) => {
+    return (
+      isWithinRadius(
+        ride.startLocation.latitude,
+        ride.startLocation.longitude,
+        startLocation.latitude,
+        startLocation.longitude,
+        5
+      ) &&
+      isWithinRadius(
+        ride.endLocation.latitude,
+        ride.endLocation.longitude,
+        endLocation.latitude,
+        endLocation.longitude,
+        5
+      )
+    );
+  });
+
+  return res.status(200).send(result);
+});
+
+router.post("/filterRides", async (req, res) => {
+  const { DateTime } = require('luxon');
+  const { startLocation, endLocation, startTime, startRadius, endRadius, timeWindow, maxRideCost, maxCapacity} =
+    req.body;
+  const time = new Date(new Date(startTime).toISOString());
+  // const time = DateTime.fromISO(startTimeDate.toISOString(), { zone: 'utc' }).setZone('America/Los_Angeles')
+  const beginTime = new Date(
+    time.getTime() - timeWindow * 60000
+  );
+  const endTime = new Date(
+    time.getTime() + timeWindow * 60000
+  );
+  const condition = { startTime: { $gte: beginTime, $lte: endTime }, capacity:{$gt:0, $lte:maxCapacity},
+                      rideCost: {$lte:maxRideCost} };
+
+  const rides = await Ride.find(condition).exec();
+
   const result = rides.filter((ride) => {
     return (
       isWithinRadius(

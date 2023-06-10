@@ -115,9 +115,7 @@ const FindRide = ({ navigation }) => {
     if (
       data.startLocation.description == "" ||
       data.endLocation.description == "" ||
-      data.startTime == "" ||
-      data.startRadius == "" ||
-      data.endRadius == ""
+      data.startTime == ""
     ) {
       setErrorMsg("Please Enter All Fields");
       return;
@@ -125,6 +123,9 @@ const FindRide = ({ navigation }) => {
 
     try {
       console.log("Checking");
+      console.log("log error")
+      console.log("Checking");
+      console.log("log error");
       const response = await fetch(NGROK_TUNNEL + "/findRide", {
         method: "POST",
         headers: {
@@ -133,13 +134,16 @@ const FindRide = ({ navigation }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
+      console.log('In Find Ride');
+      console.log('One more');
+      console.log('When does the suffering end?');
       const rdata = await response.json();
       console.log('In Find Ride');
       console.log('One more');
       console.log('When does the suffering end?');
       if (response.ok) {
         console.log("Ride found Successfully");
-        navigation.navigate("Rides", { rides: rdata });
+        navigation.navigate("Rides", { rides: rdata, initialParams: {"startLocation":data.startLocation, "endLocation":data.endLocation,"startTime":data.startTime}});
       } else {
         alert("Could not find ride");
       }
@@ -234,20 +238,6 @@ const FindRide = ({ navigation }) => {
             onCancel={datePickerVisibleHandler}
           />
         </View>
-        <TextInput
-          style={[input, { marginTop: 15 }]}
-          placeholder="Ride Pickup Radius (in miles)"
-          onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, startRadius: text })}
-          keyboardType="number-pad"
-        />
-        <TextInput
-          style={input}
-          placeholder="Ride Destination Radius (in miles)"
-          onPressIn={clearErrMsg}
-          onChangeText={(text) => setData({ ...data, endRadius: text })}
-          keyboardType="number-pad"
-        />
 
         <Pressable style={[submit, { marginTop: 15 }]}>
           <Text style={styles.text} onPress={findRide}>

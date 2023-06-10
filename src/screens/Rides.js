@@ -10,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 
 // Images
 import background from "../../assets/background.jpg";
@@ -22,10 +22,22 @@ import { NGROK_TUNNEL } from "@env";
 
 import { AuthContext } from "../../server/context/authContext";
 
+import RideFilters from "../modals/RideFilters";
+
 const Rides = ({ navigation, route }) => {
   const context = useContext(AuthContext);
   const [rides, setRides] = useState(route.params.rides);
   const [drivers, setDrivers] = useState([]);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [filters, setFilters] = useState({
+    "startRadius":5,
+    "endRadius":5,
+    "timeWindow":30,
+    "maxCapacity":4,
+    "maxCost":100
+  });
+  const isInitialRender = useRef(true);
+
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
   
@@ -60,6 +72,52 @@ const Rides = ({ navigation, route }) => {
     fetchDrivers();
   }, []);
 
+  
+
+  useEffect( () => {
+
+    async function filterRides () {
+    try {
+      var requestBody = {
+        "startLocation":route.params.initialParams.startLocation,
+        "endLocation":route.params.initialParams.endLocation,
+        "startRadius":filters.startRadius,
+        "endRadius":filters.endRadius,
+        "startTime":route.params.initialParams.startTime,
+        "timeWindow":filters.timeWindow,
+        "maxRideCost":filters.maxCost,
+        "maxCapacity":filters.maxCapacity
+      }
+      const response = await fetch(NGROK_TUNNEL + "/filterRides", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      console.log("mandatory log");
+      if (!response.ok) {
+        alert("Could not filter rides");
+      }
+      setRides(data);
+    } catch (error) {
+      console.log("Some error in filtering rides API " + error);
+    }
+    }
+
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      console.log("first render, do not call find rides")
+      return;
+    }
+    console.log('Filters changed, call filter ride API');
+    console.log("filters set to "+JSON.stringify(filters));
+    
+    filterRides();
+    
+  }, [filters]);
+
   async function bookRide(ride) {
     const data = {
       "rideId": ride._id,
@@ -91,6 +149,19 @@ const Rides = ({ navigation, route }) => {
       console.log("Error while booking ride "+error)
     }
   };
+
+  const closeFilterModal = () => {
+    setFilterModalVisible(false);
+  };
+
+  function changePreferencesHandler () {
+    setFilterModalVisible(true)
+  }
+
+  function handleFilters (filterValues) {
+    setFilters(filterValues);
+  }
+
 
   return (
     <View style={styles.container}>
@@ -188,6 +259,17 @@ const Rides = ({ navigation, route }) => {
       >
         <Text style={{ fontSize: 20 }}>Change Ride Preferences</Text>
       </Pressable>
+      <Pressable
+        style={[
+          submit,
+          { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
+        ]}
+        onPress={changePreferencesHandler}
+      >
+        <Text style={{ fontSize: 20 }}>Manage Filters</Text>
+      </Pressable>
+      {filterModalVisible  && <RideFilters visible={filterModalVisible} onClose = {closeFilterModal} handleFilters={handleFilters} default={filters}></RideFilters>}
+      
     </View>
   );
 };
