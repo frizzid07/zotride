@@ -24,45 +24,66 @@ const Driver = ({ navigation }) => {
   const [hasActive, setHasActive] = useState(false);
   const [activeRide, setActiveRide] = useState({});
 
-  async function checkActiveRide() {
+  async function checkActiveRideDriver() {
     console.log("Checking if Driver has an Active ride");
-    try {
-      const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      });
-      console.log(response.ok);
-      console.log('Debug');
-      console.log('Debug');
-      const result = await response.json();
-      console.log(result);
-      console.log('In Active Ride');
-      console.log('Debug');
-      console.log('Debug');
-
-      if (result.ride) {
-        console.log("Current Driver has Active Ride");
-        setActiveRide(result.ride);
+    if(context.activeDriverRide) {
+      try {
+        const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${context.activeDriverRide}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        console.log(response.ok);
+        console.log('Debug');
+        const rdata = await response.json();
+        console.log(rdata);
+        setActiveRide(rdata.ride);
         setHasActive(true);
-      } else {
-        console.log("Current Driver has no Active Ride");
-        setHasActive(false);
-      }
-    } catch (err) {
-      console.log("Some backend error");
+    } catch(err) {
       console.log(err);
+    }
+  } else {
+      try {
+        const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        console.log('Debug');
+        console.log('Debug');
+        const result = await response.json();
+        console.log(result);
+        console.log('In Active Ride');
+        console.log('Debug');
+        console.log('Debug');
+
+        if (result.ride) {
+          console.log("Current Driver has Active Ride");
+          setActiveRide(result.ride);
+          setHasActive(true);
+        } else {
+          console.log("Current Driver has no Active Ride");
+          setHasActive(false);
+        }
+      } catch (err) {
+        console.log("Some backend error");
+        console.log(err);
+      }
     }
   }
 
   useEffect(() => {
-    checkActiveRide();
+    checkActiveRideDriver();
   }, []);
 
   useEffect(() => {
     const refreshListener = navigation.addListener('focus', () => {
-      checkActiveRide();
+      checkActiveRideDriver();
     });
 
     return refreshListener;
@@ -79,8 +100,11 @@ const Driver = ({ navigation }) => {
       console.log(response.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const result = await response.json();
       console.log(result);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
 
@@ -102,6 +126,8 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       const result = await response.json();
@@ -132,6 +158,8 @@ const Driver = ({ navigation }) => {
       console.log(response.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
       console.log('Debug');
@@ -154,6 +182,7 @@ const Driver = ({ navigation }) => {
       console.log(response.ok);
       if (response.ok) {
         console.log("Driver Deleted");
+        console.log('Debug');
         context.updateUser({ isDriver: false});
         try {
           const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
@@ -167,6 +196,8 @@ const Driver = ({ navigation }) => {
           console.log('Debug');
           console.log('Debug');
           console.log('Debug');
+          console.log('Debug');
+          console.log('Debug');
           const rdata = await response2.json();
           console.log(rdata);
           console.log('Debug');
@@ -175,7 +206,7 @@ const Driver = ({ navigation }) => {
           console.error(error);
         }
         alert("Driver Record Deleted");
-        navigation.navigate("Landing");
+        // navigation.navigate("Landing", { screen: 'Home' });
       } else {
         console.log("Some error in registering");
         navigation.navigate("DriverRegistration");

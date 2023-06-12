@@ -46,8 +46,11 @@ const Landing = ({ navigation }) => {
       console.log(response.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json()
       console.log(rdata);
+      console.log('Debug');
       console.log('Debug');
       console.log('In Landing');
       console.log('Debug');
@@ -66,8 +69,11 @@ const Landing = ({ navigation }) => {
           console.log(response2.ok);
           console.log('Debug');
           console.log('Debug');
+          console.log('Debug');
+          console.log('Debug');
           const rdata2 = await response2.json();
           console.log(rdata2);
+          console.log('Debug');
           console.log('Debug');
           console.log('Debug');
         } catch(error) {
@@ -84,6 +90,7 @@ const Landing = ({ navigation }) => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
     if (context.user.isDriver) {
+      console.log('Debug');
       const checkDriver = await isRegisteredDriver();
       console.log(checkDriver);
       if(checkDriver)
@@ -111,7 +118,7 @@ const Landing = ({ navigation }) => {
         <Pressable style={submit} onPress={driverRole}>
           <Text style={styles.text}>Driver</Text>
         </Pressable>
-        <Pressable style={submit} onPress={() => {navigation.navigate("FindRide");}}>
+        <Pressable style={submit} onPress={() => {navigation.navigate("Passenger")}}>
           <Text style={styles.text}>Passenger</Text>
         </Pressable>
         <Pressable

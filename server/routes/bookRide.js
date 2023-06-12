@@ -14,10 +14,10 @@ router.put("/bookRide", async (req, res) => {
   
   if(result) {
     const old_capacity = result.capacity;
-    // if(result.passengers.includes(userId)) {
-    //   console.log('Passenger already exists');
-    //   return res.status(422).send({error: 'You are already a passenger in this ride'});
-    // } else {
+    if(result.passengers.includes(userId)) {
+      console.log('Passenger already exists');
+      return res.status(422).send({error: 'You are already a passenger in this ride'});
+    } else {
       await Ride.updateOne(
         { _id: rideId },
         { $addToSet: { passengers: userId }, capacity: old_capacity - 1 },
@@ -31,7 +31,7 @@ router.put("/bookRide", async (req, res) => {
       ).exec();
       console.log('Updated User');
       return res.status(200).send({success: 'Seat booked successfully!'});
-    // }
+    }
   } else {
     res.status(404).send({error: 'Ride not found'});
   }

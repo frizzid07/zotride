@@ -34,9 +34,12 @@ import {
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
+        console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
           const rides = await response.json();
           console.log(rides);
+          console.log('Debug');
           console.log('Debug');
           console.log('Debug');
           console.log('Debug');
@@ -58,6 +61,9 @@ import {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         if (response.ok) {

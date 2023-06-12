@@ -1,6 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { View, ActivityIndicator } from "react-native";
-import AppStack from "./AppStack";
 import AuthStack from "./AuthStack";
 import BottomTab from "./BottomTab";
 import { useContext } from "react";

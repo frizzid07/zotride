@@ -32,8 +32,12 @@ const AuthProvider = ({ children }) => {
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const userData = await checkUser.json();
       console.log(userData.userData);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');

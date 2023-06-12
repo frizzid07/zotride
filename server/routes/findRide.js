@@ -73,16 +73,30 @@ function toRadians(degrees) {
 }
 
 router.get("/findActiveRide", async (req, res) => {
-  const id = req.query.driverId;
+  var driverId = null, passId = null;
+  if(req.query.driverId !== undefined) {
+    driverId = req.query.driverId;
+  } else {
+    passId = req.query.userId;
+  }
   try {
-    const ride = await Ride.findOne({ driverId: id, isActive: true });
-
+    var ride = null, rideList = null;
+    if(driverId !== null) {
+      ride = await Ride.findOne({ driverId: driverId, isActive: true });
+    } else if(passId !== null){
+      rideList = await Ride.find({ passengers: { $elemMatch: { $eq: passId } }, isActive: true });
+      if(rideList.length !== 0) {
+        ride = rideList.map((rideInfo) => {
+          return { rideDetails: rideInfo };
+        });
+      }
+    }
     if (ride) {
-      console.log("Current Driver has an active ride");
-      return res.status(200).send({ ride });
+      console.log("Current User has an active ride");
+      return res.status(200).send({ active: true, ride });
     } else {
-      console.log("Current Driver has no active ride");
-      return res.status(200).send({});
+      console.log("Current User has no active ride");
+      return res.status(200).send({ active: false });
     }
   } catch (err) {
     console.log(err);
@@ -132,6 +146,37 @@ router.get("/getDriverRides", async (req, res) => {
     return res.status(422).json({ error: err });
   }
 
+});
+
+router.get("/getRide", async (req, res) => {
+  const rideId = req.query.rideId;
+  try {
+    const ride = await Ride.findOne({ _id: rideId }).exec();
+    return res.status(200).send({ ride });
+  } catch(err) {
+    return res.status(422).json({ error: err });
+  }
+});
+
+router.put("/populateRides", async (req, res) => {
+  const userId = req.query.userId;
+  const { rides } = req.body;
+
+  try {
+    const updatedUser = await User.findOne({ _id: userId });
+    console.log(updatedUser);
+    if(updatedUser) {
+      updatedUser.activePassengerRides = rides
+      await updatedUser.save();
+      console.log("User registration updated successfully");
+      return res.status(200).send({ updatedUser });
+    } else {
+      return res.status(404).send({ error: "User not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: "Failed to update user" });
+  }
 });
 
 module.exports = router;
