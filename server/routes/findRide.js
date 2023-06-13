@@ -109,20 +109,36 @@ router.get("/getRides", async (req, res) => {
   try {
     const user = await User.findOne({ _id: userId}).exec();
     console.log(`User ID: ${user}`);
-    const pastRides = []
-    for(let i=0;i<user.past_rides.length;i++){
-      const ride = await Ride.findOne({ _id: user.past_rides[i]}).exec();
-      console.log(`Ride is ${ride}`);
-      const driver = await User.findOne({ _id: ride.driverId}).exec();
-      console.log(`Driver is ${driver}`);
-      const driverDetails = {
-        "firstName":driver.firstName,
-        "lastName":driver.lastName,
-        "mobile":driver.mobileNumber
+    const currentRides = [], pastRides = []
+    if(user.activePassengerRides) {
+      for(let i=0;i<user.activePassengerRides.length;i++){
+        let ride = await Ride.findOne({ _id: user.activePassengerRides[i]}).exec();
+        console.log(`Ride is ${ride}`);
+        let driver = await User.findOne({ _id: ride.driverId}).exec();
+        console.log(`Driver is ${driver}`);
+        let driverDetails = {
+          "firstName":driver.firstName,
+          "lastName":driver.lastName,
+          "mobile":driver.mobileNumber
+        }
+        currentRides.push({"rideDetails":ride,"driverDetails":driverDetails});
       }
-      pastRides.push({"rideDetails":ride,"driverDetails":driverDetails});
     }
-    return res.status(200).send(pastRides);
+    if(user.pastRides) {
+      for(let i=0;i<user.pastRides.length;i++){
+        let ride = await Ride.findOne({ _id: user.pastRides[i]}).exec();
+        console.log(`Ride is ${ride}`);
+        let driver = await User.findOne({ _id: ride.driverId}).exec();
+        console.log(`Driver is ${driver}`);
+        let driverDetails = {
+          "firstName":driver.firstName,
+          "lastName":driver.lastName,
+          "mobile":driver.mobileNumber
+        }
+        pastRides.push({"rideDetails":ride,"driverDetails":driverDetails});
+      }
+    }
+    return res.status(200).send({ currentRides, pastRides });
   } catch (err) {
     return res.status(422).json({ error: err });
   }
@@ -131,17 +147,30 @@ router.get("/getRides", async (req, res) => {
 router.get("/getDriverRides", async (req, res) => {
   const driverId  = req.query.driverId;
   try {
-    const rides = await Ride.find({ driverId: driverId}).exec();
-    const pastRides = []
-    for(let i=0;i<rides.length;i++){
-      let passengers = [];
-      for(let j=0;j<rides[i].passengers.length;j++){
-        const passenger = await User.findOne({ _id: rides[i].passengers[j]}).exec();
-        passengers.push({"firstName":passenger.firstName,"lastName":passenger.lastName});
+    const currentRides = await Ride.find({ driverId: driverId, isActive: true}).exec();
+    const currentRidesList = [], pastRidesList = []
+    if(currentRides) {
+      for(let i=0;i<currentRides.length;i++){
+        let passengers = [];
+        for(let j=0;j<currentRides[i].passengers.length;j++){
+          const passenger = await User.findOne({ _id: currentRides[i].passengers[j]}).exec();
+          passengers.push({"firstName":passenger.firstName,"lastName":passenger.lastName});
+        }
+        currentRidesList.push({"rideDetails":currentRides[i],"passengerDetails":passengers});
       }
-      pastRides.push({"rideDetails":rides[i],"passengerDetails":passengers});
     }
-    return res.status(200).send(pastRides);
+    const pastRides = await Ride.find({ driverId: driverId, isActive: false}).exec();
+    if(pastRides) {
+      for(let i=0;i<pastRides.length;i++){
+        let passengers = [];
+        for(let j=0;j<pastRides[i].passengers.length;j++){
+          const passenger = await User.findOne({ _id: pastRides[i].passengers[j]}).exec();
+          passengers.push({"firstName":passenger.firstName,"lastName":passenger.lastName});
+        }
+        pastRidesList.push({"rideDetails":pastRides[i],"passengerDetails":passengers});
+      }
+    }
+    return res.status(200).send({ currentRidesList, pastRidesList });
   } catch (err) {
     return res.status(422).json({ error: err });
   }
@@ -158,25 +187,63 @@ router.get("/getRide", async (req, res) => {
   }
 });
 
-router.put("/populateRides", async (req, res) => {
+router.get("/endTrip", async (req, res) => {
   const userId = req.query.userId;
-  const { rides } = req.body;
-
+  const rideId = req.query.rideId;
   try {
-    const updatedUser = await User.findOne({ _id: userId });
-    console.log(updatedUser);
-    if(updatedUser) {
-      updatedUser.activePassengerRides = rides
-      await updatedUser.save();
-      console.log("User registration updated successfully");
-      return res.status(200).send({ updatedUser });
-    } else {
-      return res.status(404).send({ error: "User not found" });
-    }
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send({ error: "Failed to update user" });
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { $push: { pastRides: rideId } },
+      { $pull: { activePassengerRides: rideId } },
+      { new: true }
+    ).exec();
+    return res.status(200).send({success: 'Trip ended successfully!'});
+  } catch(error) {
+    return res.status(422).json({ error: error });
   }
 });
+
+router.get("/cancelTrip", async (req, res) => {
+  const userId = req.query.userId;
+  const rideId = req.query.rideId;
+  try {
+    const result = await Ride.findOne({ _id: rideId }).exec();
+    const old_capacity = result.capacity;
+    await Ride.updateOne(
+      { _id: rideId },
+      { $pull: { passengers: userId }, capacity: old_capacity + 1 },
+      { new: true }
+    ).exec();
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { activePassengerRides: rideId } },
+      { new: true }
+    ).exec();
+    return res.status(200).send({success: 'Trip cancelled successfully!'});
+  } catch(error) {
+    return res.status(422).json({ error: error });
+  }
+});
+
+// router.put("/populateRides", async (req, res) => {
+//   const userId = req.query.userId;
+//   const { rides } = req.body;
+
+//   try {
+//     const updatedUser = await User.findOne({ _id: userId });
+//     console.log(updatedUser);
+//     if(updatedUser) {
+//       updatedUser.activePassengerRides = rides
+//       await updatedUser.save();
+//       console.log("User registration updated successfully");
+//       return res.status(200).send({ updatedUser });
+//     } else {
+//       return res.status(404).send({ error: "User not found" });
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     return res.status(500).send({ error: "Failed to update user" });
+//   }
+// });
 
 module.exports = router;

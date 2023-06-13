@@ -137,8 +137,11 @@ const FindRide = ({ navigation }) => {
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');

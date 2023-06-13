@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, Button, Alert, Pressable, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 
 // Images
 import background from '../../assets/background.jpg';
@@ -7,10 +7,15 @@ import logo from '../../assets/logo.png';
 
 // Common
 import {submit} from '../common/button';
+import { AuthContext } from '../../server/context/authContext';
 
 const SuccessPayment = ({ navigation, route }) => {
+  const context = useContext(AuthContext);
+  const { data, ride } = route?.params;
 
-  const { data } = route?.params;
+  useEffect(() => {
+    context.updateUser({ activePassengerRides: [...activePassengerRides, ride._id]})
+  }, []);
 
   return (
     <View style = {styles.container}>

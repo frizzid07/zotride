@@ -26,7 +26,7 @@ router.put("/bookRide", async (req, res) => {
       console.log('Updated Ride');
       await User.findOneAndUpdate(
         { _id: userId },
-        { $push: { past_rides: rideId } },
+        { $push: { activePassengerRides: rideId } },
         { new: true }
       ).exec();
       console.log('Updated User');

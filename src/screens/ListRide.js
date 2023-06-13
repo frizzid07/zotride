@@ -196,6 +196,7 @@ const ListRide = ({ navigation, route }) => {
         console.log("Debug");
         console.log('Debug');
         console.log('Debug');
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/editRide?driverId=${context.user._id}`, {
           method: "PATCH",
           headers: {
@@ -205,6 +206,7 @@ const ListRide = ({ navigation, route }) => {
         });
         console.log(response.ok);
         console.log("Debug");
+        console.log('Debug');
         if (response.ok) {
           console.log("Ride Updated");
           alert("Trip Updated");
@@ -219,6 +221,7 @@ const ListRide = ({ navigation, route }) => {
     else {
       try {
         console.log(data);
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + "/listRide", {
           method: "POST",
           headers: {
@@ -227,6 +230,7 @@ const ListRide = ({ navigation, route }) => {
           body: JSON.stringify({ data: data }),
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');

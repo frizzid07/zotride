@@ -36,6 +36,7 @@ const Driver = ({ navigation }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
         setActiveRide(rdata.ride);
@@ -52,6 +53,7 @@ const Driver = ({ navigation }) => {
           }
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
@@ -102,6 +104,7 @@ const Driver = ({ navigation }) => {
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
       const result = await response.json();
       console.log(result);
       console.log('Debug');
@@ -126,6 +129,7 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
@@ -156,6 +160,7 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
@@ -198,8 +203,10 @@ const Driver = ({ navigation }) => {
           console.log('Debug');
           console.log('Debug');
           console.log('Debug');
+          console.log('Debug');
           const rdata = await response2.json();
           console.log(rdata);
+          console.log('Debug');
           console.log('Debug');
           console.log('Debug');
         } catch(error) {

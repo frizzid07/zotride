@@ -52,6 +52,7 @@ const Rides = ({ navigation, route }) => {
           console.log(driver);
           console.log('Debug');
           console.log('Debug');
+          console.log('Debug');
           driverData.push(driver);
         } else {
           console.error("Failed to fetch driver data");
@@ -93,7 +94,7 @@ const Rides = ({ navigation, route }) => {
       console.log('In Book Ride');
       console.log('Debug');
       console.log('Debug');
-      // "access_token": "A21AAIiE8EZlhKbEQmpUVZiDVuAu2k5EKRIdRhFINWCN3ky8n2XuWLBfDXKywBL_FJgxRQDH3aBNMdq9W1QQQS6RNuBaJOoGg",
+      console.log('Debug');
       if(response.ok) {
         // alert(rdata.success);
         navigation.navigate("Payment", {ride: ride});
