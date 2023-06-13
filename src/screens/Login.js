@@ -63,6 +63,7 @@ const Login = ({ navigation }) => {
       console.log("Why this error")
       console.log("Common")
       console.log("Please")
+      console.log("Ridiculous")
       const response = await fetch(NGROK_TUNNEL + "/login", {
         method: "POST",
         headers: {

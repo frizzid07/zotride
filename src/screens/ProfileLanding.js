@@ -59,14 +59,14 @@ const ProfileLanding = ({navigation})=>{
 
         <Pressable
           style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3}]}
-          onPress={context.logout}
+          onPress={()=>{navigation.navigate("PastRides")}}
         >
           <Text style={styles.text}>Past Rides</Text>
         </Pressable>
 
         {isDriver && <Pressable
           style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3 }]}
-          onPress={context.logout}
+          onPress={()=>{}}
         >
           <Text style={styles.text}>Edit Registration</Text>
         </Pressable>}
