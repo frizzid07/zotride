@@ -50,7 +50,7 @@ export default MyTabs = () => {
         {context.user.isDriver && (
           <Tab.Screen name="Driver" component={Driver}></Tab.Screen>
         )}
-        {context.user.activePassengerRides && context.user.activePassengerRides.length !== 0 && !context.user.isDriver && (
+        {context.user.activePassengerRides.length !== 0 && !context.user.isDriver && (
           <Tab.Screen name="Passenger" component={Passenger}></Tab.Screen>
         )}
         <Tab.Screen name="Profile" component={PastRides}></Tab.Screen>

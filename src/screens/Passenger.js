@@ -58,10 +58,6 @@ const Passenger = ({ navigation }) => {
     
         return refreshListener;
       }, [navigation]);
-
-    useEffect(() => {
-        console.log(`Active Rides ${activeRidesPass}`);
-    }, [activeRidesPass])
     
     return (
         <View style = {styles.container}>

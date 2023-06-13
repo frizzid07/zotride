@@ -14,8 +14,13 @@ const SuccessPayment = ({ navigation, route }) => {
   const { data, ride } = route?.params;
 
   useEffect(() => {
-    context.updateUser({ activePassengerRides: [...activePassengerRides, ride._id]})
+    context.user.activePassengerRides = [...context.user.activePassengerRides, ride._id];
+    console.log(`New Context: ${JSON.stringify(context)}`);
   }, []);
+
+  useEffect(() => {
+    navigation.navigate('Landing');
+  }, [context]);
 
   return (
     <View style = {styles.container}>

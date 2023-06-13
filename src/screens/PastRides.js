@@ -106,6 +106,11 @@ import {
       getDriverRides();
     }, []);
 
+    useEffect(() => {
+      getRides();
+      getDriverRides();
+    }, [context]);
+
     return (
       <View style = {styles.container}>
         <Image style={styles.bg} source={background}></Image>

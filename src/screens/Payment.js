@@ -133,7 +133,6 @@ _onNavigationStateChange = (webViewState) => {
             }
         )
             .then(response => {
-                console.log(response)
                 if (response.status == 200) {
                     this.props.navigation.navigate("SuccessPayment", {data: response.data, ride: this.state.ride});
                 } else {

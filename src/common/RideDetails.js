@@ -19,6 +19,11 @@ import { AuthContext } from "../../server/context/authContext";
           method: "GET"
         });
         console.log(response.ok);
+        if(response.ok) {
+          let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
+          context.user.activePassengerRides = activeRides;
+          context.user.past_rides = [...context.user.past_rides, ride._id];
+        }
       } catch(error) {
         console.error(error);
       }
@@ -30,6 +35,11 @@ import { AuthContext } from "../../server/context/authContext";
             method: "GET"
           });
           console.log(response.ok);
+          if(response.ok) {
+            let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
+            context.user.activePassengerRides = activeRides;
+            context.user.past_rides = [...context.user.past_rides, ride._id];
+          }
         } catch(error) {
         console.error(error);
       }
@@ -122,7 +132,7 @@ import { AuthContext } from "../../server/context/authContext";
                   submit,
                   { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "#ebd25f"},
                 ]}
-                onPress={()=>{cancelTrip}}
+                onPress={cancelTrip}
               >
                 <Text
                   style={[styles.text, { fontSize: 15, color: "#000"}]}
