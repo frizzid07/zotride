@@ -125,7 +125,6 @@ const FindRide = ({ navigation }) => {
       console.log("Checking");
       console.log("log error")
       console.log("Checking");
-      console.log("log error");
       const response = await fetch(NGROK_TUNNEL + "/findRide", {
         method: "POST",
         headers: {

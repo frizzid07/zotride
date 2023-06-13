@@ -18,17 +18,23 @@ import { submit } from "../common/button";
 
 import { AuthContext } from "../../server/context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setDriver } from "mongoose";
 
 const Landing = ({ navigation }) => {
   const context = useContext(AuthContext);
   const [name, setName] = useState();
+  const [isDriver, setIsDriver] = useState(false)
 
   useEffect(() => {
     const getUser = async () => {
+      console.log("Getting The User Data")
       let userVal = await AsyncStorage.getItem("user");
       if (userVal) {
         userVal = JSON.parse(userVal);
         setName(userVal.firstName);
+        if(userVal.isDriver === true){
+          setDriver(true)
+        }
       }
     };
     getUser();
@@ -96,24 +102,24 @@ const Landing = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
+        <Text style={{ fontSize: 25, color: "#000", marginBottom: 30 }}>
           Welcome to ZotRide, {name}
         </Text>
-        <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
+        {/* <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
           Choose a Role
-        </Text>
-        <Pressable style={submit} onPress={driverRole}>
-          <Text style={styles.text}>Driver</Text>
-        </Pressable>
+        </Text> */}
         <Pressable style={submit} onPress={() => {navigation.navigate("FindRide");}}>
-          <Text style={styles.text}>Passenger</Text>
+          <Text style={styles.text}>Find a Ride</Text>
         </Pressable>
-        <Pressable
-          style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3 }]}
-          onPress={context.logout}
-        >
-          <Text style={styles.text}>Logout</Text>
+        {!isDriver && 
+        <View>
+        <Text style={{ fontSize: 25, color: "#000", marginTop: 30}}>
+          Register as a Driver with us
+        </Text>
+        <Pressable style={submit} onPress={()=>{navigation.navigate("DriverRegistration");}}>
+          <Text style={styles.text}>Register</Text>
         </Pressable>
+        </View>}
       </View>
     </View>
   );
