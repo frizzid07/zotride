@@ -20,12 +20,14 @@ import { submit } from "../common/button";
 import { AuthContext } from "../../server/context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setDriver } from "mongoose";
+import EditProfile from "./EditProfile";
 
 
 const ProfileLanding = ({navigation})=>{
 
   const context = useContext(AuthContext)
   const [isDriver, setIsDriver] = useState(context.user.isDriver)
+  console.log(context.user)
 
   return(
     <View style={styles.container}>
@@ -40,7 +42,7 @@ const ProfileLanding = ({navigation})=>{
           <View style={styles.profileHeader}>
           <Pressable
           style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3, backgroundColor:"#004aac" }]}
-          onPress={context.logout}
+          onPress={()=>{navigation.navigate('EditProfile', {user:context.user})}}
         >
           <Text style={[styles.smallText,{color:"#ebd25f"}]}>Edit Profile</Text>
         </Pressable>
