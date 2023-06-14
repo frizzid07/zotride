@@ -1,13 +1,13 @@
 import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    Pressable,
-    TouchableOpacity,
-  } from "react-native";
-  import React, { useContext, useEffect, useState } from "react";
-  import { NGROK_TUNNEL } from "@env";
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { NGROK_TUNNEL } from "@env";
 
 // Images
 import background from "../../assets/background.jpg";
@@ -22,58 +22,82 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setDriver } from "mongoose";
 import EditProfile from "./EditProfile";
 
+const ProfileLanding = ({ navigation }) => {
+  const context = useContext(AuthContext);
+  const [isDriver, setIsDriver] = useState(context.user.isDriver);
 
-const ProfileLanding = ({navigation})=>{
-
-  const context = useContext(AuthContext)
-  const [isDriver, setIsDriver] = useState(context.user.isDriver)
-  console.log(context.user)
-
-  return(
+  return (
     <View style={styles.container}>
-    <Image style={styles.bg} source={background}></Image>
-    <View style={styles.profileContainer}>
-      <View style={styles.profileDetails}>
+      <Image style={styles.bg} source={background}></Image>
+      <View style={styles.profileContainer}>
+        <View style={styles.profileDetails}>
           <View style={styles.profileHeader}>
-            <Text style={styles.profileNameText}>{context.user.firstName + " " + context.user.lastName}</Text>
+            <Text style={styles.profileNameText}>
+              {context.user.firstName + " " + context.user.lastName}
+            </Text>
           </View>
           <Text style={styles.profileText}>{context.user.email}</Text>
           <Text style={styles.profileText}>{context.user.mobileNumber}</Text>
           <View style={styles.profileHeader}>
-          <Pressable
-          style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3, backgroundColor:"#004aac" }]}
-          onPress={()=>{navigation.navigate('EditProfile', {user:context.user})}}
-        >
-          <Text style={[styles.smallText,{color:"#ebd25f"}]}>Edit Profile</Text>
-        </Pressable>
-        <Pressable
-          style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3, backgroundColor:"#ebd25f"}]}
-          onPress={context.logout}
-        >
-          <Text style={[styles.smallText,{color:"#004aac"}]}>Logout</Text>
-        </Pressable>
+            <Pressable
+              style={[
+                submit,
+                {
+                  minWidth: 100,
+                  minHeight: 30,
+                  borderRadius: 3,
+                  backgroundColor: "#004aac",
+                },
+              ]}
+              onPress={() => {
+                navigation.navigate("EditProfile", { user: context.user });
+              }}
+            >
+              <Text style={[styles.smallText, { color: "#ebd25f" }]}>
+                Edit Profile
+              </Text>
+            </Pressable>
+            <Pressable
+              style={[
+                submit,
+                {
+                  minWidth: 100,
+                  minHeight: 30,
+                  borderRadius: 3,
+                  backgroundColor: "#ebd25f",
+                },
+              ]}
+              onPress={context.logout}
+            >
+              <Text style={[styles.smallText, { color: "#004aac" }]}>
+                Logout
+              </Text>
+            </Pressable>
           </View>
+        </View>
       </View>
-    </View>
-    <View style={styles.textContainer}>
-
+      <View style={styles.textContainer}>
         <Pressable
-          style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3}]}
-          onPress={()=>{navigation.navigate("PastRides")}}
+          style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3 }]}
+          onPress={() => {
+            navigation.navigate("PastRides");
+          }}
         >
           <Text style={styles.text}>Past Rides</Text>
         </Pressable>
 
-        {isDriver && <Pressable
-          style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3 }]}
-          onPress={()=>{}}
-        >
-          <Text style={styles.text}>Edit Registration</Text>
-        </Pressable>}
-        </View>
+        {isDriver && (
+          <Pressable
+            style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3 }]}
+            onPress={() => {}}
+          >
+            <Text style={styles.text}>Edit Registration</Text>
+          </Pressable>
+        )}
+      </View>
     </View>
-  )
-}
+  );
+};
 
 export default ProfileLanding;
 
@@ -81,12 +105,12 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    alignItems:"center"
+    alignItems: "center",
   },
   textContainer: {
     display: "flex",
     height: "100%",
-    alignItems:"center"
+    alignItems: "center",
   },
   bg: {
     position: "absolute",
@@ -96,20 +120,20 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
   profileContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     //marginBottom: 20,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderRadius: 10,
-    backgroundColor: 'white',
-    padding : 15,
-    marginTop:100,
-    maxWidth:"90%",
-    justifyContent:"center"
+    backgroundColor: "white",
+    padding: 15,
+    marginTop: 100,
+    maxWidth: "90%",
+    justifyContent: "center",
   },
-  smallText:{
-    fontSize:15
+  smallText: {
+    fontSize: 15,
   },
   text: {
     fontSize: 25,
@@ -126,26 +150,26 @@ const styles = StyleSheet.create({
   },
   profileImageContainer: {
     width: 80,
-    height:80,
+    height: 80,
     borderRadius: 40,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     marginRight: 15,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   profileImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 40,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   profileDetails: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   profileHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems:'center'
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   profileText: {
     fontSize: 15,
@@ -154,11 +178,11 @@ const styles = StyleSheet.create({
   profileNameText: {
     fontSize: 18,
 
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 1,
   },
   editButtonContainer: {
     flex: 1,
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
 });
