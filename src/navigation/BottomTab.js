@@ -37,8 +37,6 @@ export default MyTabs = () => {
               iconName = focused ? "person-sharp" : "person-outline";
             } else if (route.name === "Driver") {
               iconName = focused ? "car-sport-sharp" : "car-sport-outline";
-            } else if (route.name === "Passenger") {
-              iconName = focused ? "car-sport-sharp" : "car-sport-outline";
             }
             return (
               <Ionicons name={iconName} size={size} color={color}></Ionicons>
@@ -49,9 +47,6 @@ export default MyTabs = () => {
         <Tab.Screen name="Home" component={AppStack}></Tab.Screen>
         {context.user.isDriver && (
           <Tab.Screen name="Driver" component={Driver}></Tab.Screen>
-        )}
-        {context.user.activePassengerRides.length !== 0 && !context.user.isDriver && (
-          <Tab.Screen name="Passenger" component={Passenger}></Tab.Screen>
         )}
         <Tab.Screen name="Profile" component={PastRides}></Tab.Screen>
       </Tab.Navigator>

@@ -29,9 +29,7 @@ const Passenger = ({ navigation }) => {
                         });
                         console.log(response.ok);
                         console.log('Debug');
-                        console.log('Debug');
                         const rdata = await response.json();
-                        console.log('Debug');
                         rides.push({"rideDetails":rdata.ride});
                         console.log(rides);
                     } catch(err) {

@@ -36,7 +36,6 @@ const Driver = ({ navigation }) => {
         });
         console.log(response.ok);
         console.log('Debug');
-        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
         setActiveRide(rdata.ride);
@@ -54,15 +53,9 @@ const Driver = ({ navigation }) => {
         });
         console.log(response.ok);
         console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
         const result = await response.json();
         console.log(result);
         console.log('In Active Ride');
-        console.log('Debug');
-        console.log('Debug');
 
         if (result.ride) {
           console.log("Current Driver has Active Ride");
@@ -101,15 +94,8 @@ const Driver = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       const result = await response.json();
       console.log(result);
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
 
       if (result.ride) {
         console.log(`New Data ${JSON.stringify(result.ride)}`);
@@ -120,6 +106,25 @@ const Driver = ({ navigation }) => {
     }
   }
 
+  async function endRide() {
+    try {
+      const response = await fetch(NGROK_TUNNEL + `/endRide?rideId=${activeRide._id}&userId=${context.user._id}`, {
+        method: "GET"
+      });
+      console.log(response.ok);
+      console.log('Debug');
+      if(response.ok) {
+        alert("Trip Ended Successfully!");
+        context.user.activeDriverRide = null;
+        context.user.past_drives = [...context.user.past_drives, activeRide._id];
+        setHasActive(false);
+        navigation.navigate('Landing');
+      }
+    } catch(error) {
+      console.log("Error in ending ride " + err);
+    }
+  }
+  
   async function cancelRide() {
     try {
       const response = await fetch(NGROK_TUNNEL + `/deleteRide?rideId=${activeRide._id}`, {
@@ -130,15 +135,8 @@ const Driver = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       const result = await response.json();
       console.log(result);
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
 
       if (result.deleted) {
         console.log("Ride Deleted");
@@ -161,14 +159,8 @@ const Driver = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
-      console.log('Debug');
-      console.log('Debug');
       navigation.navigate('DriverRegistration', {driver: rdata.driver});
     } catch(error) {
       console.log("Could not edit record");
@@ -187,7 +179,6 @@ const Driver = ({ navigation }) => {
       console.log(response.ok);
       if (response.ok) {
         console.log("Driver Deleted");
-        console.log('Debug');
         context.updateUser({ isDriver: false});
         try {
           const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
@@ -199,16 +190,8 @@ const Driver = ({ navigation }) => {
           });
           console.log(response2.ok);
           console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
           const rdata = await response2.json();
           console.log(rdata);
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
         } catch(error) {
           console.error(error);
         }
@@ -250,8 +233,11 @@ const Driver = ({ navigation }) => {
               <Pressable style={[submit, { backgroundColor: '#004aac' }]} onPress={editRide}>
                 <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Modify Trip</Text>
               </Pressable>
-              <Pressable style={[submit, { backgroundColor: "#ebd25f", marginTop: -5 }]} onPress={cancelRide}>
-                <Text style={[styles.text, { color: 'black', fontSize: 20 }]}>Cancel Trip</Text>
+              <Pressable style={[submit, { backgroundColor: "#ebd25f", marginTop: -5 }]} onPress={endRide}>
+                <Text style={[styles.text, { color: 'black', fontSize: 20 }]}>End Trip</Text>
+              </Pressable>
+              <Pressable style={[submit, { backgroundColor: "#c21807", marginTop: -5 }]} onPress={cancelRide}>
+                <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Cancel Trip</Text>
               </Pressable>
             </View>
           </View>
@@ -264,10 +250,10 @@ const Driver = ({ navigation }) => {
             <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Edit Registration</Text>
           </Pressable>
           <Pressable
-            style={[submit, { backgroundColor: "#ebd25f", marginTop: -5 }]}
+            style={[submit, { backgroundColor: "#c21807", marginTop: -5 }]}
             onPress={deleteReg}
           >
-            <Text style={[styles.text, { color: 'black', fontSize: 20 }]}>Delete Registration</Text>
+            <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Delete Registration</Text>
           </Pressable>
         </View>
       </View>

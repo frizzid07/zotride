@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: [true, "Cannot be blank"]},
     activeDriverRide: {type: String, default: null},
     activePassengerRides: {type: []},
-    past_rides:{type: []}
+    past_rides:{type: []},
+    past_drives:{type: []}
 }, {timestamps: true});
 
 userSchema.pre('save', async function (next) {

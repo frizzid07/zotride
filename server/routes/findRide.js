@@ -112,7 +112,7 @@ router.get("/getRides", async (req, res) => {
     const currentRides = [], pastRides = []
     if(user.activePassengerRides) {
       for(let i=0;i<user.activePassengerRides.length;i++){
-        let ride = await Ride.findOne({ _id: user.activePassengerRides[i]}).exec();
+        let ride = await Ride.findOne({ _id: user.activePassengerRides[i], isActive: true}).exec();
         console.log(`Ride is ${ride}`);
         let driver = await User.findOne({ _id: ride.driverId}).exec();
         console.log(`Driver is ${driver}`);
@@ -185,6 +185,25 @@ router.get("/getRide", async (req, res) => {
   }
 });
 
+router.get("/endRide", async (req, res) => {
+  const userId = req.query.userId;
+  const rideId = req.query.rideId;
+  try {
+    const ride = await Ride.findOne({ _id: rideId });
+    const user = await User.findOne({ _id: userId });
+    if(ride && user) {
+      ride.isActive = false;
+      await ride.save();
+      user.activeDriverRide = null;
+      user.past_drives = [...user.past_drives, ride._id];
+      await user.save();
+    }
+    return res.status(200).send({success: 'Trip ended successfully!'});
+  } catch(error) {
+    return res.status(422).json({ error: error });
+  }
+});
+
 router.get("/endTrip", async (req, res) => {
   const userId = req.query.userId;
   const rideId = req.query.rideId;
@@ -202,8 +221,6 @@ router.get("/endTrip", async (req, res) => {
       $pull: { activePassengerRides: rideId } },
       { new: true }
     ).exec();
-    const user = await User.findOne({ _id: userId }).exec();
-    console.log(`User Details ${user}`);
     return res.status(200).send({success: 'Trip ended successfully!'});
   } catch(error) {
     return res.status(422).json({ error: error });
@@ -227,33 +244,10 @@ router.get("/cancelTrip", async (req, res) => {
       { $pull: { activePassengerRides: rideId } },
       { new: true }
     ).exec();
-    const user = await User.findOne({ _id: userId }).exec();
-    console.log(`User Details ${user}`);
     return res.status(200).send({success: 'Trip cancelled successfully!'});
   } catch(error) {
     return res.status(422).json({ error: error });
   }
 });
-
-// router.put("/populateRides", async (req, res) => {
-//   const userId = req.query.userId;
-//   const { rides } = req.body;
-
-//   try {
-//     const updatedUser = await User.findOne({ _id: userId });
-//     console.log(updatedUser);
-//     if(updatedUser) {
-//       updatedUser.activePassengerRides = rides
-//       await updatedUser.save();
-//       console.log("User registration updated successfully");
-//       return res.status(200).send({ updatedUser });
-//     } else {
-//       return res.status(404).send({ error: "User not found" });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     return res.status(500).send({ error: "Failed to update user" });
-//   }
-// });
 
 module.exports = router;

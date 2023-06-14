@@ -45,16 +45,9 @@ const Landing = ({ navigation }) => {
       );
       console.log(response.ok);
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       const rdata = await response.json()
       console.log(rdata);
-      console.log('Debug');
-      console.log('Debug');
       console.log('In Landing');
-      console.log('Debug');
       if(rdata.driver !== null) {
         console.log('Driver Record found');
         return true;
@@ -69,15 +62,8 @@ const Landing = ({ navigation }) => {
           });
           console.log(response2.ok);
           console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
           const rdata2 = await response2.json();
           console.log(rdata2);
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
         } catch(error) {
           console.error(error);
         }
@@ -92,6 +78,7 @@ const Landing = ({ navigation }) => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
     if (context.user.isDriver) {
+      console.log('Debug');
       console.log('Debug');
       const checkDriver = await isRegisteredDriver();
       console.log(checkDriver);

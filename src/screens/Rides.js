@@ -42,17 +42,10 @@ const Rides = ({ navigation, route }) => {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
         if (response.ok) {
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
           const driver = await response.json();
           console.log(driver);
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
           driverData.push(driver);
         } else {
           console.error("Failed to fetch driver data");
@@ -84,21 +77,11 @@ const Rides = ({ navigation, route }) => {
       });
       console.log(response.ok);
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
       console.log('In Book Ride');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       if(response.ok) {
-        // alert(rdata.success);
         navigation.navigate("Payment", {ride: ride});
-        // navigation.navigate("Confirm", { ride: ride });
       } else {
         alert(rdata.error);
         console.log("Error while booking ride")

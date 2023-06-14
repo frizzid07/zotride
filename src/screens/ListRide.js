@@ -193,10 +193,6 @@ const ListRide = ({ navigation, route }) => {
       }
 
       try {
-        console.log("Debug");
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/editRide?driverId=${context.user._id}`, {
           method: "PATCH",
           headers: {
@@ -205,7 +201,6 @@ const ListRide = ({ navigation, route }) => {
           body: JSON.stringify({editData: editData}),
         });
         console.log(response.ok);
-        console.log("Debug");
         console.log('Debug');
         if (response.ok) {
           console.log("Ride Updated");
@@ -220,8 +215,6 @@ const ListRide = ({ navigation, route }) => {
     
     else {
       try {
-        console.log(data);
-        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + "/listRide", {
           method: "POST",
           headers: {
@@ -231,15 +224,9 @@ const ListRide = ({ navigation, route }) => {
         });
         console.log(response.ok);
         console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
         console.log('In List Ride');
-        console.log('Debug');
-        console.log('Debug');
 
         if (rdata.added) {
           context.updateUser({ activeDriverRide: rdata.rideId});

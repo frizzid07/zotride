@@ -34,6 +34,9 @@ const SuccessPayment = ({ navigation, route }) => {
           <Text style={[styles.text, {marginBottom: 40}]}>Payment successful!</Text>
           <Text style={[styles.text, {marginBottom: 50}]}>Transaction ID{'\n'}<Text style={{fontSize: 20}}>{data.id}</Text></Text>
           <Text style={[styles.text, {marginBottom: 30}]}>Payment of {data.transactions[0]?.amount.currency + ' ' + data.transactions[0]?.amount.total} successfully received by {data.transactions[0]?.payee.email}</Text>
+          <Pressable style={submit} onPress={() => navigation.navigate("Confirm", { ride: ride })}>
+            <Text style={styles.text}>View Confirmation</Text>
+          </Pressable>
           <Pressable style={submit} onPress={() => navigation.navigate('Landing')}>
             <Text style={styles.text}>Back to Home</Text>
           </Pressable>

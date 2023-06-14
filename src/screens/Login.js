@@ -38,18 +38,8 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        setIsChecking(true);
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
         let userVal = await AsyncStorage.getItem("user");
         console.log('One more');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
         if (userVal) {
           userVal = JSON.parse(userVal);
           console.log(userVal);
@@ -79,21 +69,11 @@ const Login = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
+        console.log('Debug');
         let authenticated = await context.authenticate(rdata);
         if (authenticated) {
           setIsSuccessful(true);

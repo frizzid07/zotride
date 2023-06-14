@@ -34,20 +34,9 @@ import {
         );
         console.log(response.ok);
         console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
         if (response.ok) {
           const rides = await response.json();
           console.log(rides);
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
           setCurrentRides(rides.currentRides);
           setPastRides(rides.pastRides);
         } else {
@@ -67,21 +56,10 @@ import {
           }
         );
         console.log(response.ok);
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
-        console.log('Debug');
         if (response.ok) {
+          console.log('Debug');
           const rides = await response.json();
           console.log(rides);
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
-          console.log('Debug');
           setCurrentDrives(rides.currentRidesList);
           setPastDrives(rides.pastRidesList);
         } else {

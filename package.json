@@ -24,6 +24,7 @@
     "expo": "~48.0.17",
     "expo-application": "~5.1.1",
     "expo-auth-session": "~4.0.3",
+    "expo-blur": "~12.2.2",
     "expo-crypto": "~12.2.1",
     "expo-status-bar": "~1.4.4",
     "expo-web-browser": "~12.1.1",
@@ -48,8 +49,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-webview": "11.26.0",
-    "react-navigation": "^4.4.4",
-    "expo-blur": "~12.2.2"
+    "react-navigation": "^4.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -9,9 +9,12 @@ import { submit } from "./button";
 import { NGROK_TUNNEL } from "@env";
 import { useContext } from "react";
 import { AuthContext } from "../../server/context/authContext";
+import { useNavigation } from '@react-navigation/native';
+
 
   const RideDetails = ({rideDetails, driverDetails, passengerDetails, edit}) => {
     const context = useContext(AuthContext);
+    const navigation = useNavigation();
 
     async function endTrip() {
       try {
@@ -22,7 +25,9 @@ import { AuthContext } from "../../server/context/authContext";
         if(response.ok) {
           let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
           context.user.activePassengerRides = activeRides;
-          context.user.past_rides = [...context.user.past_rides, ride._id];
+          context.user.past_rides = [...context.user.past_rides, rideDetails._id];
+          alert("Trip ended successfully!");
+          navigation.navigate("PastRides");
         }
       } catch(error) {
         console.error(error);
@@ -38,7 +43,9 @@ import { AuthContext } from "../../server/context/authContext";
           if(response.ok) {
             let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
             context.user.activePassengerRides = activeRides;
-            context.user.past_rides = [...context.user.past_rides, ride._id];
+            context.user.past_rides = [...context.user.past_rides, rideDetails._id];
+            alert("Trip cancelled succesfully");
+            navigation.navigate("PastRides");
           }
         } catch(error) {
         console.error(error);
@@ -130,12 +137,12 @@ import { AuthContext } from "../../server/context/authContext";
               <Pressable
                 style={[styles.capacity,
                   submit,
-                  { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "#ebd25f"},
+                  { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "#c21807"},
                 ]}
                 onPress={cancelTrip}
               >
                 <Text
-                  style={[styles.text, { fontSize: 15, color: "#000"}]}
+                  style={[styles.text, { fontSize: 15, color: "#fff"}]}
                 >
                   Cancel
                 </Text>
