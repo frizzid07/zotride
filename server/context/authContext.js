@@ -30,21 +30,8 @@ const AuthProvider = ({ children }) => {
       });
       console.log(checkUser.ok);
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       const userData = await checkUser.json();
       console.log(userData.userData);
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       if (userData !== undefined) {
         setUser(userData.userData);
         AsyncStorage.setItem("user", JSON.stringify(userData.userData));
