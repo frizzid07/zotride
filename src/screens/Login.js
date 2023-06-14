@@ -38,8 +38,8 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        setIsChecking(true);
         let userVal = await AsyncStorage.getItem("user");
+        console.log('One more');
         if (userVal) {
           userVal = JSON.parse(userVal);
           console.log(userVal);
@@ -60,10 +60,6 @@ const Login = ({ navigation }) => {
     try {
       setIsChecking(true);
       console.log(`In Login ${data}, ${JSON.stringify(data)}`);
-      console.log("Why this error")
-      console.log("Common")
-      console.log("Please")
-      console.log("Ridiculous")
       const response = await fetch(NGROK_TUNNEL + "/login", {
         method: "POST",
         headers: {
@@ -72,14 +68,13 @@ const Login = ({ navigation }) => {
         body: JSON.stringify({ data: data }),
       });
       console.log(response.ok);
-      console.log("Dodging error");
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
-      console.log("One more");
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
+        console.log('Debug');
         let authenticated = await context.authenticate(rdata);
-        console.log(authenticated);
         if (authenticated) {
           setIsSuccessful(true);
           alert(`Logged in successfully`);

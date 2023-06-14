@@ -67,9 +67,10 @@ const Register = ({ navigation }) => {
             body: JSON.stringify(fdata),
           });
           console.log(response.ok);
+          console.log('Debug');
+          console.log('Debug');
           const data = await response.json();
-          console.log("In Register");
-          console.log("Fallen soldier");
+          console.log('In Register');
           console.log(data);
 
           if (data.error === "Invalid Credentials") {

@@ -71,12 +71,11 @@ const Landing = ({ navigation }) => {
             },
             body: JSON.stringify({ data: { userId: context.user._id } }),
           });
-          const rdata2 = await response2.json();
           console.log(response2.ok);
+          console.log('Debug');
+          const rdata2 = await response2.json();
           console.log(rdata2);
-          console.log("In PUT query");
-          console.log("Still here");
-        } catch (error) {
+        } catch(error) {
           console.error(error);
         }
       }
@@ -90,6 +89,8 @@ const Landing = ({ navigation }) => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
     if (context.user.isDriver) {
+      console.log('Debug');
+      console.log('Debug');
       const checkDriver = await isRegisteredDriver();
       console.log(checkDriver);
       if (checkDriver) navigation.navigate("Driver");

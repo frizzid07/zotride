@@ -114,16 +114,30 @@ function toRadians(degrees) {
 }
 
 router.get("/findActiveRide", async (req, res) => {
-  const id = req.query.driverId;
+  var driverId = null, passId = null;
+  if(req.query.driverId !== undefined) {
+    driverId = req.query.driverId;
+  } else {
+    passId = req.query.userId;
+  }
   try {
-    const ride = await Ride.findOne({ driverId: id, isActive: true });
-
+    var ride = null, rideList = null;
+    if(driverId !== null) {
+      ride = await Ride.findOne({ driverId: driverId, isActive: true });
+    } else if(passId !== null){
+      rideList = await Ride.find({ passengers: { $elemMatch: { $eq: passId } }, isActive: true });
+      if(rideList.length !== 0) {
+        ride = rideList.map((rideInfo) => {
+          return { rideDetails: rideInfo };
+        });
+      }
+    }
     if (ride) {
-      console.log("Current Driver has an active ride");
-      return res.status(200).send({ ride });
+      console.log("Current User has an active ride");
+      return res.status(200).send({ active: true, ride });
     } else {
-      console.log("Current Driver has no active ride");
-      return res.status(200).send({});
+      console.log("Current User has no active ride");
+      return res.status(200).send({ active: false });
     }
   } catch (err) {
     console.log(err);
@@ -136,20 +150,36 @@ router.get("/getRides", async (req, res) => {
   try {
     const user = await User.findOne({ _id: userId}).exec();
     console.log(`User ID: ${user}`);
-    const pastRides = []
-    for(let i=0;i<user.past_rides.length;i++){
-      const ride = await Ride.findOne({ _id: user.past_rides[i]}).exec();
-      console.log(`Ride is ${ride}`);
-      const driver = await User.findOne({ _id: ride.driverId}).exec();
-      console.log(`Driver is ${driver}`);
-      const driverDetails = {
-        "firstName":driver.firstName,
-        "lastName":driver.lastName,
-        "mobile":driver.mobileNumber
+    const currentRides = [], pastRides = []
+    if(user.activePassengerRides) {
+      for(let i=0;i<user.activePassengerRides.length;i++){
+        let ride = await Ride.findOne({ _id: user.activePassengerRides[i], isActive: true}).exec();
+        console.log(`Ride is ${ride}`);
+        let driver = await User.findOne({ _id: ride.driverId}).exec();
+        console.log(`Driver is ${driver}`);
+        let driverDetails = {
+          "firstName":driver.firstName,
+          "lastName":driver.lastName,
+          "mobile":driver.mobileNumber
+        }
+        currentRides.push({"rideDetails":ride,"driverDetails":driverDetails});
       }
-      pastRides.push({"rideDetails":ride,"driverDetails":driverDetails});
     }
-    return res.status(200).send(pastRides);
+    if(user.past_rides) {
+      for(let i=0;i<user.past_rides.length;i++){
+        let ride = await Ride.findOne({ _id: user.past_rides[i]}).exec();
+        console.log(`Ride is ${ride}`);
+        let driver = await User.findOne({ _id: ride.driverId}).exec();
+        console.log(`Driver is ${driver}`);
+        let driverDetails = {
+          "firstName":driver.firstName,
+          "lastName":driver.lastName,
+          "mobile":driver.mobileNumber
+        }
+        pastRides.push({"rideDetails":ride,"driverDetails":driverDetails});
+      }
+    }
+    return res.status(200).send({ currentRides, pastRides });
   } catch (err) {
     return res.status(422).json({ error: err });
   }
@@ -158,21 +188,107 @@ router.get("/getRides", async (req, res) => {
 router.get("/getDriverRides", async (req, res) => {
   const driverId  = req.query.driverId;
   try {
-    const rides = await Ride.find({ driverId: driverId}).exec();
-    const pastRides = []
-    for(let i=0;i<rides.length;i++){
-      let passengers = [];
-      for(let j=0;j<rides[i].passengers.length;j++){
-        const passenger = await User.findOne({ _id: rides[i].passengers[j]}).exec();
-        passengers.push({"firstName":passenger.firstName,"lastName":passenger.lastName});
-      }
-      pastRides.push({"rideDetails":rides[i],"passengerDetails":passengers});
+    const currentRide = await Ride.findOne({ driverId: driverId, isActive: true}).exec();
+    const currentRidesList = [], pastRidesList = []
+    if(currentRide) {
+        let passengers = [];
+        for(let j=0;j<currentRide.passengers.length;j++){
+          const passenger = await User.findOne({ _id: currentRide.passengers[j]}).exec();
+          passengers.push({"firstName":passenger.firstName,"lastName":passenger.lastName});
+        }
+        currentRidesList.push({"rideDetails":currentRide,"passengerDetails":passengers});
     }
-    return res.status(200).send(pastRides);
+    const pastRides = await Ride.find({ driverId: driverId, isActive: false}).exec();
+    if(pastRides) {
+      for(let i=0;i<pastRides.length;i++){
+        let passengers = [];
+        for(let j=0;j<pastRides[i].passengers.length;j++){
+          const passenger = await User.findOne({ _id: pastRides[i].passengers[j]}).exec();
+          passengers.push({"firstName":passenger.firstName,"lastName":passenger.lastName});
+        }
+        pastRidesList.push({"rideDetails":pastRides[i],"passengerDetails":passengers});
+      }
+    }
+    return res.status(200).send({ currentRidesList, pastRidesList });
   } catch (err) {
     return res.status(422).json({ error: err });
   }
 
+});
+
+router.get("/getRide", async (req, res) => {
+  const rideId = req.query.rideId;
+  try {
+    const ride = await Ride.findOne({ _id: rideId }).exec();
+    return res.status(200).send({ ride });
+  } catch(err) {
+    return res.status(422).json({ error: err });
+  }
+});
+
+router.get("/endRide", async (req, res) => {
+  const userId = req.query.userId;
+  const rideId = req.query.rideId;
+  try {
+    const ride = await Ride.findOne({ _id: rideId });
+    const user = await User.findOne({ _id: userId });
+    if(ride && user) {
+      ride.isActive = false;
+      await ride.save();
+      user.activeDriverRide = null;
+      user.past_drives = [...user.past_drives, ride._id];
+      await user.save();
+    }
+    return res.status(200).send({success: 'Trip ended successfully!'});
+  } catch(error) {
+    return res.status(422).json({ error: error });
+  }
+});
+
+router.get("/endTrip", async (req, res) => {
+  const userId = req.query.userId;
+  const rideId = req.query.rideId;
+  console.log(userId, rideId);
+  try {
+    await Ride.updateOne(
+      { _id: rideId },
+      { $pull: { passengers: userId } ,
+      $inc: { capacity: 1 } },
+      { new: true }
+    ).exec();
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { $push: { past_rides: rideId },
+      $pull: { activePassengerRides: rideId } },
+      { new: true }
+    ).exec();
+    return res.status(200).send({success: 'Trip ended successfully!'});
+  } catch(error) {
+    return res.status(422).json({ error: error });
+  }
+});
+
+router.get("/cancelTrip", async (req, res) => {
+  const userId = req.query.userId;
+  const rideId = req.query.rideId;
+  try {
+    await Ride.updateOne(
+      { _id: rideId },
+      { $pull: { passengers: userId } ,
+      $inc: { capacity: 1 } },
+      { new: true }
+    ).exec();
+    const ride = await Ride.findOne({ _id: rideId }).exec();
+    console.log(`Ride Details ${ride}`);
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { activePassengerRides: rideId } },
+      { new: true }
+    ).exec();
+    return res.status(200).send({success: 'Trip cancelled successfully!'});
+  } catch(error) {
+    return res.status(422).json({ error: error });
+  }
 });
 
 module.exports = router;

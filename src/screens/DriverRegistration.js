@@ -151,6 +151,7 @@ const DriverRegistration = ({ navigation, route }) => {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
         if (response.ok) {
           console.log("Driver Updated");
           alert("Driver Record Updated");
@@ -169,28 +170,26 @@ const DriverRegistration = ({ navigation, route }) => {
           },
           body: JSON.stringify({ data: data }),
         });
+        console.log(response.ok);
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
-        console.log(response.ok);
-        console.log("One more");
         if (rdata.success) {
           console.log("Driver Registered Successfully");
+          context.updateUser({ isDriver: true});
           try {
-            const response2 = await fetch(
-              NGROK_TUNNEL + "/driverRegistration",
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ data: data }),
-              }
-            );
+            const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({data: data})
+            });
+            console.log(response2.ok);
+            console.log('Debug');
             const rdata2 = await response2.json();
             console.log(rdata2);
-            console.log(response2.ok);
-            console.log("One more");
-          } catch (error) {
+          } catch(error) {
             console.error(error);
           }
           navigation.navigate("Driver");

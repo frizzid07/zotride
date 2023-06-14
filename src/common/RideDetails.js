@@ -1,11 +1,57 @@
 import {
     StyleSheet,
     Text,
+    Pressable,
     View
   } from "react-native";
 
-  
-  const RideDetails = ({rideDetails, driverDetails, passengerDetails}) => {
+import { submit } from "./button";
+import { NGROK_TUNNEL } from "@env";
+import { useContext } from "react";
+import { AuthContext } from "../../server/context/authContext";
+import { useNavigation } from '@react-navigation/native';
+
+
+  const RideDetails = ({rideDetails, driverDetails, passengerDetails, edit}) => {
+    const context = useContext(AuthContext);
+    const navigation = useNavigation();
+
+    async function endTrip() {
+      try {
+        const response = await fetch(NGROK_TUNNEL+`/endTrip?userId=${context.user._id}&rideId=${rideDetails._id}`, {
+          method: "GET"
+        });
+        console.log(response.ok);
+        if(response.ok) {
+          let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
+          context.user.activePassengerRides = activeRides;
+          context.user.past_rides = [...context.user.past_rides, rideDetails._id];
+          alert("Trip ended successfully!");
+          navigation.navigate("PastRides");
+        }
+      } catch(error) {
+        console.error(error);
+      }
+    }
+
+    async function cancelTrip() {
+      try {
+          const response = await fetch(NGROK_TUNNEL+`/cancelTrip?userId=${context.user._id}&rideId=${rideDetails._id}`, {
+            method: "GET"
+          });
+          console.log(response.ok);
+          if(response.ok) {
+            let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
+            context.user.activePassengerRides = activeRides;
+            context.user.past_rides = [...context.user.past_rides, rideDetails._id];
+            alert("Trip cancelled succesfully");
+            navigation.navigate("PastRides");
+          }
+        } catch(error) {
+        console.error(error);
+      }
+    }
+    
     return (
       <View style={styles.rideBox}>
         <View style={styles.rideContainer}>
@@ -73,6 +119,35 @@ import {
               </Text>
             </>
           )}
+          {edit && (
+          <>
+            <Pressable
+                style={[styles.capacity,
+                  submit,
+                  { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "#004aac"},
+                ]}
+                onPress={endTrip}
+              >
+                <Text
+                  style={[styles.text, { fontSize: 15, color: "#fff"}]}
+                >
+                  End
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[styles.capacity,
+                  submit,
+                  { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "#c21807"},
+                ]}
+                onPress={cancelTrip}
+              >
+                <Text
+                  style={[styles.text, { fontSize: 15, color: "#fff"}]}
+                >
+                  Cancel
+                </Text>
+              </Pressable>
+          </>)}
         </View>
       </View>
     );

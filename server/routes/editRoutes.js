@@ -30,7 +30,7 @@ router.patch("/editDriver", async (req, res) => {
                 existingDriver.vehicleInformation[0].vehicleModel = vehicleInfo.vehicleModel;
             }
             if (vehicleInfo.hasOwnProperty("vehicleCapacity")) {
-                existingDriver.vehicleInformation[0].vehicleCapacity = vehicleInfo.vehicleCapacity;
+                existingDriver.vehicleInformation[0].vehicleCapacity = parseInt(vehicleInfo.vehicleCapacity);
             }
             if (vehicleInfo.hasOwnProperty("vehicleColor")) {
                 existingDriver.vehicleInformation[0].vehicleColor = vehicleInfo.vehicleColor;
@@ -67,9 +67,9 @@ router.patch("/editRide", async (req, res) => {
         if(editData.hasOwnProperty("startTime"))
             existingRide.startTime = editData.startTime;
         if(editData.hasOwnProperty("rideCost"))
-            existingRide.rideCost = editData.rideCost;
+            existingRide.rideCost = parseInt(editData.rideCost);
         if(editData.hasOwnProperty("capacity"))
-            existingRide.capacity = editData.capacity;
+            existingRide.capacity = parseInt(editData.capacity);
         if(editData.startLocation) {
             if (editData.startLocation.hasOwnProperty("description")) {
                 existingRide.startLocation.description = editData.startLocation.description;

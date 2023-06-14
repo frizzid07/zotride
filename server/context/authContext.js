@@ -11,6 +11,10 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState();
   const [user, setUser] = useState();
 
+  const updateUser = (userData) => {
+    setUser(prevUser => ({ ...prevUser, ...userData }));
+  };
+
   async function authenticate(authToken) {
     setIsLoading(true);
     setIsLoggedIn(true);
@@ -29,15 +33,22 @@ const AuthProvider = ({ children }) => {
         body: JSON.stringify({ authToken: authToken }),
       });
       console.log(checkUser.ok);
-      console.log('Save us senpai');
-      console.log("save please")
-      console.log('Save us senpai');
-      console.log("save please")
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const userData = await checkUser.json();
-      console.log("We are checking");
-      console.log('One more');
-      console.log('Save us senpai');
-      console.log("save please")
+      console.log(userData.userData);
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       if (userData !== undefined) {
         console.log("Leggo")
         setUser(userData.userData);
@@ -71,6 +82,7 @@ const AuthProvider = ({ children }) => {
   const value = {
     token: token,
     user: user,
+    updateUser: updateUser,
     isLoggedIn: isLoggedIn,
     isLoading: isLoading,
     authenticate: authenticate,

@@ -136,13 +136,9 @@ const FindRide = ({ navigation }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
-      console.log('In Find Ride');
-      console.log('One more');
-      console.log('When does the suffering end?');
+      console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
-      console.log('One more');
-      console.log('When does the suffering end?');
       if (response.ok) {
         console.log("Ride found Successfully");
         navigation.navigate("Rides", { rides: rdata, initialParams: {"startLocation":data.startLocation, "endLocation":data.endLocation,"startTime":data.startTime}});

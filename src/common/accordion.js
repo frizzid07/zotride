@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import RideDetails from './RideDetails';
 
-const AccordionItem = ({ rideDetails, driverDetails, passengerDetails }) => {
+const AccordionItem = ({ rideDetails, driverDetails, passengerDetails, edit }) => {
   const [expanded, setExpanded] = useState(false);
   const from = rideDetails.startLocation.description.substring(0,12);
   const to = rideDetails.endLocation.description.substring(0,12);
@@ -11,6 +11,7 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails }) => {
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };
+
   return (
     <TouchableOpacity onPress={toggleExpanded}>
       <View style={styles.listItemContainer}>
@@ -22,17 +23,21 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails }) => {
         </TouchableOpacity>
       </View>
       {expanded && 
-      <RideDetails rideDetails={rideDetails} driverDetails={driverDetails} passengerDetails={passengerDetails}></RideDetails>}
+      <RideDetails rideDetails={rideDetails} driverDetails={driverDetails} passengerDetails={passengerDetails} edit={edit}></RideDetails>}
       </TouchableOpacity>
   );
 };
 
-const Accordion = ({ data }) => {
+const Accordion = ({ data, edit }) => {
   return (
     <View>
-      {data.map((item, index) => (
-        <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails} />
-      ))}
+      {edit !== undefined ? (
+      <>{data.map((item, index) => (
+            <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails} edit={edit} />
+      ))}</>) : (
+        <>{data.map((item, index) => (
+              <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails}/>
+        ))}</>)}
     </View>
   );
 };

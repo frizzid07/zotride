@@ -39,7 +39,6 @@ const Verify = ({ navigation, route }) => {
                 dayOfBirth: userdata.user[0]?.dayOfBirth,
                 monthOfBirth: userdata.user[0]?.monthOfBirth,
                 yearOfBirth: userdata.user[0]?.yearOfBirth,
-                isDriver: false,
                 mobileNumber: userdata.user[0]?.mobileNumber,
                 email: userdata.user[0]?.email,
                 password: userdata.user[0]?.password
@@ -55,10 +54,10 @@ const Verify = ({ navigation, route }) => {
                 });
               
                 console.log(response.ok);
+                console.log('Debug');
                 const data = await response.json();
                 console.log(data);
                 console.log('In Verify');
-                console.log('One more');
               
                 if (data.message === 'User Registered Successfully') {
                     await AsyncStorage.setItem('user', JSON.stringify(userData));

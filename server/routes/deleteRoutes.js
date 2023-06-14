@@ -5,10 +5,16 @@ require("dotenv").config();
 
 const Ride = mongoose.model("Ride");
 const Driver = mongoose.model("Driver");
+const User = mongoose.model("User");
 
 router.delete("/deleteRide", async (req, res) => {
   const id = req.query.rideId;
   console.log(`Ride to be cancelled: ${id}`);
+  const user = await User.findOne({ activeDriverRide: id });
+  if(user) {
+    user.activeDriverRide = null;
+    await user.save();
+  }
   await Ride.deleteOne({ _id: id })
     .then(() => {
       console.log("Cancelled the Ride");

@@ -19,6 +19,7 @@ import background from "../../assets/background.jpg";
 import { submit } from "../common/button";
 
 import { NGROK_TUNNEL } from "@env";
+import axios from "axios";
 
 import { AuthContext } from "../../server/context/authContext";
 
@@ -55,6 +56,7 @@ const Rides = ({ navigation, route }) => {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
         if (response.ok) {
           const driver = await response.json();
           console.log(driver);
@@ -134,14 +136,12 @@ const Rides = ({ navigation, route }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
       console.log('In Book Ride');
-      console.log('One more');
-      console.log('Why are we here? Just to suffer?');
       if(response.ok) {
-        alert(rdata.success);
-        navigation.navigate("Confirm", { ride: ride });
+        navigation.navigate("Payment", {ride: ride});
       } else {
         alert(rdata.error);
         console.log("Error while booking ride")
