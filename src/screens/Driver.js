@@ -27,6 +27,7 @@ const Driver = ({ navigation }) => {
   useEffect(() => {
     async function checkActiveRide() {
       console.log("Checking if Driver has an Active ride");
+      console.log("We are checking")
       try {
         const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
           method: "GET",
@@ -98,6 +99,7 @@ const Driver = ({ navigation }) => {
   }
 
   const editReg = async () => {
+    console.log("We are checking")
     try {
       const response = await fetch(NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`, {
         method: "GET",

@@ -45,6 +45,7 @@ const Verify = ({ navigation, route }) => {
                 password: userdata.user[0]?.password
             }
             try {
+                console.log("Please bro")
                 const response = await fetch(NGROK_TUNNEL + "/register", {
                   method: 'POST',
                   headers: {

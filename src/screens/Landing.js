@@ -18,24 +18,36 @@ import { submit } from "../common/button";
 
 import { AuthContext } from "../../server/context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setDriver } from "mongoose";
 
 const Landing = ({ navigation }) => {
   const context = useContext(AuthContext);
   const [name, setName] = useState();
+  const [isDriver, setIsDriver] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
+      console.log("In Landing => cGetting The User Data");
       let userVal = await AsyncStorage.getItem("user");
       if (userVal) {
+        console.log("Got user");
         userVal = JSON.parse(userVal);
         setName(userVal.firstName);
+        console.log(userVal.isDriver);
+        if (userVal.isDriver === true) {
+          setIsDriver(true);
+        } else {
+          console.log("User is not a driver");
+        }
+      } else {
+        console.log("Didn't get user");
       }
     };
     getUser();
   }, []);
 
   const isRegisteredDriver = async () => {
-    console.log('Checking Driver');
+    console.log("Checking Driver");
     try {
       const response = await fetch(
         NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`,
@@ -43,12 +55,12 @@ const Landing = ({ navigation }) => {
           method: "GET",
         }
       );
-      const rdata = await response.json()
+      const rdata = await response.json();
       console.log(rdata);
       console.log(response.ok);
-      console.log('In Landing');
-      if(rdata.driver !== null) {
-        console.log('Driver Record found');
+      console.log("In Landing");
+      if (rdata.driver !== null) {
+        console.log("Driver Record found");
         return true;
       } else {
         try {
@@ -57,38 +69,36 @@ const Landing = ({ navigation }) => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({data: {userId: context.user._id}})
+            body: JSON.stringify({ data: { userId: context.user._id } }),
           });
           const rdata2 = await response2.json();
           console.log(response2.ok);
           console.log(rdata2);
-          console.log('In PUT query');
-          console.log('Still here');
-        } catch(error) {
+          console.log("In PUT query");
+          console.log("Still here");
+        } catch (error) {
           console.error(error);
         }
       }
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
     return false;
-  }
-  
+  };
+
   const driverRole = async () => {
     //Checking if The User is a registered Driver
     console.log("Drive Role Function Called");
     if (context.user.isDriver) {
       const checkDriver = await isRegisteredDriver();
       console.log(checkDriver);
-      if(checkDriver)
-        navigation.navigate("Driver");
-      else
-        navigation.navigate("DriverRegistration");
+      if (checkDriver) navigation.navigate("Driver");
+      else navigation.navigate("DriverRegistration");
     } else {
       navigation.navigate("DriverRegistration");
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background}></Image>
@@ -96,24 +106,35 @@ const Landing = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
+        <Text style={{ fontSize: 25, color: "#000", marginBottom: 30 }}>
           Welcome to ZotRide, {name}
         </Text>
-        <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
+        {/* <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
           Choose a Role
-        </Text>
-        <Pressable style={submit} onPress={driverRole}>
-          <Text style={styles.text}>Driver</Text>
-        </Pressable>
-        <Pressable style={submit} onPress={() => {navigation.navigate("FindRide");}}>
-          <Text style={styles.text}>Passenger</Text>
-        </Pressable>
+        </Text> */}
         <Pressable
-          style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3 }]}
-          onPress={context.logout}
+          style={submit}
+          onPress={() => {
+            navigation.navigate("FindRide");
+          }}
         >
-          <Text style={styles.text}>Logout</Text>
+          <Text style={styles.text}>Find a Ride</Text>
         </Pressable>
+        {!isDriver && (
+          <View>
+            <Text style={{ fontSize: 25, color: "#000", marginTop: 30 }}>
+              Register as a Driver with us
+            </Text>
+            <Pressable
+              style={submit}
+              onPress={() => {
+                navigation.navigate("DriverRegistration");
+              }}
+            >
+              <Text style={styles.text}>Register</Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     </View>
   );

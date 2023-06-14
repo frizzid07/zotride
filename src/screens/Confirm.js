@@ -33,6 +33,7 @@ import {
     useEffect(() => {
       async function getDetails() {
         try {
+          console.log("Please bro")
           const response = await fetch(
               NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
               {

@@ -24,6 +24,9 @@ const requireToken = require("./middleware/authTokenRequired");
 const editRoutes = require("./routes/editRoutes");
 app.use(editRoutes);
 
+const editProfileRoute = require("./routes/editProfileRoute");
+app.use(editProfileRoute);
+
 const deleteRoutes = require("./routes/deleteRoutes");
 app.use(deleteRoutes);
 

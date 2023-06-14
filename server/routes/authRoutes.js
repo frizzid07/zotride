@@ -235,6 +235,7 @@ router.post("/login", async (req, res) => {
 
 router.post("/auth", async (req, res) => {
   const { token } = req.body.authToken;
+  console.log(`In Auth Route => ${token}`)
   if (!token) {
     return res
       .status(401)
