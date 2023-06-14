@@ -146,6 +146,7 @@ const DriverRegistration = ({ navigation, route }) => {
         console.log(rdata);
         if (rdata.success) {
           console.log("Driver Registered Successfully");
+          alert("Driver Registered Successfully");
           context.updateUser({ isDriver: true});
           try {
             const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
