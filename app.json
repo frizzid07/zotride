@@ -23,14 +23,20 @@
         "backgroundColor": "#ffffff"
       },
       "bundleIdentifier": "com.zotride",
-      "config":{
-        "googleMaps":{
+      "config": {
+        "googleMaps": {
           "apiKey": "AIzaSyCZ3WDFCoMW-7VjiNGQq1fqEXvPwrj_Lpg"
         }
-      }
+      },
+      "package": "com.mandar01.zotride"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fecf5bc1-b52e-408d-a991-ce21fef5957f"
+      }
     }
   }
 }

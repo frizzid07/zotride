@@ -29,8 +29,14 @@ const AuthProvider = ({ children }) => {
       console.log("save please")
       console.log('Save us senpai');
       console.log("save please")
+      console.log("save please")
+      console.log('Save us senpai');
+      console.log("save please")
       const userData = await checkUser.json();
       console.log("We are checking");
+      console.log('One more');
+      console.log('Save us senpai');
+      console.log("save please")
       console.log('One more');
       console.log('Save us senpai');
       console.log("save please")

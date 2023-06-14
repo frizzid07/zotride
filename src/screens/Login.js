@@ -62,6 +62,8 @@ const Login = ({ navigation }) => {
       console.log(`In Login ${data}, ${JSON.stringify(data)}`);
       console.log("Logging in");
       console.log("error log")
+      console.log("Logging in");
+      console.log("error log")
       const response = await fetch(NGROK_TUNNEL + "/login", {
         method: "POST",
         headers: {
@@ -69,6 +71,8 @@ const Login = ({ navigation }) => {
         },
         body: JSON.stringify({ data: data }),
       });
+      console.log("Logging in");
+      console.log("error log")
       console.log(response.ok);
       console.log("Dodging error");
       const rdata = await response.json();
