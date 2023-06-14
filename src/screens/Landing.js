@@ -27,14 +27,20 @@ const Landing = ({ navigation }) => {
 
   useEffect(() => {
     const getUser = async () => {
-      console.log("Getting The User Data");
+      console.log("In Landing => cGetting The User Data");
       let userVal = await AsyncStorage.getItem("user");
       if (userVal) {
+        console.log("Got user");
         userVal = JSON.parse(userVal);
         setName(userVal.firstName);
+        console.log(userVal.isDriver);
         if (userVal.isDriver === true) {
-          setDriver(true);
+          setIsDriver(true);
+        } else {
+          console.log("User is not a driver");
         }
+      } else {
+        console.log("Didn't get user");
       }
     };
     getUser();

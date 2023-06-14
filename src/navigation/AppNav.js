@@ -34,7 +34,6 @@ export default AppNav = () => {
 
   return (
     <View style={{ width: "100%", height: "100%" }} onLayout={onLayoutRootView}>
-      {isLoading && <ActivityIndicator size={"large"}></ActivityIndicator>}
       <NavigationContainer>
         {isLoggedIn ? <BottomTab /> : <AuthStack />}
       </NavigationContainer>
