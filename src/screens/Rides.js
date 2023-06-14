@@ -24,6 +24,8 @@ import { AuthContext } from "../../server/context/authContext";
 
 import RideFilters from "../modals/RideFilters";
 
+import RideCard from "../common/RideCard";
+
 const Rides = ({ navigation, route }) => {
   const context = useContext(AuthContext);
   const [rides, setRides] = useState(route.params.rides);
@@ -166,110 +168,46 @@ const Rides = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background} />
-      <Text style={[styles.text, { marginBottom: 5, marginTop: 50 }]}>
-        Available Rides
-      </Text>
-      {rides.length === 0 ? (
-        <Text
-          style={[styles.text, { fontSize: 25, margin: 20, color: "gray" }]}
-        >
-          No available rides
+      <ScrollView>
+        <Text style={[styles.text, { marginBottom: 5, marginTop: 50 }]}>
+          Available Rides
         </Text>
-      ) : (
-        rides.map((ride, index) => {
-          const driver = drivers[index];
-          return (
-            <View key={index} style={styles.rideBox}>
-              <View style={styles.rideContainer}>
-                <Text style={[styles.location, {textAlign: 'left'}]}>
-                  <Text style={{ fontWeight: "bold" }}>
-                    {ride.startLocation.description}
-                  </Text>
-                </Text>
-                <Text style={styles.text}> to </Text>
-                <Text style={[styles.location, {textAlign: 'right'}]}>
-                  <Text style={{ fontWeight: "bold"}}>
-                    {" "}
-                    {ride.endLocation.description}
-                  </Text>
-                </Text>
-              </View>
-              <View style={styles.rideContainer}>
-                <Text style={styles.driver}>
-                  Ride:{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {driver?.driver
-                      ? driver?.driver?.vehicleInformation[0]?.vehicleCompany +
-                        " " +
-                        driver?.driver?.vehicleInformation[0]?.vehicleModel
-                      : ""}
-                  </Text>
-                  {"\n\n"}
-                  Driver:{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {driver?.user
-                      ? driver?.user?.firstName + " " + driver?.user?.lastName
-                      : ""}
-                  </Text>
-                </Text>
-                <Text style={styles.capacity}>
-                  Starts at{"\n"}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {new Date(ride.startTime).toLocaleString('en-US', options)}
-                  </Text>
-                </Text>
-              </View>
-              <View style={styles.rideContainer}>
-                <Text style={styles.capacity}>
-                  Seats:{" "}
-                  <Text style={{ fontWeight: "bold" }}>{ride.capacity}</Text>
-                </Text>
-                <Text style={styles.capacity}>
-                  Fare:{" "}
-                  <Text style={{ fontWeight: "bold" }}>${ride.rideCost}</Text>
-                </Text>
-                <Text style={[styles.driver, { flex: 1 }]}>
-                  <Pressable
-                    style={[
-                      submit,
-                      { fontSize: 20, minWidth: 100, backgroundColor: "green"},
-                    ]}
-                    onPress={()=>{bookRide(ride)}}
-                  >
-                    <Text
-                      style={[styles.text, { fontSize: 20, color: "#fff"}]}
-                    >
-                      Book
-                    </Text>
-                  </Pressable>
-                </Text>
-              </View>
-            </View>
-          );
-        })
-      )}
-      <Pressable
-        style={[
-          submit,
-          { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
-        ]}
-        onPress={() => {
-          navigation.navigate("FindRide");
-        }}
-      >
-        <Text style={{ fontSize: 20 }}>Change Ride Preferences</Text>
-      </Pressable>
-      <Pressable
-        style={[
-          submit,
-          { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
-        ]}
-        onPress={changePreferencesHandler}
-      >
-        <Text style={{ fontSize: 20 }}>Manage Filters</Text>
-      </Pressable>
-      {filterModalVisible  && <RideFilters visible={filterModalVisible} onClose = {closeFilterModal} handleFilters={handleFilters} default={filters}></RideFilters>}
-      
+        {rides.length === 0 ? (
+          <Text
+            style={[styles.text, { fontSize: 25, margin: 20, color: "gray" }]}
+          >
+            No available rides
+          </Text>
+        ) : (
+          rides.map((ride, index) => {
+            const driver = drivers[index];
+            return (
+              <RideCard driverDetail={driver} rideDetails={ride}></RideCard>
+            );
+          })
+        )}
+        <Pressable
+          style={[
+            submit,
+            { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
+          ]}
+          onPress={() => {
+            navigation.navigate("FindRide");
+          }}
+        >
+          <Text style={{ fontSize: 20 }}>Change Ride Preferences</Text>
+        </Pressable>
+        <Pressable
+          style={[
+            submit,
+            { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
+          ]}
+          onPress={changePreferencesHandler}
+        >
+          <Text style={{ fontSize: 20 }}>Manage Filters</Text>
+        </Pressable>
+        {filterModalVisible  && <RideFilters visible={filterModalVisible} onClose = {closeFilterModal} handleFilters={handleFilters} default={filters}></RideFilters>}
+      </ScrollView>
     </View>
   );
 };
@@ -280,6 +218,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
+    marginBottom: '40%'
   },
   textContainer: {
     flex: 1,
