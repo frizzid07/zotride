@@ -122,36 +122,6 @@ const Rides = ({ navigation, route }) => {
     
   }, [filters]);
 
-  async function bookRide(ride) {
-    const data = {
-      "rideId": ride._id,
-      "userId": context.user._id
-    }
-    try {
-      const response = await fetch(NGROK_TUNNEL + "/bookRide", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      console.log(response.ok);
-      console.log('Debug');
-      const rdata = await response.json();
-      console.log(rdata);
-      console.log('In Book Ride');
-      if(response.ok) {
-        navigation.navigate("Payment", {ride: ride});
-      } else {
-        alert(rdata.error);
-        console.log("Error while booking ride")
-      }
-    } catch (error) {
-      alert(error);
-      console.log("Error while booking ride "+error)
-    }
-  };
-
   const closeFilterModal = () => {
     setFilterModalVisible(false);
   };
@@ -182,7 +152,7 @@ const Rides = ({ navigation, route }) => {
           rides.map((ride, index) => {
             const driver = drivers[index];
             return (
-              <RideCard driverDetail={driver} rideDetails={ride}></RideCard>
+              <RideCard key={index} driverDetail={driver} rideDetails={ride} navigation={navigation}></RideCard>
             );
           })
         )}
