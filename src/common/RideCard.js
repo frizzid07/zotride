@@ -5,7 +5,7 @@ import { AuthContext } from '../../server/context/authContext';
 import {NGROK_TUNNEL} from "@env"
 
 
-const RideCard = ({ driverDetail, rideDetails }) => {
+const RideCard = ({ navigation, driverDetail, rideDetails }) => {
 
     const [showRideDetails, setShowRideDetails] = useState(false);
     const context = useContext(AuthContext);
@@ -40,11 +40,8 @@ const RideCard = ({ driverDetail, rideDetails }) => {
         const rdata = await response.json();
         console.log(rdata);
         console.log('In Book Ride');
-        console.log('One more');
-        console.log('Why are we here? Just to suffer?');
         if(response.ok) {
-          alert(rdata.success);
-          navigation.navigate("Confirm", { ride: ride });
+          navigation.navigate("Payment", {ride: ride});
         } else {
           alert(rdata.error);
           console.log("Error while booking ride")

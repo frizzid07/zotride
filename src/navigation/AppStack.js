@@ -11,6 +11,7 @@ import FindRide from "../screens/FindRide";
 import Rides from "../screens/Rides";
 import DriverRegistration from "../screens/DriverRegistration";
 import ListRide from "../screens/ListRide";
+import RideCard from "../common/RideCard";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ export default AppStack = () => {
       <Stack.Screen name="CancelPayment" component={CancelPayment} />
       <Stack.Screen name="DriverRegistration" component={DriverRegistration} />
       <Stack.Screen name="ListRide" component={ListRide} />
+      <Stack.Screen name="RideCard" component={RideCard} />
     </Stack.Navigator>
   );
 };
