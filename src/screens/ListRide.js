@@ -234,7 +234,7 @@ const ListRide = ({ navigation, route }) => {
           context.updateUser({ activeDriverRide: rdata.rideId});
           alert("Ride added successfully");
           console.log("Ride Added Successfully");
-          navigation.navigate("Landing");
+          navigation.pop();
         } else {
           alert("Could not add ride");
         }

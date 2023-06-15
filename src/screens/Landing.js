@@ -60,6 +60,10 @@ const Landing = ({ navigation }) => {
   }, [context]);
 
   useEffect(() => {
+    getUser();
+  }, [isDriver]);
+
+  useEffect(() => {
     const refreshListener = navigation.addListener('focus', () => {
       getUser();
     });
@@ -89,7 +93,11 @@ const Landing = ({ navigation }) => {
       console.log(err);
     }
   } else {
-      try {
+        if(!context.user.isDriver) {
+          setHasActive(false);
+          setIsDriver(false);
+        } else {
+          try {
         console.log('Debug');
         console.log('In here');
         const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
@@ -119,6 +127,7 @@ const Landing = ({ navigation }) => {
       }
     }
   }
+}
 
   async function checkActiveRide() {
     console.log("Checking if Passenger has an Active ride");
@@ -139,7 +148,7 @@ const Landing = ({ navigation }) => {
 
   useEffect(() => {
     checkActiveRideDriver();
-  }, [isDriver]);
+  }, [context]);
 
   useEffect(() => {
     const refreshListener = navigation.addListener('focus', () => {
@@ -188,7 +197,7 @@ const Landing = ({ navigation }) => {
         >
           <Text style={styles.text}>Find a new Ride</Text>
         </Pressable>
-        {hasActivePass && context.user.activePassengerRides.length !== 0 && (
+        {hasActivePass && (
           <Pressable style={[submit, {marginTop: 0}]} onPress={() => navigation.navigate('Passenger')}>
             <Text style={styles.text}>View Active Ride(s)</Text>
           </Pressable>
@@ -196,7 +205,7 @@ const Landing = ({ navigation }) => {
         {!isDriver && (
           <View>
             <Text style={{ fontSize: 25, color: "#000", marginTop: 30 }}>
-              Register as a Driver with us
+              Enroll as a Driver with us
             </Text>
             <Pressable
               style={submit}
@@ -208,7 +217,7 @@ const Landing = ({ navigation }) => {
             </Pressable>
           </View>
         )}
-        {isDriver && context.user.activeDriverRide === null && (
+        {isDriver && !hasActive && (
           <View>
             <Text style={{ fontSize: 25, color: "#000", marginTop: 30, marginBottom: 15 }}>
               Start your journey with us
@@ -223,7 +232,7 @@ const Landing = ({ navigation }) => {
             </Pressable>
           </View>
         )}
-        {isDriver && context.user.activeDriverRide !== null && (
+        {isDriver && hasActive && (
           <View style={{ width: "95%", marginTop: '4%' }}>
             <Text style={[styles.text, {fontSize: 20, marginLeft: '2%'}]}>Your Current Ride</Text>
             <SingleRide ride={activeRide}></SingleRide>

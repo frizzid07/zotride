@@ -118,10 +118,10 @@ const Driver = ({ navigation }) => {
         context.user.activeDriverRide = null;
         context.user.past_drives = [...context.user.past_drives, activeRide._id];
         setHasActive(false);
-        navigation.navigate('Landing');
+        navigation.pop();
       }
     } catch(error) {
-      console.log("Error in ending ride " + err);
+      console.log("Error in ending ride " + error);
     }
   }
   
@@ -140,7 +140,9 @@ const Driver = ({ navigation }) => {
 
       if (result.deleted) {
         console.log("Ride Deleted");
+        context.user.activeDriverRide = null;
         setHasActive(false);
+        navigation.pop();
       } else {
         console.log(`Could not Delete due to ${result.error}`);
       }
@@ -196,7 +198,6 @@ const Driver = ({ navigation }) => {
           console.error(error);
         }
         alert("Driver Record Deleted");
-        // navigation.navigate("Landing", { screen: 'Home' });
       } else {
         console.log("Some error in registering");
         navigation.navigate("DriverRegistration");
@@ -242,7 +243,7 @@ const Driver = ({ navigation }) => {
             </View>
           </View>
         )}
-        <View style={{ width: "60%", marginTop: 15 }}>
+        {/* <View style={{ width: "60%", marginTop: 15 }}>
           <Pressable
             style={[submit, { backgroundColor: 'rgba(0, 74, 172, 0.8)' }]}
             onPress={editReg}
@@ -255,7 +256,7 @@ const Driver = ({ navigation }) => {
           >
             <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Delete Registration</Text>
           </Pressable>
-        </View>
+        </View> */}
       </View>
     </View>
   );

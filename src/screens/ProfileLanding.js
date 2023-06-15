@@ -79,7 +79,6 @@ const ProfileLanding = ({ navigation }) => {
           console.error(error);
         }
         alert("Driver Record Deleted");
-        // navigation.navigate("Landing", { screen: 'Home' });
       } else {
         console.log("Some error in registering");
         navigation.navigate("DriverRegistration");
@@ -170,20 +169,40 @@ const ProfileLanding = ({ navigation }) => {
 
         {isDriver && (
           <View style={{ marginTop: 10 }}>
+            <Text style={{ fontSize: 25, color: "#000", marginTop: '5%', marginBottom: '2%' }}>
+              Modify your Driver Details
+            </Text>
             <Pressable
               style={[submit, { minWidth: 150, minHeight: 30, borderRadius: 3, backgroundColor: 'rgba(0, 74, 172, 0.8)' }]}
               onPress={editReg}
             >
-              <Text style={[styles.text, { color: 'white'}]}>Edit Registration</Text>
+              <Text style={[styles.text, { color: 'white', fontSize: 20}]}>Edit Registration</Text>
             </Pressable>
             <Pressable
               style={[submit, { minWidth: 150, minHeight: 30, borderRadius: 3, backgroundColor: "rgba(194, 24, 7, 0.8)" }]}
               onPress={deleteReg}
             >
-              <Text style={[styles.text, { color: 'white'}]}>Delete Registration</Text>
+              <Text style={[styles.text, { color: 'white', fontSize: 20}]}>Delete Registration</Text>
             </Pressable>
         </View>
         )}
+
+        {!isDriver && (
+          <View>
+            <Text style={{ fontSize: 25, color: "#000", marginTop: '5%' }}>
+              Enroll as a Driver with us
+            </Text>
+            <Pressable
+              style={submit}
+              onPress={() => {
+                navigation.navigate("DriverRegistration");
+              }}
+            >
+              <Text style={styles.text}>Register</Text>
+            </Pressable>
+          </View>
+        )}
+
       </View>
     </View>
   );
