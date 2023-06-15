@@ -61,10 +61,12 @@ const FindRide = ({ navigation }) => {
 
   const getInfo = async (data) => {
     try {
+      console.log('Debug');
       const response = await fetch(`https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${data.startLocation.latitude},${data.startLocation.longitude}&destinations=${data.endLocation.latitude},${data.endLocation.longitude}&key=${DISTANCE_MATRIX_KEY}`, {
         method: "GET"
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       if(response.ok) {
@@ -198,6 +200,7 @@ const FindRide = ({ navigation }) => {
 
     try {
       console.log("Checking");
+      console.log('Debug');
       const response = await fetch(NGROK_TUNNEL + "/findRide", {
         method: "POST",
         headers: {
@@ -209,13 +212,14 @@ const FindRide = ({ navigation }) => {
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
       console.log('Debug');
       console.log('Debug');
       if (response.ok) {
         console.log("Ride found Successfully");
-        navigation.navigate("Rides", { rides: rdata });
+        navigation.navigate("Rides", { rides: rdata, initialParams: {"startLocation":data.startLocation, "endLocation":data.endLocation,"startTime":data.startTime}});
       } else {
         alert("Could not find ride");
       }

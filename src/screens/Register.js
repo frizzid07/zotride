@@ -59,6 +59,7 @@ const Register = ({ navigation }) => {
         console.log("Fetching Verify API");
         console.log("Please bro");
         try {
+          console.log('Debug');
           const response = await fetch(NGROK_TUNNEL + "/verify", {
             method: "POST",
             headers: {
@@ -74,6 +75,7 @@ const Register = ({ navigation }) => {
           const data = await response.json();
           console.log('In Register');
           console.log(data);
+          console.log('Debug');
 
           if (data.error === "Invalid Credentials") {
             alert("Invalid Credentials");

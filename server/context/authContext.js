@@ -19,8 +19,12 @@ const AuthProvider = ({ children }) => {
     setIsLoading(true);
     setIsLoggedIn(true);
     setToken(authToken.token);
+    console.log('Debug');
+    console.log('Debug');
     console.log(`In authcontext ${JSON.stringify(authToken)}`);
     try {
+      console.log('Debug');
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
@@ -35,8 +39,11 @@ const AuthProvider = ({ children }) => {
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const userData = await checkUser.json();
       console.log(userData.userData);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       if (userData !== undefined) {

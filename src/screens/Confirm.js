@@ -35,6 +35,8 @@ import {
         try {
           console.log("Please bro");
           console.log('Debug');
+          console.log('Debug');
+          console.log('Debug');
           const response = await fetch(
               NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
               {
@@ -44,9 +46,12 @@ import {
             console.log(response.ok);
             console.log('Debug');
             console.log('Debug');
+            console.log('Debug');
             if (response.ok) {
               const driver = await response.json();
               console.log(driver);
+              console.log('Debug');
+              console.log('Debug');
               console.log('Debug');
               setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
                   " " +

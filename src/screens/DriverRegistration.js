@@ -111,6 +111,7 @@ const DriverRegistration = ({ navigation, route }) => {
       }
     
       try {
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/editDriver?driverId=${context.user._id}`, {
           method: "PATCH",
           headers: {
@@ -119,6 +120,7 @@ const DriverRegistration = ({ navigation, route }) => {
           body: JSON.stringify({editData: editData}),
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
@@ -135,6 +137,7 @@ const DriverRegistration = ({ navigation, route }) => {
 
     else {
       try {
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + "/driverRegistration", {
           method: "POST",
           headers: {
@@ -146,6 +149,7 @@ const DriverRegistration = ({ navigation, route }) => {
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
         console.log('Debug');
@@ -154,6 +158,7 @@ const DriverRegistration = ({ navigation, route }) => {
           alert("Driver Registered Successfully");
           context.updateUser({ isDriver: true});
           try {
+            console.log('Debug');
             const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
               method: "PUT",
               headers: {
@@ -162,6 +167,7 @@ const DriverRegistration = ({ navigation, route }) => {
               body: JSON.stringify({data: data})
             });
             console.log(response2.ok);
+            console.log('Debug');
             console.log('Debug');
             console.log('Debug');
             console.log('Debug');

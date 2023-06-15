@@ -29,6 +29,8 @@ const Driver = ({ navigation }) => {
     if(context.user.activeDriverRide) {
       try {
         console.log('Debug');
+        console.log('Debug');
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${context.user.activeDriverRide}`, {
           method: "GET",
           headers: {
@@ -36,6 +38,7 @@ const Driver = ({ navigation }) => {
           }
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
@@ -50,6 +53,8 @@ const Driver = ({ navigation }) => {
   } else {
       try {
         console.log('Debug');
+        console.log('Debug');
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
           method: "GET",
           headers: {
@@ -57,6 +62,8 @@ const Driver = ({ navigation }) => {
           }
         });
         console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
@@ -83,6 +90,10 @@ const Driver = ({ navigation }) => {
   useEffect(() => {
     checkActiveRideDriver();
   }, []);
+  
+  useEffect(() => {
+    checkActiveRideDriver();
+  }, [context]);
 
   useEffect(() => {
     const refreshListener = navigation.addListener('focus', () => {
@@ -94,6 +105,8 @@ const Driver = ({ navigation }) => {
 
   async function editRide() {
     try {
+      console.log('Debug');
+      console.log('Debug');
       const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
         method: "GET",
         headers: {
@@ -101,6 +114,8 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
@@ -119,10 +134,14 @@ const Driver = ({ navigation }) => {
 
   async function endRide() {
     try {
+      console.log('Debug');
+      console.log('Debug');
       const response = await fetch(NGROK_TUNNEL + `/endRide?rideId=${activeRide._id}&userId=${context.user._id}`, {
         method: "GET"
       });
       console.log(response.ok);
+      console.log('Debug');
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
@@ -140,6 +159,7 @@ const Driver = ({ navigation }) => {
   
   async function cancelRide() {
     try {
+      console.log('Debug');
       const response = await fetch(NGROK_TUNNEL + `/deleteRide?rideId=${activeRide._id}`, {
         method: "DELETE",
         headers: {
@@ -147,6 +167,8 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');

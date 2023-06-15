@@ -52,6 +52,7 @@ const Rides = ({ navigation, route }) => {
 
     for (const ride of rides) {
       try {
+        console.log('Debug');
         const response = await fetch(
           NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
           {
@@ -82,12 +83,9 @@ const Rides = ({ navigation, route }) => {
     fetchDrivers();
   }, []);
 
-  
-
-  useEffect( () => {
-
-    async function filterRides () {
+  async function filterRides () {
     try {
+      console.log(`Route ${JSON.stringify(route.params.initialParams)}`);
       var requestBody = {
         "startLocation":route.params.initialParams.startLocation,
         "endLocation":route.params.initialParams.endLocation,
@@ -98,6 +96,8 @@ const Rides = ({ navigation, route }) => {
         "maxRideCost":filters.maxCost,
         "maxCapacity":filters.maxCapacity
       }
+      console.log('Debug');
+      console.log('Debug');
       const response = await fetch(NGROK_TUNNEL + "/filterRides", {
         method: "POST",
         headers: {
@@ -111,6 +111,7 @@ const Rides = ({ navigation, route }) => {
       console.log('Debug');
       const data = await response.json();
       console.log("mandatory log");
+      console.log('Debug');
       if (!response.ok) {
         alert("Could not filter rides");
       }
@@ -119,6 +120,8 @@ const Rides = ({ navigation, route }) => {
       console.log("Some error in filtering rides API " + error);
     }
     }
+
+  useEffect( () => {
 
     if (isInitialRender.current) {
       isInitialRender.current = false;

@@ -82,6 +82,8 @@ const Landing = ({ navigation }) => {
     } catch(err) {
       console.log(err);
     }
+  } else {
+    setHasActive(false);
   }
 }
 
@@ -93,6 +95,14 @@ const Landing = ({ navigation }) => {
       setIsDriver(false);
     }
   }
+
+  useEffect(() => {
+    console.log('Updated Active Ride');
+  }, [activeRide]);
+  
+  useEffect(() => {
+    checkActiveRideDriver();
+  }, []);
 
   useEffect(() => {
     checkActiveRideDriver();

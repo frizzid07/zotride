@@ -6,46 +6,45 @@ import {
 
 const SingleRide = (props) => {
   const ride = props.ride;
-  console.log(ride.startLocation.description);
-  return (
-    <View style={styles.rideBox}>
-      <View style={styles.rideContainer}>
-        <Text style={styles.location}>
-          <Text style={{ fontWeight: "bold" }}>
-            {ride.startLocation.description}
+    return (
+      <View style={styles.rideBox}>
+        <View style={styles.rideContainer}>
+          <Text style={styles.location}>
+            <Text style={{ fontWeight: "bold" }}>
+              {ride?.startLocation.description}
+            </Text>
           </Text>
-        </Text>
-        <Text> to </Text>
-        <Text style={styles.location}>
-          <Text style={{ fontWeight: "bold" }}>
-            {" "}
-            {ride.endLocation.description}
+          <Text> to </Text>
+          <Text style={styles.location}>
+            <Text style={{ fontWeight: "bold" }}>
+              {" "}
+              {ride?.endLocation.description}
+            </Text>
           </Text>
-        </Text>
+        </View>
+        <View style={styles.rideContainer}>
+          <Text style={styles.driver}>
+            Starts at{"\n"}
+            <Text style={{ fontWeight: "bold" }}>
+              {new Date(ride?.startTime).toLocaleString(undefined, {
+                weekday: "short",
+                day: "numeric",
+                month: "long",
+                hour: "numeric",
+                minute: "numeric",
+                timeZone: "America/Los_Angeles",
+              })}
+            </Text>
+          </Text>
+          <Text style={styles.capacity}>
+            Seats: <Text style={{ fontWeight: "bold" }}>{ride?.capacity}</Text>
+          </Text>
+          <Text style={styles.capacity}>
+            Fare: <Text style={{ fontWeight: "bold" }}>${ride?.rideCost}</Text>
+          </Text>
+        </View>
       </View>
-      <View style={styles.rideContainer}>
-        <Text style={styles.driver}>
-          Starts at{"\n"}
-          <Text style={{ fontWeight: "bold" }}>
-            {new Date(ride.startTime).toLocaleString(undefined, {
-              weekday: "short",
-              day: "numeric",
-              month: "long",
-              hour: "numeric",
-              minute: "numeric",
-              timeZone: "America/Los_Angeles",
-            })}
-          </Text>
-        </Text>
-        <Text style={styles.capacity}>
-          Seats: <Text style={{ fontWeight: "bold" }}>{ride.capacity}</Text>
-        </Text>
-        <Text style={styles.capacity}>
-          Fare: <Text style={{ fontWeight: "bold" }}>${ride.rideCost}</Text>
-        </Text>
-      </View>
-    </View>
-  );
+    );
 };
 
 export default SingleRide;

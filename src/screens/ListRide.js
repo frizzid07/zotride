@@ -62,10 +62,12 @@ const ListRide = ({ navigation, route }) => {
 
   const getInfo = async (data) => {
     try {
+      console.log('Debug');
       const response = await fetch(`https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${data.startLocation.latitude},${data.startLocation.longitude}&destinations=${data.endLocation.latitude},${data.endLocation.longitude}&key=${DISTANCE_MATRIX_KEY}`, {
         method: "GET"
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       if(response.ok) {
         const rdata = await response.json();
@@ -259,6 +261,8 @@ const ListRide = ({ navigation, route }) => {
       }
 
       try {
+        console.log('Debug');
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/editRide?driverId=${context.user._id}`, {
           method: "PATCH",
           headers: {
@@ -267,6 +271,7 @@ const ListRide = ({ navigation, route }) => {
           body: JSON.stringify({editData: editData}),
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
@@ -283,6 +288,8 @@ const ListRide = ({ navigation, route }) => {
     
     else {
       try {
+        console.log('Debug');
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + "/listRide", {
           method: "POST",
           headers: {
@@ -294,6 +301,7 @@ const ListRide = ({ navigation, route }) => {
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
         console.log('In List Ride');
@@ -302,7 +310,7 @@ const ListRide = ({ navigation, route }) => {
           context.updateUser({ activeDriverRide: rdata.rideId});
           alert("Ride added successfully");
           console.log("Ride Added Successfully");
-          navigation.pop();
+          navigation.navigate('PastRides');
         } else {
           alert("Could not add ride");
         }

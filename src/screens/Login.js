@@ -38,6 +38,7 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     const checkUser = async () => {
       try {
+        console.log('Debug');
         let userVal = await AsyncStorage.getItem("user");
         console.log('One more');
         if (userVal) {
@@ -59,7 +60,9 @@ const Login = ({ navigation }) => {
   async function loginUser() {
     try {
       setIsChecking(true);
+      console.log('Debug');
       console.log(`In Login ${data}, ${JSON.stringify(data)}`);
+      console.log('Debug');
       const response = await fetch(NGROK_TUNNEL + "/login", {
         method: "POST",
         headers: {
@@ -71,8 +74,11 @@ const Login = ({ navigation }) => {
       console.log('Debug');
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       if (response.ok) {
@@ -80,6 +86,7 @@ const Login = ({ navigation }) => {
         console.log('Debug');
         console.log('Debug');
         let authenticated = await context.authenticate(rdata);
+        console.log('Debug');
         if (authenticated) {
           setIsSuccessful(true);
           alert(`Logged in successfully`);

@@ -29,12 +29,10 @@ const Passenger = ({ navigation }) => {
                 for (const ride of context.user.activePassengerRides) {
                         try {
                         console.log('Debug');
-                        console.log('Debug');
                         const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${ride}`, {
                             method: "GET"
                         });
                         console.log(response.ok);
-                        console.log('Debug');
                         console.log('Debug');
                         console.log('Debug');
                         const rdata = await response.json();
@@ -70,20 +68,30 @@ const Passenger = ({ navigation }) => {
     return (
         <View style = {styles.container}>
             <Image style={styles.bg} source={background}></Image>
+            <ScrollView>
                 <View style = {styles.textContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
-                        <Image style={styles.logo} source={logo} />
+                    <TouchableOpacity onPress={() => navigation.navigate("Welcome")}>
+                        <Image style={[styles.logo, {width: "25%"}]} source={logo} />
                     </TouchableOpacity>
                     <Text style={styles.text}>Welcome, {context.user.firstName}</Text>
+                    <View style={{ width: "75%", marginTop: 25 }}>
+                        <Pressable
+                        style={submit}
+                        onPress={() => navigation.navigate("FindRide")}
+                        >
+                        <Text style={styles.text}>Find a New Ride</Text>
+                        </Pressable>
+                    </View>
                     {hasActivePass &&
-                        <View style={{ width: '100%', marginTop: '4%' }}>
+                        <View style={{ width: '100%', marginTop: 10 }}>
                             <Text style={[styles.text, {marginTop: 20, marginLeft: 10, fontSize: 20}]}>Your Active Rides</Text>
                             <Accordion data={activeRidesPass} edit={true} refreshPassengerScreen={refreshPassengerScreen}/>
                         </View>}
                     <Pressable style={submit} onPress={() => navigation.navigate('Landing')}>
                         <Text style={styles.text}>Back to Home</Text>
                     </Pressable>
-                </View>
+                    </View>
+            </ScrollView>
         </View>
     )
 }

@@ -45,6 +45,7 @@ const Verify = ({ navigation, route }) => {
             }
             try {
                 console.log("Please bro")
+                console.log('Debug');
                 const response = await fetch(NGROK_TUNNEL + "/register", {
                   method: 'POST',
                   headers: {
@@ -60,6 +61,7 @@ const Verify = ({ navigation, route }) => {
                 const data = await response.json();
                 console.log(data);
                 console.log('In Verify');
+                console.log('Debug');
               
                 if (data.message === 'User Registered Successfully') {
                     await AsyncStorage.setItem('user', JSON.stringify(userData));

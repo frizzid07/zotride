@@ -10,11 +10,18 @@ import { NGROK_TUNNEL } from "@env";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../server/context/authContext";
 
-  const RideDetails = ({rideDetails, driverDetails, passengerDetails, edit}) => {
+  const RideDetails = ({rideDetails, driverDetails, passengerDetails, edit, refreshPassengerScreen}) => {
     const context = useContext(AuthContext);
+
+    const [refreshState, setRefreshState] = useState(false);
+
+    useEffect(() => {
+      refreshPassengerScreen();
+    }, [refreshState]);
 
     async function endTrip() {
       try {
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL+`/endTrip?userId=${context.user._id}&rideId=${rideDetails._id}`, {
           method: "GET"
         });
@@ -23,8 +30,8 @@ import { AuthContext } from "../../server/context/authContext";
           let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
           context.user.activePassengerRides = activeRides;
           context.user.past_rides = [...context.user.past_rides, rideDetails._id];
+          setRefreshState(prevRefresh => !prevRefresh);
           alert("Trip ended successfully!");
-          navigation.pop();
         }
       } catch(error) {
         console.error(error);
@@ -33,15 +40,16 @@ import { AuthContext } from "../../server/context/authContext";
 
     async function cancelTrip() {
       try {
-          const response = await fetch(NGROK_TUNNEL+`/cancelTrip?userId=${context.user._id}&rideId=${rideDetails._id}`, {
+        console.log('Debug');
+        const response = await fetch(NGROK_TUNNEL+`/cancelTrip?userId=${context.user._id}&rideId=${rideDetails._id}`, {
             method: "GET"
           });
           console.log(response.ok);
           if(response.ok) {
             let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
             context.user.activePassengerRides = activeRides;
+            setRefreshState(prevRefresh => !prevRefresh);
             alert("Trip cancelled successfully!");
-            navigation.pop();
           }
         } catch(error) {
         console.error(error);

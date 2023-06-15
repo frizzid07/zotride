@@ -28,7 +28,7 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails, edit, ref
   );
 };
 
-const Accordion = ({ data, edit, refreshPassengerScreen }) => {
+const Accordion = ({ data, edit, navigation }) => {
   return (
     <View>
       {edit !== undefined ? (
@@ -36,7 +36,7 @@ const Accordion = ({ data, edit, refreshPassengerScreen }) => {
             <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails} edit={edit} refreshPassengerScreen={refreshPassengerScreen}/>
       ))}</>) : (
         <>{data.map((item, index) => (
-              <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails}/>
+              <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails}  refreshPassengerScreen={refreshPassengerScreen}/>
         ))}</>)}
     </View>
   );

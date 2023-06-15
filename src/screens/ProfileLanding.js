@@ -32,6 +32,7 @@ const ProfileLanding = ({ navigation }) => {
   const editReg = async () => {
     console.log("We are checking")
     try {
+      console.log('Debug');
       const response = await fetch(NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`, {
         method: "GET",
         headers: {
@@ -44,6 +45,7 @@ const ProfileLanding = ({ navigation }) => {
       console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
+      console.log('Debug');
       navigation.navigate('DriverRegistration', {driver: rdata.driver});
     } catch(error) {
       console.log("Could not edit record");
@@ -53,6 +55,7 @@ const ProfileLanding = ({ navigation }) => {
 
   const deleteReg = async () => {
     try {
+      console.log('Debug');
       const response = await fetch(NGROK_TUNNEL + `/deleteDriver?driverId=${context.user._id}`, {
         method: "DELETE",
         headers: {
@@ -62,10 +65,12 @@ const ProfileLanding = ({ navigation }) => {
       console.log(response.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
       if (response.ok) {
         console.log("Driver Deleted");
         context.updateUser({ isDriver: false});
         try {
+          console.log('Debug');
           const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
             method: "PUT",
             headers: {
@@ -79,6 +84,7 @@ const ProfileLanding = ({ navigation }) => {
           console.log('Debug');
           const rdata = await response2.json();
           console.log(rdata);
+          console.log('Debug');
         } catch(error) {
           console.error(error);
         }

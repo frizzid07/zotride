@@ -18,6 +18,7 @@ const SuccessPayment = ({ navigation, route }) => {
     context.user.activePassengerRides = [...context.user.activePassengerRides, ride._id];
     console.log(`New Context: ${JSON.stringify(context)}`);
   }, []);
+  
   return (
     <View style = {styles.container}>
       <Image style={styles.bg} source={background}></Image>

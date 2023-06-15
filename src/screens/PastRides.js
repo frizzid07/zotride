@@ -27,6 +27,7 @@ import {
       try {
         console.log('Debug');
         console.log('Debug');
+        console.log('Debug');
         const response = await fetch(
           NGROK_TUNNEL + `/getRides?userId=${context.user._id}`,
           {
@@ -34,6 +35,7 @@ import {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
@@ -56,6 +58,7 @@ import {
       try {
         console.log('Debug');
         console.log('Debug');
+        console.log('Debug');
         const response = await fetch(
           NGROK_TUNNEL + `/getDriverRides?driverId=${context.user._id}`,
           {
@@ -63,6 +66,7 @@ import {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         if (response.ok) {

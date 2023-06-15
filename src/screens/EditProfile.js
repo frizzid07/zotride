@@ -72,6 +72,7 @@ const EditProfile = ({ navigation, route }) => {
     }
     else {
         console.log('Editing Details');
+        console.log('Debug');
         try {
         console.log(fillData._id)
           const response = await fetch(NGROK_TUNNEL+ `/editProfile?id=${fillData._id}`, {
