@@ -43,6 +43,7 @@ const Rides = ({ navigation, route }) => {
         );
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
           const driver = await response.json();
           console.log(driver);
@@ -76,6 +77,7 @@ const Rides = ({ navigation, route }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);

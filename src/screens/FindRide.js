@@ -23,7 +23,7 @@ import logo from "../../assets/logo.png";
 import { submit } from "../common/button";
 import { input } from "../common/input";
 
-import { NGROK_TUNNEL } from "@env";
+import { NGROK_TUNNEL, DISTANCE_MATRIX_KEY } from "@env";
 import { AuthContext } from "../../server/context/authContext";
 
 const FindRide = ({ navigation }) => {
@@ -36,6 +36,8 @@ const FindRide = ({ navigation }) => {
   const [startLocDesc, setStartLocDesc] = useState("Not Selected");
   const [endLocDesc, setEndLocDesc] = useState("Not Selected");
   const [startTime, setStartTime] = useState(new Date());
+
+  const [locData, setLocData] = useState(null);
 
   const [data, setData] = useState({
     startLocation: {
@@ -51,6 +53,70 @@ const FindRide = ({ navigation }) => {
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
   const { DateTime } = require('luxon');
+
+  const getInfo = async (data) => {
+    try {
+      const response = await fetch(`https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${data.startLocation.latitude},${data.startLocation.longitude}&destinations=${data.endLocation.latitude},${data.endLocation.longitude}&key=${DISTANCE_MATRIX_KEY}`, {
+        method: "GET"
+      });
+      console.log(response.ok);
+      console.log('Debug');
+      if(response.ok) {
+        const rdata = await response.json();
+        console.log(rdata);
+        console.log('Debug');
+        setLocData(rdata);
+      }
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  function metersToMiles(meters) {
+    const miles = meters * 0.000621371;
+    return miles.toFixed(1);
+  }
+
+  function calcFare(total) {
+    const rate = 2;
+    const extra = 10;
+    const fix = 5;
+    const above = 25;
+    const next = 25;
+    const min = 1;
+    const cons = 1.5;
+
+    total = total / 1000;
+    if (10>total){
+    var cost = fix;
+    }
+    else if (10<total && 20>total)
+      {
+      var cost = (total * rate) + extra;
+      }
+      else if (20<total && 30>total)
+      {
+          var cost = (total * rate) + next;
+      }
+      else if (30<total && 50>total)
+      {
+          var cost = ((total - 30) * cons) + above;
+      }
+      else
+      {
+          var cost = ((total - 50) * min) + 50;
+      }
+
+    var fare = cost * 0.11 + cost;
+    return fare.toFixed(2);
+  }
+
+  useEffect(() => {
+    if (data.startLocation.description && data.endLocation.description) {
+      console.log('Start and end locations are populated');
+      getInfo(data);
+    }
+  }, [data.startLocation.description, data.endLocation.description]);
 
   function startLocVisibleHandler() {
     setStartLocVisible(!isStartLocVisible);
@@ -134,8 +200,10 @@ const FindRide = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
+      console.log('Debug');
       if (response.ok) {
         console.log("Ride found Successfully");
         navigation.navigate("Rides", { rides: rdata });
@@ -233,6 +301,17 @@ const FindRide = ({ navigation }) => {
             onCancel={datePickerVisibleHandler}
           />
         </View>
+        {locData !== null && 
+          <View>
+            <Text style={[styles.text, { marginTop: 15, textAlign: "center"}]}>Trip Stats</Text>
+            <Text style={[styles.buttontext, {fontSize: 20, marginTop: 10}]}>
+            Journey: {metersToMiles(locData.rows[0].elements[0].distance.value)} miles{"\n"}
+            Duration: {locData.rows[0].elements[0].duration.text}{"\n"}
+            Estimated Cab Fare: ${calcFare(locData.rows[0].elements[0].distance.value)}
+            </Text>
+          </View>
+        }
+        <Text style={[styles.text, { marginTop: 15 }]}>Other Details</Text>
         <TextInput
           style={[input, { marginTop: 15 }]}
           placeholder="Ride Pickup Radius (in miles)"
@@ -319,41 +398,3 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
 });
-
-// const styles = StyleSheet.create({
-//     container: {
-//       width: "100%",
-//       height: "100%",
-//     },
-//     textContainer: {
-//       flex: 1,
-//       justifyContent: "center",
-//       alignItems: "center",
-//       height: "100%"
-//     },
-//     innerContainer: {
-//       display: "flex",
-//       flexDirection: "row",
-//       alignSelf: "flex-start",
-//     },
-//     bg: {
-//       position: "absolute",
-//       top: 0,
-//       width: "100%",
-//       height: "100%",
-//       zIndex: -1,
-//     },
-//     text: {
-//       fontSize: 25,
-//       color: "#000",
-//     },
-//     logo: {
-//       width: "20%",
-//       height: undefined,
-//       aspectRatio: 1,
-//       borderWidth: 1,
-//       borderColor: "#ffde59",
-//       borderRadius: 5,
-//       marginBottom: 10,
-//     },
-//   });

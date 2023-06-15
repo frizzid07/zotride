@@ -57,6 +57,7 @@ const Register = ({ navigation }) => {
           console.log(response.ok);
           console.log('Debug');
           console.log('Debug');
+          console.log('Debug');
           const data = await response.json();
           console.log('In Register');
           console.log(data);

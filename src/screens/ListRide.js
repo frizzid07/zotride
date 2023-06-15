@@ -66,9 +66,11 @@ const ListRide = ({ navigation, route }) => {
         method: "GET"
       });
       console.log(response.ok);
+      console.log('Debug');
       if(response.ok) {
         const rdata = await response.json();
         console.log(rdata);
+        console.log('Debug');
         setLocData(rdata);
       }
     } catch(error) {
@@ -266,6 +268,7 @@ const ListRide = ({ navigation, route }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
           console.log("Ride Updated");
           alert("Trip Updated");
@@ -287,6 +290,7 @@ const ListRide = ({ navigation, route }) => {
           body: JSON.stringify({ data: data }),
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
