@@ -138,6 +138,10 @@ const Landing = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    checkActiveRideDriver();
+  }, [isDriver]);
+
+  useEffect(() => {
     const refreshListener = navigation.addListener('focus', () => {
       checkActiveRideDriver();
     });
