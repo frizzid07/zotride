@@ -24,7 +24,7 @@ import logo from "../../assets/logo.png";
 import { submit } from "../common/button";
 import { input } from "../common/input";
 
-import { NGROK_TUNNEL } from "@env";
+import { NGROK_TUNNEL, DISTANCE_MATRIX_KEY } from "@env";
 import { AuthContext } from "../../server/context/authContext";
 
 const FindRide = ({ navigation }) => {
@@ -37,6 +37,8 @@ const FindRide = ({ navigation }) => {
   const [startLocDesc, setStartLocDesc] = useState("Not Selected");
   const [endLocDesc, setEndLocDesc] = useState("Not Selected");
   const [startTime, setStartTime] = useState(new Date());
+
+  const [locData, setLocData] = useState(null);
 
   const [data, setData] = useState({
     startLocation: {
@@ -52,10 +54,6 @@ const FindRide = ({ navigation }) => {
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
   const { DateTime } = require('luxon');
-
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
 
   function startLocVisibleHandler() {
     setStartLocVisible(!isStartLocVisible);
@@ -142,9 +140,9 @@ const FindRide = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
-      console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
+      console.log('Debug');
       if (response.ok) {
         console.log("Ride found Successfully");
         navigation.navigate("Rides", { rides: rdata, initialParams: {"startLocation":data.startLocation, "endLocation":data.endLocation,"startTime":data.startTime}});
@@ -242,6 +240,20 @@ const FindRide = ({ navigation }) => {
             onCancel={datePickerVisibleHandler}
           />
         </View>
+        <TextInput
+          style={[input, { marginTop: 15 }]}
+          placeholder="Ride Pickup Radius (in miles)"
+          onPressIn={clearErrMsg}
+          onChangeText={(text) => setData({ ...data, startRadius: text })}
+          keyboardType="number-pad"
+        />
+        <TextInput
+          style={input}
+          placeholder="Ride Destination Radius (in miles)"
+          onPressIn={clearErrMsg}
+          onChangeText={(text) => setData({ ...data, endRadius: text })}
+          keyboardType="number-pad"
+        />
 
         <Pressable style={[submit, { marginTop: 15 }]}>
           <Text style={styles.text} onPress={findRide}>
@@ -310,41 +322,3 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
 });
-
-// const styles = StyleSheet.create({
-//     container: {
-//       width: "100%",
-//       height: "100%",
-//     },
-//     textContainer: {
-//       flex: 1,
-//       justifyContent: "center",
-//       alignItems: "center",
-//       height: "100%"
-//     },
-//     innerContainer: {
-//       display: "flex",
-//       flexDirection: "row",
-//       alignSelf: "flex-start",
-//     },
-//     bg: {
-//       position: "absolute",
-//       top: 0,
-//       width: "100%",
-//       height: "100%",
-//       zIndex: -1,
-//     },
-//     text: {
-//       fontSize: 25,
-//       color: "#000",
-//     },
-//     logo: {
-//       width: "20%",
-//       height: undefined,
-//       aspectRatio: 1,
-//       borderWidth: 1,
-//       borderColor: "#ffde59",
-//       borderRadius: 5,
-//       marginBottom: 10,
-//     },
-//   });

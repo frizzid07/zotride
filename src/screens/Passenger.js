@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect} from 'react'
 import Accordion from "../common/accordion";
 import { AuthContext } from "../../server/context/authContext";
 import { NGROK_TUNNEL } from "@env";
@@ -15,6 +15,11 @@ const Passenger = ({ navigation }) => {
     const context = useContext(AuthContext);
     const [hasActivePass, setHasActivePass] = useState(false);
     const [activeRidesPass, setActiveRidesPass] = useState({});
+    const [refresh, setRefresh] = useState(false);
+
+    const refreshPassengerScreen = () => {
+        setRefresh(prevRefresh => !prevRefresh);
+    };
 
     async function checkActiveRidePass() {
         console.log("Checking if Passenger has an Active ride");
@@ -43,12 +48,14 @@ const Passenger = ({ navigation }) => {
                 console.log("Some backend error");
                 console.log(err);
             }
+        } else {
+            setHasActivePass(false);
         }
     }
 
     useEffect(() => {
         checkActiveRidePass();
-    }, []);
+    }, [refresh]);
     
     useEffect(() => {
         const refreshListener = navigation.addListener('focus', () => {
@@ -69,7 +76,7 @@ const Passenger = ({ navigation }) => {
                     {hasActivePass &&
                         <View style={{ width: '100%', marginTop: '4%' }}>
                             <Text style={[styles.text, {marginTop: 20, marginLeft: 10, fontSize: 20}]}>Your Active Rides</Text>
-                            <Accordion data={activeRidesPass} edit={true}/>
+                            <Accordion data={activeRidesPass} edit={true} refreshPassengerScreen={refreshPassengerScreen}/>
                         </View>}
                     <Pressable style={submit} onPress={() => navigation.navigate('Landing')}>
                         <Text style={styles.text}>Back to Home</Text>

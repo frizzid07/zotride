@@ -120,6 +120,7 @@ const DriverRegistration = ({ navigation, route }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
           console.log("Driver Updated");
           alert("Driver Record Updated");
@@ -142,8 +143,10 @@ const DriverRegistration = ({ navigation, route }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
+        console.log('Debug');
         if (rdata.success) {
           console.log("Driver Registered Successfully");
           alert("Driver Registered Successfully");
@@ -158,8 +161,10 @@ const DriverRegistration = ({ navigation, route }) => {
             });
             console.log(response2.ok);
             console.log('Debug');
+            console.log('Debug');
             const rdata2 = await response2.json();
             console.log(rdata2);
+            console.log('Debug');
           } catch(error) {
             console.error(error);
           }

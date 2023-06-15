@@ -36,8 +36,10 @@ const Driver = ({ navigation }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
+        console.log('Debug');
         setActiveRide(rdata.ride);
         setHasActive(true);
     } catch(err) {
@@ -45,6 +47,7 @@ const Driver = ({ navigation }) => {
     }
   } else {
       try {
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
           method: "GET",
           headers: {
@@ -53,9 +56,11 @@ const Driver = ({ navigation }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         const result = await response.json();
         console.log(result);
         console.log('In Active Ride');
+        console.log('Debug');
 
         if (result.ride) {
           console.log("Current Driver has Active Ride");
@@ -94,8 +99,10 @@ const Driver = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
       const result = await response.json();
       console.log(result);
+      console.log('Debug');
 
       if (result.ride) {
         console.log(`New Data ${JSON.stringify(result.ride)}`);
@@ -112,6 +119,7 @@ const Driver = ({ navigation }) => {
         method: "GET"
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       if(response.ok) {
         alert("Trip Ended Successfully!");
@@ -135,8 +143,10 @@ const Driver = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
       const result = await response.json();
       console.log(result);
+      console.log('Debug');
 
       if (result.deleted) {
         console.log("Ride Deleted");
@@ -161,8 +171,10 @@ const Driver = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
+      console.log('Debug');
       navigation.navigate('DriverRegistration', {driver: rdata.driver});
     } catch(error) {
       console.log("Could not edit record");
@@ -179,6 +191,7 @@ const Driver = ({ navigation }) => {
         }
       });
       console.log(response.ok);
+      console.log('Debug');
       if (response.ok) {
         console.log("Driver Deleted");
         context.updateUser({ isDriver: false});
@@ -192,8 +205,10 @@ const Driver = ({ navigation }) => {
           });
           console.log(response2.ok);
           console.log('Debug');
+          console.log('Debug');
           const rdata = await response2.json();
           console.log(rdata);
+          console.log('Debug');
         } catch(error) {
           console.error(error);
         }

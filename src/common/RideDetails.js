@@ -7,14 +7,16 @@ import {
 
 import { submit } from "./button";
 import { NGROK_TUNNEL } from "@env";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../server/context/authContext";
-import { useNavigation } from '@react-navigation/native';
 
-
-  const RideDetails = ({rideDetails, driverDetails, passengerDetails, edit}) => {
+  const RideDetails = ({rideDetails, driverDetails, passengerDetails, edit, refreshPassengerScreen}) => {
     const context = useContext(AuthContext);
-    const navigation = useNavigation();
+    const [refreshState, setRefreshState] = useState(false);
+
+    useEffect(() => {
+      refreshPassengerScreen();
+    }, [refreshState]);
 
     async function endTrip() {
       try {
@@ -26,6 +28,8 @@ import { useNavigation } from '@react-navigation/native';
           let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
           context.user.activePassengerRides = activeRides;
           context.user.past_rides = [...context.user.past_rides, rideDetails._id];
+          console.log(`New Context ${JSON.stringify(context)}`);
+          setRefreshState(prevRefresh => !prevRefresh);
           alert("Trip ended successfully!");
           navigation.pop();
         }
@@ -46,6 +50,9 @@ import { useNavigation } from '@react-navigation/native';
             context.user.past_rides = [...context.user.past_rides, rideDetails._id];
             alert("Trip cancelled succesfully");
             navigation.pop();
+            console.log(`New Context ${JSON.stringify(context)}`);
+            setRefreshState(prevRefresh => !prevRefresh);
+            alert("Trip cancelled successfully!");
           }
         } catch(error) {
         console.error(error);

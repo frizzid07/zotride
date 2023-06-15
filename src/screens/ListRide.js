@@ -23,7 +23,7 @@ import logo from "../../assets/logo.png";
 import { submit } from "../common/button";
 import { input } from "../common/input";
 
-import { NGROK_TUNNEL } from "@env";
+import { NGROK_TUNNEL, DISTANCE_MATRIX_KEY } from "@env";
 import { AuthContext } from "../../server/context/authContext";
 
 const ListRide = ({ navigation, route }) => {
@@ -38,6 +38,8 @@ const ListRide = ({ navigation, route }) => {
   const [startLocDesc, setStartLocDesc] = useState("Not Selected");
   const [endLocDesc, setEndLocDesc] = useState("Not Selected");
   const [startTime, setStartTime] = useState(new Date());
+
+  const [locData, setLocData] = useState(null);
 
   const [fillData, setFillData] = useState(route?.params?.ride);
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
@@ -57,6 +59,70 @@ const ListRide = ({ navigation, route }) => {
     rideCost: "",
     capacity: "",
   });
+
+  const getInfo = async (data) => {
+    try {
+      const response = await fetch(`https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${data.startLocation.latitude},${data.startLocation.longitude}&destinations=${data.endLocation.latitude},${data.endLocation.longitude}&key=${DISTANCE_MATRIX_KEY}`, {
+        method: "GET"
+      });
+      console.log(response.ok);
+      console.log('Debug');
+      if(response.ok) {
+        const rdata = await response.json();
+        console.log(rdata);
+        console.log('Debug');
+        setLocData(rdata);
+      }
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  function metersToMiles(meters) {
+    const miles = meters * 0.000621371;
+    return miles.toFixed(1);
+  }
+
+  function calcFare(total) {
+    const rate = 2;
+    const extra = 10;
+    const fix = 5;
+    const above = 25;
+    const next = 25;
+    const min = 1;
+    const cons = 1.5;
+
+    total = total / 1000;
+    if (10>total){
+    var cost = fix;
+    }
+    else if (10<total && 20>total)
+      {
+      var cost = (total * rate) + extra;
+      }
+      else if (20<total && 30>total)
+      {
+          var cost = (total * rate) + next;
+      }
+      else if (30<total && 50>total)
+      {
+          var cost = ((total - 30) * cons) + above;
+      }
+      else
+      {
+          var cost = ((total - 50) * min) + 50;
+      }
+
+    var fare = cost * 0.11 + cost;
+    return fare.toFixed(2);
+  }
+
+  useEffect(() => {
+    if (data.startLocation.description && data.endLocation.description) {
+      console.log('Start and end locations are populated');
+      getInfo(data);
+    }
+  }, [data.startLocation.description, data.endLocation.description]);
 
   function fetchDesc(fillData) {
     setStartLocDesc(fillData.startLocation.description);
@@ -254,9 +320,9 @@ const ListRide = ({ navigation, route }) => {
         <TouchableOpacity>
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
-        <Text style={[styles.text, { marginBottom: 25 }]}>List a new Trip</Text>
+        <Text style={[styles.text, { marginBottom: 15 }]}>List a new Trip</Text>
         {errorMsg ? (
-          <Text style={[styles.text, { color: "red", marginTop: -5 }]}>
+          <Text style={[styles.text, { color: "red", marginTop: -2 }]}>
             {errorMsg}
           </Text>
         ) : null}
@@ -326,24 +392,34 @@ const ListRide = ({ navigation, route }) => {
             onCancel={datePickerVisibleHandler}
           />
         </View>
+        {locData !== null && 
+          <View>
+            <Text style={[styles.text, { marginTop: 15, textAlign: "center"}]}>Trip Stats</Text>
+            <Text style={[styles.buttontext, {fontSize: 20, marginTop: 10}]}>
+            Journey: {metersToMiles(locData.rows[0].elements[0].distance.value)} miles{"\n"}
+            Duration: {locData.rows[0].elements[0].duration.text}{"\n"}
+            Estimated Cab Fare: ${calcFare(locData.rows[0].elements[0].distance.value)}
+            </Text>
+          </View>
+        }
         <Text style={[styles.text, { marginTop: 15 }]}>Other Details</Text>
         <TextInput
-          style={input}
-          placeholder="Ride Cost (USD)"
+          style={[input, {marginTop: 10}]}
+          placeholder="Ride Cost (USD) per Seat"
           onPressIn={clearErrMsg}
           onChangeText={(text) => setData({ ...data, rideCost: text })}
           keyboardType="number-pad"
           value={data.rideCost.toString()}
         />
         <TextInput
-          style={input}
+          style={[input, {marginTop: 5}]}
           placeholder="Number of Passengers"
           onPressIn={clearErrMsg}
           onChangeText={(text) => setData({ ...data, capacity: text })}
           keyboardType="number-pad"
           value={data.capacity.toString()}
         />
-        <Pressable style={[submit, { marginTop: 50 }]}>
+        <Pressable style={[submit, { marginTop: 15 }]}>
           <Text style={styles.text} onPress={registerRide}>
             Register
           </Text>

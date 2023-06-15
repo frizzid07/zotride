@@ -42,10 +42,10 @@ import {
             );
             console.log(response.ok);
             console.log('Debug');
-            console.log('Debug');
             if (response.ok) {
               const driver = await response.json();
               console.log(driver);
+              console.log('Debug');
               setCar(driver?.driver?.vehicleInformation[0]?.vehicleCompany +
                   " " +
                   driver?.driver?.vehicleInformation[0]?.vehicleModel);
@@ -68,19 +68,21 @@ import {
             <Image style={styles.logo} source={logo} />
             </TouchableOpacity>
             
-            <Text style={[styles.text, {marginBottom: 15}]}>Hello {context.user.firstName}, your ride to</Text>
+            <Text style={[styles.text, {marginBottom: 10, fontSize: 18}]}>Receipt for Ride #{ride._id}</Text>
             
-            <Text style={[styles.text, {fontSize: 20, marginBottom: 15, marginTop: 5}]}>{ride.endLocation.description}</Text>
-            <Text style={[styles.text, {fontSize: 15, marginBottom: 10}]}>in</Text>
+            <Text style={[styles.text, {marginBottom: 10}]}>Hello {context.user.firstName}, your ride to</Text>
+            
+            <Text style={[styles.text, {fontSize: 20, marginBottom: 10, marginTop: 5}]}>{ride.endLocation.description}</Text>
+            <Text style={[styles.text, {fontSize: 15, marginBottom: 8}]}>in</Text>
             <Text style={styles.text}>{name}'s{'\n'}{car}</Text>
-            <Text style={[styles.text, {fontSize: 15, marginTop: 10}]}>has been booked for</Text>
+            <Text style={[styles.text, {fontSize: 15, marginTop: 8}]}>has been booked for</Text>
             
-            <Text style={[styles.text, {marginTop: 10}]}>{new Date(ride.startTime).toLocaleString('en-US', options)}</Text>
+            <Text style={[styles.text, {marginTop: 8}]}>{new Date(ride.startTime).toLocaleString('en-US', options)}</Text>
             
-            <Text style={[styles.text, {marginTop: 25, fontSize: 30}]}>Happy Journey!</Text>
+            <Text style={[styles.text, {marginTop: 15, fontSize: 30}]}>Happy Journey!</Text>
 
-            <Pressable style={[submit, {marginTop: '8%'}]} onPress={() => navigation.navigate('Landing')}>
-                <Text style={styles.text}>Back to Home</Text>
+            <Pressable style={[submit, {marginTop: 15}]} onPress={() => navigation.navigate('Landing')}>
+              <Text style={[styles.text, {fontSize: 20}]}>Back to Home</Text>
             </Pressable>
             
         </View>

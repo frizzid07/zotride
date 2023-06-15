@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import RideDetails from './RideDetails';
 
-const AccordionItem = ({ rideDetails, driverDetails, passengerDetails, edit }) => {
+const AccordionItem = ({ rideDetails, driverDetails, passengerDetails, edit, refreshPassengerScreen }) => {
   const [expanded, setExpanded] = useState(false);
   const from = rideDetails.startLocation.description.substring(0,12);
   const to = rideDetails.endLocation.description.substring(0,12);
@@ -23,17 +23,17 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails, edit }) =
         </TouchableOpacity>
       </View>
       {expanded && 
-      <RideDetails rideDetails={rideDetails} driverDetails={driverDetails} passengerDetails={passengerDetails} edit={edit}></RideDetails>}
+      <RideDetails rideDetails={rideDetails} driverDetails={driverDetails} passengerDetails={passengerDetails} edit={edit} refreshPassengerScreen={refreshPassengerScreen}></RideDetails>}
       </TouchableOpacity>
   );
 };
 
-const Accordion = ({ data, edit }) => {
+const Accordion = ({ data, edit, refreshPassengerScreen }) => {
   return (
     <View>
       {edit !== undefined ? (
       <>{data.map((item, index) => (
-            <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails} edit={edit} />
+            <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails} edit={edit} refreshPassengerScreen={refreshPassengerScreen}/>
       ))}</>) : (
         <>{data.map((item, index) => (
               <AccordionItem key={index} rideDetails={item.rideDetails} driverDetails={item.driverDetails} passengerDetails={item.passengerDetails}/>
