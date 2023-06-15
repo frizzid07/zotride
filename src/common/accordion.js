@@ -28,7 +28,7 @@ const AccordionItem = ({ rideDetails, driverDetails, passengerDetails, edit, ref
   );
 };
 
-const Accordion = ({ data, edit, navigation }) => {
+const Accordion = ({ data, edit, refreshPassengerScreen }) => {
   return (
     <View>
       {edit !== undefined ? (
