@@ -120,6 +120,19 @@ const Landing = ({ navigation }) => {
     }
   }
 
+  async function checkActiveRide() {
+    console.log("Checking if Passenger has an Active ride");
+    if(context.user.isDriver) {      
+      setIsDriver(true);
+    } else {
+      setIsDriver(false);
+    }
+  }
+
+  useEffect(() => {
+    checkActiveRide();
+  }, [context]);
+
   useEffect(() => {
     checkActiveRideDriver();
   }, []);
@@ -191,7 +204,7 @@ const Landing = ({ navigation }) => {
             </Pressable>
           </View>
         )}
-        {isDriver && !hasActive && context.user.activeDriverRide === null && (
+        {isDriver && context.user.activeDriverRide === null && (
           <View>
             <Text style={{ fontSize: 25, color: "#000", marginTop: 30, marginBottom: 15 }}>
               Start your journey with us
@@ -206,7 +219,7 @@ const Landing = ({ navigation }) => {
             </Pressable>
           </View>
         )}
-        {isDriver && hasActive && context.user.activeDriverRide !== null && (
+        {isDriver && context.user.activeDriverRide !== null && (
           <View style={{ width: "95%", marginTop: '4%' }}>
             <Text style={[styles.text, {fontSize: 20, marginLeft: '2%'}]}>Your Current Ride</Text>
             <SingleRide ride={activeRide}></SingleRide>

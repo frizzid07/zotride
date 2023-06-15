@@ -90,6 +90,19 @@ const ProfileLanding = ({ navigation }) => {
     }
   }
 
+  async function checkActiveRide() {
+    console.log("Checking if Passenger has an Active ride");
+    if(context.user.isDriver) {      
+      setIsDriver(true);
+    } else {
+      setIsDriver(false);
+    }
+  }
+
+  useEffect(() => {
+    checkActiveRide();
+  }, [context]);
+
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background}></Image>
