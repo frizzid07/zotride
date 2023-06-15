@@ -26,9 +26,9 @@ const Driver = ({ navigation }) => {
 
   async function checkActiveRideDriver() {
     console.log("Checking if Driver has an Active ride");
-    if(context.activeDriverRide) {
+    if(context.user.activeDriverRide) {
       try {
-        const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${context.activeDriverRide}`, {
+        const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${context.user.activeDriverRide}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -105,6 +105,7 @@ const Driver = ({ navigation }) => {
       console.log(err);
     }
   }
+
   async function endRide() {
     try {
       const response = await fetch(NGROK_TUNNEL + `/endRide?rideId=${activeRide._id}&userId=${context.user._id}`, {
@@ -149,7 +150,6 @@ const Driver = ({ navigation }) => {
   }
 
   const editReg = async () => {
-    console.log("We are checking")
     try {
       const response = await fetch(NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`, {
         method: "GET",
@@ -212,9 +212,9 @@ const Driver = ({ navigation }) => {
       <Image style={styles.bg} source={background}></Image>
       <View style={styles.textContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("Welcome")}>
-          <Image style={[styles.logo, {width: "25%"}]} source={logo} />
+          <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
-        <Text style={styles.text}>Welcome, {context.user.firstName}</Text>
+        <Text style={[styles.text, {marginTop: '-2%'}]}>Welcome, {context.user.firstName}</Text>
         {!hasActive && (
           <View style={{ width: "75%", marginTop: 25 }}>
             <Pressable
@@ -226,17 +226,17 @@ const Driver = ({ navigation }) => {
           </View>
         )}
         {hasActive && (
-          <View style={{ width: "100%", marginTop: 15 }}>
+          <View style={{ width: "100%", marginTop: 25 }}>
             <Text style={[styles.text, {fontSize: 20}]}>Your Current Ride</Text>
             <SingleRide ride={activeRide}></SingleRide>
-            <View style={{ width: "60%", marginTop: 15, alignSelf: 'center' }}>
-              <Pressable style={[submit, { backgroundColor: '#004aac' }]} onPress={editRide}>
+            <View style={{ width: "60%", marginTop: '1%', alignSelf: 'center' }}>
+              <Pressable style={[submit, { backgroundColor: 'rgba(0, 74, 172, 0.8)', padding: 0 }]} onPress={editRide}>
                 <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Modify Trip</Text>
               </Pressable>
-              <Pressable style={[submit, { backgroundColor: "#ebd25f", marginTop: -5 }]} onPress={endRide}>
+              <Pressable style={[submit, { backgroundColor: "rgba(235, 210, 95, 0.8)", marginTop: -5 }]} onPress={endRide}>
                 <Text style={[styles.text, { color: 'black', fontSize: 20 }]}>End Trip</Text>
               </Pressable>
-              <Pressable style={[submit, { backgroundColor: "#c21807", marginTop: -5 }]} onPress={cancelRide}>
+              <Pressable style={[submit, { backgroundColor: "rgba(194, 24, 7, 0.8)", marginTop: -5 }]} onPress={cancelRide}>
                 <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Cancel Trip</Text>
               </Pressable>
             </View>
@@ -244,13 +244,13 @@ const Driver = ({ navigation }) => {
         )}
         <View style={{ width: "60%", marginTop: 15 }}>
           <Pressable
-            style={[submit, { backgroundColor: '#004aac' }]}
+            style={[submit, { backgroundColor: 'rgba(0, 74, 172, 0.8)' }]}
             onPress={editReg}
           >
             <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Edit Registration</Text>
           </Pressable>
           <Pressable
-            style={[submit, { backgroundColor: "#c21807", marginTop: -5 }]}
+            style={[submit, { backgroundColor: "rgba(194, 24, 7, 0.8)", marginTop: -5 }]}
             onPress={deleteReg}
           >
             <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Delete Registration</Text>
@@ -291,12 +291,8 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   logo: {
-    width: "40%",
+    width: "70%",
     height: undefined,
-    aspectRatio: 1,
-    borderWidth: 2,
-    borderColor: "#ffde59",
-    borderRadius: 5,
-    marginBottom: 20,
+    aspectRatio: 2.5
   },
 });

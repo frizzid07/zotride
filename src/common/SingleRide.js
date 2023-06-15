@@ -2,17 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  Button,
-  Pressable,
-  Alert,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
 } from "react-native";
-// Images
-import background from "../../assets/background.jpg";
-import logo from "../../assets/logo.png";
 
 const SingleRide = (props) => {
   const ride = props.ride;
@@ -34,7 +24,7 @@ const SingleRide = (props) => {
         </Text>
       </View>
       <View style={styles.rideContainer}>
-        <Text style={styles.capacity}>
+        <Text style={styles.driver}>
           Starts at{"\n"}
           <Text style={{ fontWeight: "bold" }}>
             {new Date(ride.startTime).toLocaleString(undefined, {
@@ -47,8 +37,6 @@ const SingleRide = (props) => {
             })}
           </Text>
         </Text>
-      </View>
-      <View style={styles.rideContainer}>
         <Text style={styles.capacity}>
           Seats: <Text style={{ fontWeight: "bold" }}>{ride.capacity}</Text>
         </Text>
@@ -104,7 +92,7 @@ const styles = StyleSheet.create({
   driver: {
     fontSize: 15,
     marginLeft: 5,
-    flex: 2,
+    flex: 3,
   },
   capacity: {
     fontSize: 15,

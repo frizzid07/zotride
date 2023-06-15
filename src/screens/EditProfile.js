@@ -10,6 +10,7 @@ import {submit} from '../common/button';
 import {input} from '../common/input';
 
 import {NGROK_TUNNEL} from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const EditProfile = ({ navigation, route }) => {
   const context = useContext(AuthContext)
@@ -40,8 +41,25 @@ const EditProfile = ({ navigation, route }) => {
 
   },[]);
 
-
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const updateUser = async() => {
+    const userJSON = await AsyncStorage.getItem('user');
+    let user = JSON.parse(userJSON);
+
+    user.firstName = context.user.firstName;
+    user.lastName = context.user.lastName;
+    user.dayOfBirth = context.user.dayOfBirth;
+    user.monthOfBirth = context.user.monthOfBirth;
+    user.yearOfBirth = context.user.yearOfBirth;
+
+    // Save the updated user object to AsyncStorage
+    await AsyncStorage.setItem('user', JSON.stringify(user));
+  }
+
+  useEffect(() => {
+    updateUser();
+  }, [context.user]);
 
   async function EditData() {
     if (fdata.firstName == '' ||
@@ -65,6 +83,7 @@ const EditProfile = ({ navigation, route }) => {
           });
           console.log("Why Bro")
           console.log(response.ok);
+          console.log('Debug');
           if (response.ok) {
             console.log("User Updated");
             context.updateUser({firstName:fdata.firstName,
@@ -158,12 +177,8 @@ const styles = StyleSheet.create({
       color: '#000'
   },
   logo: {
-      width: '20%',
-      height: undefined,
-      aspectRatio: 1,
-      borderWidth: 1,
-      borderColor: '#ffde59',
-      borderRadius: 5,
-      marginBottom: 10
-  }
+    width: "70%",
+    height: undefined,
+    aspectRatio: 2.5
+  },
 });

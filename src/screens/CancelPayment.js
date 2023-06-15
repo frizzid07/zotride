@@ -51,12 +51,8 @@ const styles = StyleSheet.create({
         color: '#000'
     },
     logo: {
-        width: '20%',
-        height: undefined,
-        borderWidth: 2,
-        borderColor: '#ffde59',
-        borderRadius: 5,
-        aspectRatio: 1,
-        marginBottom: 40
-    }
+      width: "60%",
+      height: undefined,
+      aspectRatio: 2.5
+    },
 });

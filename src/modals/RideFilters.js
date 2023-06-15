@@ -41,9 +41,9 @@ function RideFilters(props) {
                                 <Slider
                                     minimumValue={0}
                                     maximumValue={15}
-                                    minimumTrackTintColor="tomato"
+                                    minimumTrackTintColor="#ebd25f"
                                     maximumTrackTintColor="#000"
-                                    thumbTintColor="tomato"
+                                    thumbTintColor="#ebd25f"
                                     onValueChange={(value) => setStartRadius(parseInt(value))}
                                     value={props.default.startRadius}
                                 />
@@ -58,9 +58,9 @@ function RideFilters(props) {
                                 <Slider
                                     minimumValue={0}
                                     maximumValue={15}
-                                    minimumTrackTintColor="tomato"
+                                    minimumTrackTintColor="#ebd25f"
                                     maximumTrackTintColor="#000"
-                                    thumbTintColor="tomato"
+                                    thumbTintColor="#ebd25f"
                                     onValueChange={(value) => setEndRadius(parseInt(value))}
                                     value={props.default.endRadius}
                                 />
@@ -75,9 +75,9 @@ function RideFilters(props) {
                                 <Slider
                                     minimumValue={0}
                                     maximumValue={15}
-                                    minimumTrackTintColor="tomato"
+                                    minimumTrackTintColor="#ebd25f"
                                     maximumTrackTintColor="#000"
-                                    thumbTintColor="tomato"
+                                    thumbTintColor="#ebd25f"
                                     onValueChange={(value) => setMaxCapacity(parseInt(value))}
                                     value={props.default.maxCapacity}
                                 />

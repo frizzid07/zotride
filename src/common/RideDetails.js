@@ -27,7 +27,7 @@ import { useNavigation } from '@react-navigation/native';
           context.user.activePassengerRides = activeRides;
           context.user.past_rides = [...context.user.past_rides, rideDetails._id];
           alert("Trip ended successfully!");
-          navigation.navigate("PastRides");
+          navigation.pop();
         }
       } catch(error) {
         console.error(error);
@@ -45,7 +45,7 @@ import { useNavigation } from '@react-navigation/native';
             context.user.activePassengerRides = activeRides;
             context.user.past_rides = [...context.user.past_rides, rideDetails._id];
             alert("Trip cancelled succesfully");
-            navigation.navigate("PastRides");
+            navigation.pop();
           }
         } catch(error) {
         console.error(error);
@@ -124,7 +124,7 @@ import { useNavigation } from '@react-navigation/native';
             <Pressable
                 style={[styles.capacity,
                   submit,
-                  { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "#004aac"},
+                  { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "rgba(0, 74, 172, 0.8)"},
                 ]}
                 onPress={endTrip}
               >
@@ -137,7 +137,7 @@ import { useNavigation } from '@react-navigation/native';
               <Pressable
                 style={[styles.capacity,
                   submit,
-                  { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "#c21807"},
+                  { fontSize: 15, minWidth: 65, flex: 1, backgroundColor: "rgba(194, 24, 7, 0.8)"},
                 ]}
                 onPress={cancelTrip}
               >

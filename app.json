@@ -4,12 +4,11 @@
     "slug": "zotride",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconlogo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#deeef0"
+      "image": "./assets/logo.png",
+      "backgroundColor": "#f8eff1"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,8 +18,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/iconlogo.png",
+        "backgroundColor": "#004AAD"
       },
       "bundleIdentifier": "com.zotride",
       "config":{
@@ -30,7 +29,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/iconlogo.png"
     }
   }
 }

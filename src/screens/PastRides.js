@@ -24,8 +24,9 @@ import {
     const [pastDrives, setPastDrives] = useState([]);
     
     const getRides = async () => {
-
       try {
+        console.log('Debug');
+        console.log('Debug');
         const response = await fetch(
           NGROK_TUNNEL + `/getRides?userId=${context.user._id}`,
           {
@@ -34,9 +35,13 @@ import {
         );
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
           const rides = await response.json();
           console.log(rides);
+          console.log('Debug');
+          console.log('Debug');
           setCurrentRides(rides.currentRides);
           setPastRides(rides.pastRides);
         } else {
@@ -49,6 +54,8 @@ import {
 
     const getDriverRides = async () => {
       try {
+        console.log('Debug');
+        console.log('Debug');
         const response = await fetch(
           NGROK_TUNNEL + `/getDriverRides?driverId=${context.user._id}`,
           {
@@ -56,10 +63,16 @@ import {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
+          console.log('Debug');
           console.log('Debug');
           const rides = await response.json();
           console.log(rides);
+          console.log('Debug');
+          console.log('Debug');
           setCurrentDrives(rides.currentRidesList);
           setPastDrives(rides.pastRidesList);
         } else {
@@ -93,49 +106,53 @@ import {
       <View style = {styles.container}>
         <Image style={styles.bg} source={background}></Image>
         <ScrollView>
-            <Text style={[styles.text, {textAlign: "center", fontSize: 32}]}>Current/Past Rides</Text>
-            <Text style={[styles.text, {marginTop: 20, marginLeft: 10}]}>As a Passenger</Text>
-            <Text style={[styles.text, {marginTop: 20, marginLeft: 10, fontSize: 18}]}>Current</Text>
-            {currentRides.length === 0 ? (
-              <Text
-                style={[styles.text, { fontSize: 25, margin: 20, color: "gray", marginTop: 20 }]}
-              >
-                No available rides
-              </Text>
-            ):(
-              <Accordion data={currentRides} />
-            )}
-            <Text style={[styles.text, {marginTop: 20, marginLeft: 10, fontSize: 18}]}>Past</Text>
-            {pastRides.length === 0 ? (
-              <Text
-                style={[styles.text, { fontSize: 25, margin: 20, color: "gray", marginTop: 20 }]}
-              >
-                No available rides
-              </Text>
-            ):(
-              <Accordion data={pastRides} />
-            )}
-            <Text style={[styles.text, {marginTop: 20, marginLeft: 10}]}>As a Driver</Text>
-            <Text style={[styles.text, {marginTop: 20, marginLeft: 10, fontSize: 18}]}>Current</Text>
-            {currentDrives.length === 0 ? (
-              <Text
-                style={[styles.text, { fontSize: 25, margin: 20, color: "gray", marginTop: 20 }]}
-              >
-                No available rides
-              </Text>
-            ):(
-              <Accordion data={currentDrives} />
-            )}
-            <Text style={[styles.text, {marginTop: 20, marginLeft: 10, fontSize: 18}]}>Past</Text>
-            {pastDrives.length === 0 ? (
-              <Text
-                style={[styles.text, { fontSize: 25, margin: 20, color: "gray", marginTop: 20 }]}
-              >
-                No available rides
-              </Text>
-            ):(
-              <Accordion data={pastDrives} />
-            )}
+            <Text style={[styles.text, {textAlign: "center", fontSize: 32}]}>Your Rides</Text>
+            <Text style={[styles.text, {marginTop: '4%', marginLeft: '2%'}]}>As a Passenger</Text>
+            <View style={[styles.boundingBox, {marginTop: '2%', marginLeft: '2%', marginRight: '2%'}]}>
+              <Text style={[styles.text, {marginTop: '2%', marginLeft: '2%', fontSize: 18}]}>Current</Text>
+              {currentRides.length === 0 ? (
+                <Text
+                  style={[styles.text, { fontSize: 25, margin: '4%', color: "gray", marginTop: '4%' }]}
+                >
+                  No available rides
+                </Text>
+              ):(
+                <Accordion data={currentRides} />
+              )}
+              <Text style={[styles.text, {marginTop: 20, marginLeft: 10, fontSize: 18}]}>Past</Text>
+              {pastRides.length === 0 ? (
+                <Text
+                  style={[styles.text, { fontSize: 25, margin: '4%', color: "gray", marginTop: '4%' }]}
+                >
+                  No available rides
+                </Text>
+              ):(
+                <Accordion data={pastRides} />
+              )}
+            </View>
+            <Text style={[styles.text, {marginTop: '4%', marginLeft: '2%'}]}>As a Driver</Text>
+            <View style={[styles.boundingBox, {marginTop: '2%', marginLeft: '2%', marginRight: '2%'}]}>
+              <Text style={[styles.text, {marginTop: '2%', marginLeft: '2%', fontSize: 18}]}>Current</Text>
+              {currentDrives.length === 0 ? (
+                <Text
+                  style={[styles.text, { fontSize: 25, margin: '4%', color: "gray", marginTop: '4%' }]}
+                >
+                  No available rides
+                </Text>
+              ):(
+                <Accordion data={currentDrives} />
+              )}
+              <Text style={[styles.text, {marginTop: '2%', marginLeft: '2%', fontSize: 18}]}>Past</Text>
+              {pastDrives.length === 0 ? (
+                <Text
+                  style={[styles.text, { fontSize: 25, margin: '4%', color: "gray", marginTop: '4%' }]}
+                >
+                  No available rides
+                </Text>
+              ):(
+                <Accordion data={pastDrives} />
+              )}
+            </View>
         </ScrollView>
       </View>
     );
@@ -157,6 +174,13 @@ import {
     text: {
       fontSize: 25,
       color: "#000",
-      marginTop: "15%"
+      marginTop: "12%"
+    },
+    boundingBox: {
+      padding: 10,
+      borderWidth: 2,
+      borderColor: 'rgba(235, 210, 95, 0.2)',
+      borderRadius: 5,
+      backgroundColor: 'rgba(0, 74, 172, 0.2)'
     }
   });

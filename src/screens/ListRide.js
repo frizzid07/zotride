@@ -202,6 +202,7 @@ const ListRide = ({ navigation, route }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
           console.log("Ride Updated");
           alert("Trip Updated");
@@ -223,6 +224,7 @@ const ListRide = ({ navigation, route }) => {
           body: JSON.stringify({ data: data }),
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
@@ -385,13 +387,9 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "15%",
+    width: "50%",
     height: undefined,
-    aspectRatio: 1,
-    borderWidth: 1,
-    borderColor: "#ffde59",
-    borderRadius: 5,
-    marginBottom: 10,
+    aspectRatio: 2.5
   },
   locButton: {
     backgroundColor: "#fff",

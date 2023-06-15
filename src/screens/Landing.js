@@ -5,6 +5,7 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
+  LogBox
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { NGROK_TUNNEL } from "@env";
@@ -17,88 +18,140 @@ import logo from "../../assets/logo.png";
 import { submit } from "../common/button";
 
 import { AuthContext } from "../../server/context/authContext";
+import SingleRide from "../common/SingleRide";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { setDriver } from "mongoose";
 
 const Landing = ({ navigation }) => {
   const context = useContext(AuthContext);
   const [name, setName] = useState();
   const [isDriver, setIsDriver] = useState(false);
+  const [hasActive, setHasActive] = useState(false);
+  const [activeRide, setActiveRide] = useState({});
+  const [hasActivePass, setHasActivePass] = useState(false);
+
+  LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+  ]);
+
+  const getUser = async () => {
+    console.log("In Landing => Getting The User Data");
+    let userVal = await AsyncStorage.getItem("user");
+    if (userVal) {
+      console.log("Got user");
+      userVal = JSON.parse(userVal);
+      setName(userVal.firstName);
+      console.log(userVal.isDriver);
+      if (userVal.isDriver === true) {
+        setIsDriver(true);
+      } else {
+        console.log("User is not a driver");
+      }
+    } else {
+      console.log("Didn't get user");
+    }
+  };
 
   useEffect(() => {
-    const getUser = async () => {
-      console.log("In Landing => cGetting The User Data");
-      let userVal = await AsyncStorage.getItem("user");
-      if (userVal) {
-        console.log("Got user");
-        userVal = JSON.parse(userVal);
-        setName(userVal.firstName);
-        console.log(userVal.isDriver);
-        if (userVal.isDriver === true) {
-          setIsDriver(true);
-        } else {
-          console.log("User is not a driver");
-        }
-      } else {
-        console.log("Didn't get user");
-      }
-    };
     getUser();
   }, []);
 
-  const isRegisteredDriver = async () => {
-    console.log("Checking Driver");
-    try {
-      const response = await fetch(
-        NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`,
-        {
-          method: "GET",
-        }
-      );
-      const rdata = await response.json();
-      console.log(rdata);
-      console.log(response.ok);
-      console.log("In Landing");
-      if (rdata.driver !== null) {
-        console.log("Driver Record found");
-        return true;
-      } else {
-        try {
-          const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ data: { userId: context.user._id } }),
-          });
-          console.log(response2.ok);
-          console.log('Debug');
-          const rdata2 = await response2.json();
-          console.log(rdata2);
-        } catch(error) {
-          console.error(error);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return false;
-  };
+  useEffect(() => {
+    getUser();
+  }, [context]);
 
-  const driverRole = async () => {
-    //Checking if The User is a registered Driver
-    console.log("Drive Role Function Called");
-    if (context.user.isDriver) {
-      console.log('Debug');
-      console.log('Debug');
-      const checkDriver = await isRegisteredDriver();
-      console.log(checkDriver);
-      if (checkDriver) navigation.navigate("Driver");
-      else navigation.navigate("DriverRegistration");
-    } else {
-      navigation.navigate("DriverRegistration");
+  useEffect(() => {
+    const refreshListener = navigation.addListener('focus', () => {
+      getUser();
+    });
+
+    return refreshListener;
+  }, [navigation]);
+
+  async function checkActiveRideDriver() {
+    console.log("Checking if Driver has an Active ride");
+    if(context.user.activeDriverRide !== null) {
+      try {
+        console.log('Debug');
+        const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${context.user.activeDriverRide}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        const rdata = await response.json();
+        console.log(rdata);
+        setActiveRide(rdata.ride);
+        setHasActive(true);
+    } catch(err) {
+      console.log(err);
     }
-  };
+  } else {
+      try {
+        console.log('Debug');
+        console.log('In here');
+        const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        const result = await response.json();
+        console.log(result);
+        console.log('In Active Ride');
+
+        if (result.ride) {
+          console.log("Current Driver has Active Ride");
+          setActiveRide(result.ride);
+          setHasActive(true);
+        } else {
+          console.log("Current Driver has no Active Ride");
+          setHasActive(false);
+        }
+      } catch (err) {
+        console.log("Some backend error");
+        console.log(err);
+      }
+    }
+  }
+
+  useEffect(() => {
+    checkActiveRideDriver();
+  }, []);
+
+  useEffect(() => {
+    const refreshListener = navigation.addListener('focus', () => {
+      checkActiveRideDriver();
+    });
+
+    return refreshListener;
+  }, [navigation]);
+
+  async function checkActiveRidePass() {
+    console.log("Checking if Passenger has an Active ride");
+    if(context.user.activePassengerRides.length !== 0) {      
+      setHasActivePass(true);
+    } else {
+      setHasActivePass(false);
+    }
+  }
+
+  useEffect(() => {
+    checkActiveRidePass();
+  }, [context]);
+
+  useEffect(() => {
+    const refreshListener = navigation.addListener('focus', () => {
+      checkActiveRidePass();
+    });
+
+    return refreshListener;
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -107,20 +160,22 @@ const Landing = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
           <Image style={styles.logo} source={logo} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 25, color: "#000", marginBottom: 30 }}>
+        <Text style={{ fontSize: 25, color: "#000", marginBottom: '3%' }}>
           Welcome to ZotRide, {name}
         </Text>
-        {/* <Text style={{ fontSize: 25, color: "#000", marginBottom: 20 }}>
-          Choose a Role
-        </Text> */}
         <Pressable
           style={submit}
           onPress={() => {
             navigation.navigate("FindRide");
           }}
         >
-          <Text style={styles.text}>Find a Ride</Text>
+          <Text style={styles.text}>Find a new Ride</Text>
         </Pressable>
+        {hasActivePass && context.user.activePassengerRides.length !== 0 && (
+          <Pressable style={[submit, {marginTop: 0}]} onPress={() => navigation.navigate('Passenger')}>
+            <Text style={styles.text}>View Active Ride(s)</Text>
+          </Pressable>
+        )}
         {!isDriver && (
           <View>
             <Text style={{ fontSize: 25, color: "#000", marginTop: 30 }}>
@@ -134,6 +189,27 @@ const Landing = ({ navigation }) => {
             >
               <Text style={styles.text}>Register</Text>
             </Pressable>
+          </View>
+        )}
+        {isDriver && !hasActive && context.user.activeDriverRide === null && (
+          <View>
+            <Text style={{ fontSize: 25, color: "#000", marginTop: 30, marginBottom: 15 }}>
+              Start your journey with us
+            </Text>
+            <Pressable
+              style={submit}
+              onPress={() => {
+                navigation.navigate("ListRide");
+              }}
+            >
+              <Text style={styles.text}>List your Ride</Text>
+            </Pressable>
+          </View>
+        )}
+        {isDriver && hasActive && context.user.activeDriverRide !== null && (
+          <View style={{ width: "95%", marginTop: '4%' }}>
+            <Text style={[styles.text, {fontSize: 20, marginLeft: '2%'}]}>Your Current Ride</Text>
+            <SingleRide ride={activeRide}></SingleRide>
           </View>
         )}
       </View>
@@ -166,12 +242,8 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "40%",
+    width: "60%",
     height: undefined,
-    aspectRatio: 1,
-    borderWidth: 2,
-    borderColor: "#ffde59",
-    borderRadius: 5,
-    marginBottom: 40,
+    aspectRatio: 2.5
   },
 });

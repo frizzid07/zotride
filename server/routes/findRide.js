@@ -155,28 +155,32 @@ router.get("/getRides", async (req, res) => {
       for(let i=0;i<user.activePassengerRides.length;i++){
         let ride = await Ride.findOne({ _id: user.activePassengerRides[i], isActive: true}).exec();
         console.log(`Ride is ${ride}`);
-        let driver = await User.findOne({ _id: ride.driverId}).exec();
-        console.log(`Driver is ${driver}`);
-        let driverDetails = {
-          "firstName":driver.firstName,
-          "lastName":driver.lastName,
-          "mobile":driver.mobileNumber
+        if(ride) {
+          let driver = await User.findOne({ _id: ride.driverId}).exec();
+          console.log(`Driver is ${driver}`);
+          let driverDetails = {
+            "firstName":driver.firstName,
+            "lastName":driver.lastName,
+            "mobile":driver.mobileNumber
+          }
+          currentRides.push({"rideDetails":ride,"driverDetails":driverDetails});
         }
-        currentRides.push({"rideDetails":ride,"driverDetails":driverDetails});
       }
     }
     if(user.past_rides) {
       for(let i=0;i<user.past_rides.length;i++){
         let ride = await Ride.findOne({ _id: user.past_rides[i]}).exec();
         console.log(`Ride is ${ride}`);
-        let driver = await User.findOne({ _id: ride.driverId}).exec();
-        console.log(`Driver is ${driver}`);
-        let driverDetails = {
-          "firstName":driver.firstName,
-          "lastName":driver.lastName,
-          "mobile":driver.mobileNumber
+        if(ride) {
+          let driver = await User.findOne({ _id: ride.driverId}).exec();
+          console.log(`Driver is ${driver}`);
+          let driverDetails = {
+            "firstName":driver.firstName,
+            "lastName":driver.lastName,
+            "mobile":driver.mobileNumber
+          }
+          pastRides.push({"rideDetails":ride,"driverDetails":driverDetails});
         }
-        pastRides.push({"rideDetails":ride,"driverDetails":driverDetails});
       }
     }
     return res.status(200).send({ currentRides, pastRides });

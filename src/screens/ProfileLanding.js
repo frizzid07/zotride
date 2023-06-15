@@ -19,16 +19,81 @@ import { submit } from "../common/button";
 
 import { AuthContext } from "../../server/context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { setDriver } from "mongoose";
 import EditProfile from "./EditProfile";
 
 const ProfileLanding = ({ navigation }) => {
   const context = useContext(AuthContext);
   const [isDriver, setIsDriver] = useState(context.user.isDriver);
 
+  useEffect(() => {
+    console.log('Driver Status Initiated/Changed');
+  }, [isDriver]);
+  
+  const editReg = async () => {
+    console.log("We are checking")
+    try {
+      const response = await fetch(NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      console.log(response.ok);
+      console.log('Debug');
+      const rdata = await response.json();
+      console.log(rdata);
+      navigation.navigate('DriverRegistration', {driver: rdata.driver});
+    } catch(error) {
+      console.log("Could not edit record");
+      alert(error)
+    }
+  }
+
+  const deleteReg = async () => {
+    try {
+      const response = await fetch(NGROK_TUNNEL + `/deleteDriver?driverId=${context.user._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      console.log(response.ok);
+      console.log('Debug');
+      if (response.ok) {
+        console.log("Driver Deleted");
+        context.updateUser({ isDriver: false});
+        try {
+          const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({data: {userId: context.user._id}})
+          });
+          console.log(response2.ok);
+          console.log('Debug');
+          console.log('Debug');
+          const rdata = await response2.json();
+          console.log(rdata);
+        } catch(error) {
+          console.error(error);
+        }
+        alert("Driver Record Deleted");
+        // navigation.navigate("Landing", { screen: 'Home' });
+      } else {
+        console.log("Some error in registering");
+        navigation.navigate("DriverRegistration");
+      }
+    } catch(error) {
+      console.log("Could not delete record");
+      alert(error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Image style={styles.bg} source={background}></Image>
+      <Text style={[styles.text, {marginTop: 60}]}>User Profile</Text>
       <View style={styles.profileContainer}>
         <View style={styles.profileDetails}>
           <View style={styles.profileHeader}>
@@ -36,8 +101,12 @@ const ProfileLanding = ({ navigation }) => {
               {context.user.firstName + " " + context.user.lastName}
             </Text>
           </View>
-          <Text style={styles.profileText}>{context.user.email}</Text>
-          <Text style={styles.profileText}>{context.user.mobileNumber}</Text>
+          <Text style={[styles.profileText, {marginTop: '3%'}]}>
+            <Text style={{fontWeight: 'bold'}}>Email<Text/>
+            : </Text>{context.user.email}</Text>
+          <Text style={styles.profileText}>
+          <Text style={{fontWeight: 'bold'}}>Mobile<Text/>
+            : </Text>{context.user.mobileNumber}</Text>
           <View style={styles.profileHeader}>
             <Pressable
               style={[
@@ -46,14 +115,14 @@ const ProfileLanding = ({ navigation }) => {
                   minWidth: 100,
                   minHeight: 30,
                   borderRadius: 3,
-                  backgroundColor: "#004aac",
+                  backgroundColor: "rgba(0, 74, 172, 0.8)",
                 },
               ]}
               onPress={() => {
                 navigation.navigate("EditProfile", { user: context.user });
               }}
             >
-              <Text style={[styles.smallText, { color: "#ebd25f" }]}>
+              <Text style={[styles.smallText, { color: "#fff" }]}>
                 Edit Profile
               </Text>
             </Pressable>
@@ -64,12 +133,12 @@ const ProfileLanding = ({ navigation }) => {
                   minWidth: 100,
                   minHeight: 30,
                   borderRadius: 3,
-                  backgroundColor: "#ebd25f",
+                  backgroundColor: "rgba(235, 210, 95, 0.8)",
                 },
               ]}
               onPress={context.logout}
             >
-              <Text style={[styles.smallText, { color: "#004aac" }]}>
+              <Text style={[styles.smallText, { color: "#000" }]}>
                 Logout
               </Text>
             </Pressable>
@@ -78,21 +147,29 @@ const ProfileLanding = ({ navigation }) => {
       </View>
       <View style={styles.textContainer}>
         <Pressable
-          style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3 }]}
+          style={[submit, { minWidth: 150, minHeight: 30, borderRadius: 3, marginTop: '10%' }]}
           onPress={() => {
             navigation.navigate("PastRides");
           }}
         >
-          <Text style={styles.text}>Past Rides</Text>
+          <Text style={styles.text}>View your Rides</Text>
         </Pressable>
 
         {isDriver && (
-          <Pressable
-            style={[submit, { minWidth: 100, minHeight: 30, borderRadius: 3 }]}
-            onPress={() => {}}
-          >
-            <Text style={styles.text}>Edit Registration</Text>
-          </Pressable>
+          <View style={{ marginTop: 10 }}>
+            <Pressable
+              style={[submit, { minWidth: 150, minHeight: 30, borderRadius: 3, backgroundColor: 'rgba(0, 74, 172, 0.8)' }]}
+              onPress={editReg}
+            >
+              <Text style={[styles.text, { color: 'white'}]}>Edit Registration</Text>
+            </Pressable>
+            <Pressable
+              style={[submit, { minWidth: 150, minHeight: 30, borderRadius: 3, backgroundColor: "rgba(194, 24, 7, 0.8)" }]}
+              onPress={deleteReg}
+            >
+              <Text style={[styles.text, { color: 'white'}]}>Delete Registration</Text>
+            </Pressable>
+        </View>
         )}
       </View>
     </View>
@@ -128,7 +205,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     padding: 15,
-    marginTop: 100,
+    marginTop: 20,
     maxWidth: "90%",
     justifyContent: "center",
   },
@@ -140,13 +217,9 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "40%",
+    width: "60%",
     height: undefined,
-    aspectRatio: 1,
-    borderWidth: 2,
-    borderColor: "#ffde59",
-    borderRadius: 5,
-    marginBottom: 40,
+    aspectRatio: 2.5
   },
   profileImageContainer: {
     width: 80,
@@ -176,8 +249,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   profileNameText: {
-    fontSize: 18,
-
+    fontSize: 25,
     fontWeight: "bold",
     marginBottom: 1,
   },

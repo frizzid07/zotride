@@ -12,14 +12,6 @@ SplashScreen.preventAutoHideAsync();
 export default AppNav = () => {
   const { isLoggedIn, isLoading } = useContext(AuthContext);
 
-  // if (isLoading) {
-  //   return (
-  //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-  //       <ActivityIndicator size={"large"} />
-  //     </View>
-  //   );
-  // }
-
   const onLayoutRootView = useCallback(async () => {
     if (!isLoading) {
       console.log("Closing Splash Screen");

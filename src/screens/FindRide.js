@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  LogBox
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -51,6 +52,10 @@ const FindRide = ({ navigation }) => {
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
   const { DateTime } = require('luxon');
+
+  LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+  ]);
 
   function startLocVisibleHandler() {
     setStartLocVisible(!isStartLocVisible);
@@ -136,6 +141,7 @@ const FindRide = ({ navigation }) => {
         body: JSON.stringify(data),
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
@@ -281,13 +287,9 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "20%",
+    width: "60%",
     height: undefined,
-    aspectRatio: 1,
-    borderWidth: 1,
-    borderColor: "#ffde59",
-    borderRadius: 5,
-    marginBottom: 10,
+    aspectRatio: 2.5
   },
   locButton: {
     backgroundColor: "#fff",

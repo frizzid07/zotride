@@ -17,11 +17,6 @@ const SuccessPayment = ({ navigation, route }) => {
     context.user.activePassengerRides = [...context.user.activePassengerRides, ride._id];
     console.log(`New Context: ${JSON.stringify(context)}`);
   }, []);
-
-  useEffect(() => {
-    navigation.navigate('Landing');
-  }, [context]);
-
   return (
     <View style = {styles.container}>
       <Image style={styles.bg} source={background}></Image>
@@ -75,12 +70,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     logo: {
-        width: '20%',
-        height: undefined,
-        borderWidth: 2,
-        borderColor: '#ffde59',
-        borderRadius: 5,
-        aspectRatio: 1,
-        marginBottom: 30
-    }
+      width: "50%",
+      height: undefined,
+      aspectRatio: 2.5
+    },
 });

@@ -41,6 +41,8 @@ import {
               }
             );
             console.log(response.ok);
+            console.log('Debug');
+            console.log('Debug');
             if (response.ok) {
               const driver = await response.json();
               console.log(driver);
@@ -76,6 +78,10 @@ import {
             <Text style={[styles.text, {marginTop: 10}]}>{new Date(ride.startTime).toLocaleString('en-US', options)}</Text>
             
             <Text style={[styles.text, {marginTop: 25, fontSize: 30}]}>Happy Journey!</Text>
+
+            <Pressable style={[submit, {marginTop: '8%'}]} onPress={() => navigation.navigate('Landing')}>
+                <Text style={styles.text}>Back to Home</Text>
+            </Pressable>
             
         </View>
         </View>
@@ -111,12 +117,8 @@ import {
         color: '#000'
     },
     logo: {
-        width: '25%',
-        height: undefined,
-        aspectRatio: 1,
-        borderWidth: 2,
-        borderColor: '#ffde59',
-        borderRadius: 5,
-        marginBottom: 40
-    }
+      width: "65%",
+      height: undefined,
+      aspectRatio: 2.5
+    },
 });

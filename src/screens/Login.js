@@ -69,10 +69,13 @@ const Login = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);
+        console.log('Debug');
         console.log('Debug');
         let authenticated = await context.authenticate(rdata);
         if (authenticated) {
@@ -173,12 +176,8 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "40%",
+    width: "60%",
     height: undefined,
-    aspectRatio: 1,
-    borderWidth: 2,
-    borderColor: "#ffde59",
-    borderRadius: 5,
-    marginBottom: 40,
+    aspectRatio: 2.5
   },
 });

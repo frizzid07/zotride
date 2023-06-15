@@ -44,7 +44,7 @@ const DriverRegistration = ({ navigation, route }) => {
   useEffect(() => {
     console.log(`Filldata value ${fillData} ${JSON.stringify(fillData)}`);
 
-    if (fillData !== undefined) {
+    if(fillData !== undefined) {
       setData((data) => ({
         ...data,
         licenseNumber: fillData.licenseNumber,
@@ -63,59 +63,30 @@ const DriverRegistration = ({ navigation, route }) => {
   }, []);
 
   const checkEditedData = (editData) => {
-    if (data.licenseNumber != fillData.licenseNumber)
-      editData.licenseNumber = data.licenseNumber;
-    if (
-      data.vehicleInformation.vehicleNumber !=
-        fillData.vehicleInformation[0]?.vehicleNumber ||
-      data.vehicleInformation.vehicleCompany !=
-        fillData.vehicleInformation[0]?.vehicleCompany ||
-      data.vehicleInformation.vehicleModel !=
-        fillData.vehicleInformation[0]?.vehicleModel ||
-      data.vehicleInformation.vehicleColor !=
-        fillData.vehicleInformation[0]?.vehicleColor ||
-      data.vehicleInformation.vehicleCapacity !=
-        fillData.vehicleInformation[0]?.vehicleCapacity
-    ) {
-      editData.vehicleInformation = [{}];
-      if (
-        data.vehicleInformation.vehicleNumber !=
-        fillData.vehicleInformation[0]?.vehicleNumber
-      )
-        editData.vehicleInformation[0].vehicleNumber =
-          data.vehicleInformation.vehicleNumber;
-      if (
-        data.vehicleInformation.vehicleCompany !=
-        fillData.vehicleInformation[0]?.vehicleCompany
-      )
-        editData.vehicleInformation[0].vehicleCompany =
-          data.vehicleInformation.vehicleCompany;
-      if (
-        data.vehicleInformation.vehicleModel !=
-        fillData.vehicleInformation[0]?.vehicleModel
-      )
-        editData.vehicleInformation[0].vehicleModel =
-          data.vehicleInformation.vehicleModel;
-      if (
-        data.vehicleInformation.vehicleColor !=
-        fillData.vehicleInformation[0]?.vehicleColor
-      )
-        editData.vehicleInformation[0].vehicleColor =
-          data.vehicleInformation.vehicleColor;
-      if (
-        data.vehicleInformation.vehicleCapacity !=
-        fillData.vehicleInformation[0]?.vehicleCapacity
-      )
-        editData.vehicleInformation[0].vehicleCapacity =
-          data.vehicleInformation.vehicleCapacity;
-    }
-    return editData;
-  };
+      if(data.licenseNumber != fillData.licenseNumber)
+        editData.licenseNumber = data.licenseNumber;
+      if(data.vehicleInformation.vehicleNumber != fillData.vehicleInformation[0]?.vehicleNumber || data.vehicleInformation.vehicleCompany != fillData.vehicleInformation[0]?.vehicleCompany 
+        || data.vehicleInformation.vehicleModel != fillData.vehicleInformation[0]?.vehicleModel || data.vehicleInformation.vehicleColor != fillData.vehicleInformation[0]?.vehicleColor 
+        || data.vehicleInformation.vehicleCapacity != fillData.vehicleInformation[0]?.vehicleCapacity ) {
+        editData.vehicleInformation = [{}];
+        if(data.vehicleInformation.vehicleNumber != fillData.vehicleInformation[0]?.vehicleNumber)
+          editData.vehicleInformation[0].vehicleNumber = data.vehicleInformation.vehicleNumber;
+        if(data.vehicleInformation.vehicleCompany != fillData.vehicleInformation[0]?.vehicleCompany)
+          editData.vehicleInformation[0].vehicleCompany = data.vehicleInformation.vehicleCompany;
+        if(data.vehicleInformation.vehicleModel != fillData.vehicleInformation[0]?.vehicleModel)
+          editData.vehicleInformation[0].vehicleModel = data.vehicleInformation.vehicleModel;
+        if(data.vehicleInformation.vehicleColor != fillData.vehicleInformation[0]?.vehicleColor)
+          editData.vehicleInformation[0].vehicleColor = data.vehicleInformation.vehicleColor;
+        if(data.vehicleInformation.vehicleCapacity != fillData.vehicleInformation[0]?.vehicleCapacity)
+          editData.vehicleInformation[0].vehicleCapacity = data.vehicleInformation.vehicleCapacity;
+      }
+      return editData;
+  }
 
   function clearErrMsg() {
     setErrorMsg(null);
   }
-
+  
   async function registerDriver() {
     if (
       data.licenseNumber == "" ||
@@ -129,27 +100,24 @@ const DriverRegistration = ({ navigation, route }) => {
       return;
     }
 
-    if (fillData !== undefined) {
+    if(fillData !== undefined) {
       const editData = await checkEditedData({});
       console.log(`New Edit Data ${editData} ${JSON.stringify(editData)}`);
 
-      if (Object.keys(editData).length === 0) {
+      if(Object.keys(editData).length === 0) {
         setErrorMsg("No Changes Made");
         alert("No edits made");
         return;
       }
-
+    
       try {
-        const response = await fetch(
-          NGROK_TUNNEL + `/editDriver?driverId=${context.user._id}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ editData: editData }),
-          }
-        );
+        const response = await fetch(NGROK_TUNNEL + `/editDriver?driverId=${context.user._id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({editData: editData}),
+        });
         console.log(response.ok);
         console.log('Debug');
         if (response.ok) {
@@ -157,18 +125,20 @@ const DriverRegistration = ({ navigation, route }) => {
           alert("Driver Record Updated");
           navigation.navigate("Landing");
         }
-      } catch (error) {
+      } catch(error) {
         console.log("Could not update record");
         alert(error);
       }
-    } else {
+    }
+
+    else {
       try {
         const response = await fetch(NGROK_TUNNEL + "/driverRegistration", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ data: data }),
+          body: JSON.stringify({data: data})
         });
         console.log(response.ok);
         console.log('Debug');
@@ -176,6 +146,7 @@ const DriverRegistration = ({ navigation, route }) => {
         console.log(rdata);
         if (rdata.success) {
           console.log("Driver Registered Successfully");
+          alert("Driver Registered Successfully");
           context.updateUser({ isDriver: true});
           try {
             const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
@@ -199,8 +170,7 @@ const DriverRegistration = ({ navigation, route }) => {
         }
       } catch (error) {
         console.log("Some error in registering as Driver " + error);
-      } finally {
-      }
+      } finally {}
     }
   }
 
@@ -350,13 +320,9 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "20%",
+    width: "60%",
     height: undefined,
-    aspectRatio: 1,
-    borderWidth: 1,
-    borderColor: "#ffde59",
-    borderRadius: 5,
-    marginBottom: 10,
+    aspectRatio: 2.5
   },
   carDetails: {
     flexDirection: "row",

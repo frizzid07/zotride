@@ -5,7 +5,7 @@ import { AuthContext } from '../../server/context/authContext';
 import {NGROK_TUNNEL} from "@env"
 
 
-const RideCard = ({ driverDetail, rideDetails }) => {
+const RideCard = ({ driverDetail, rideDetails, navigation }) => {
 
     const [showRideDetails, setShowRideDetails] = useState(false);
     const context = useContext(AuthContext);
@@ -37,14 +37,13 @@ const RideCard = ({ driverDetail, rideDetails }) => {
           body: JSON.stringify(data),
         });
         console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
         console.log('In Book Ride');
-        console.log('One more');
-        console.log('Why are we here? Just to suffer?');
         if(response.ok) {
-          alert(rdata.success);
-          navigation.navigate("Confirm", { ride: ride });
+          navigation.navigate("Payment", {ride: ride});
         } else {
           alert(rdata.error);
           console.log("Error while booking ride")
@@ -60,21 +59,21 @@ const RideCard = ({ driverDetail, rideDetails }) => {
       <View>
       <Pressable style={styles.rideCard} onPress={handlePress}>
         <View style={styles.rideInfo}>
-          <Text style={styles.rideName}>{driverDetail?.user?.firstName + " " + driverDetail?.user?.lastName+" "}:
-          {" "+driverDetail?.driver?.vehicleInformation[0]?.vehicleCompany+" "+driverDetail?.driver?.vehicleInformation[0]?.vehicleModel} </Text>
+          <Text style={styles.rideName}>
+          {driverDetail?.driver?.vehicleInformation[0]?.vehicleCompany+" "+driverDetail?.driver?.vehicleInformation[0]?.vehicleModel}: {driverDetail?.user?.firstName + " " + driverDetail?.user?.lastName+" "} </Text>
           {!showRideDetails && 
           <View>
             <Text style={styles.rideDescription}>Click for more details</Text>
-            <Text style={styles.ridePrice}>{rideDetails?.rideCost}$</Text>
+            <Text style={styles.rideName}>Fare for your Seat: <Text style={styles.ridePrice}>${rideDetails?.rideCost}</Text></Text>
           </View>
           }
           {showRideDetails && 
           <View>
-            <Text style={styles.rideDescription}>Starts at: {rideDetails.startLocation.description}</Text>
-            <Text style={styles.rideDescription}>Ends at: {rideDetails.endLocation.description}</Text>
-            <Text style={styles.rideDescription}>Upto {rideDetails.capacity-1} more person(s) may travel with you on this ride</Text>
-            <Text style={styles.rideDescription}><Icon name="clock-o" size={18} color="black" /> {new Date(rideDetails.startTime).toLocaleString('en-US',options)}</Text>
-            <Text style={styles.ridePrice}>{rideDetails?.rideCost}$</Text>
+            <Text style={styles.rideDescription}>Starts at: <Text style={{fontWeight: 'bold'}}>{rideDetails.startLocation.description}</Text></Text>
+            <Text style={styles.rideDescription}>Ends at: <Text style={{fontWeight: 'bold'}}>{rideDetails.endLocation.description}</Text></Text>
+            <Text style={styles.rideDescription}>Upto <Text style={{fontWeight: 'bold'}}>{rideDetails.capacity-1}</Text> more person(s) may travel with you on this ride</Text>
+            <Text style={styles.rideDescription}><Icon name="clock-o" size={18} color="black" /> <Text style={{fontWeight: 'bold'}}>{new Date(rideDetails.startTime).toLocaleString('en-US',options)}</Text></Text>
+            <Text style={styles.rideName}>Fare for your Seat: <Text style={styles.ridePrice}>${rideDetails?.rideCost}</Text></Text>
             <Pressable style={styles.button} onPress={() => bookRide(rideDetails)}>
               <Text style={styles.buttonText}>Book Now!</Text>
             </Pressable>
@@ -85,10 +84,9 @@ const RideCard = ({ driverDetail, rideDetails }) => {
           {showRideDetails && <Icon name="angle-up" size={20} color="#000" />}
           {!showRideDetails && <Icon name="angle-down" size={20} color="#000" />}
         </View>
+        <View style={styles.line} />
       </Pressable>
       </View>
-      <View style={styles.line} />
-      
       </>
     );
   };
@@ -112,6 +110,7 @@ const RideCard = ({ driverDetail, rideDetails }) => {
     line: {
       height: 3,
       backgroundColor: '#C0C0C0',
+
     },
     rideList: {
       flex: 1,

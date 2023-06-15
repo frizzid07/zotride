@@ -69,6 +69,7 @@ const Register = ({ navigation }) => {
           console.log(response.ok);
           console.log('Debug');
           console.log('Debug');
+          console.log('Debug');
           const data = await response.json();
           console.log('In Register');
           console.log(data);
@@ -237,12 +238,8 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "20%",
+    width: "50%",
     height: undefined,
-    aspectRatio: 1,
-    borderWidth: 1,
-    borderColor: "#ffde59",
-    borderRadius: 5,
-    marginBottom: 10,
+    aspectRatio: 2.5
   },
 });

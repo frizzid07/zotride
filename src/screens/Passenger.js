@@ -18,7 +18,7 @@ const Passenger = ({ navigation }) => {
 
     async function checkActiveRidePass() {
         console.log("Checking if Passenger has an Active ride");
-        if(context.user.activePassengerRides && context.user.activePassengerRides.length !== 0) {
+        if(context.user.activePassengerRides.length !== 0) {
             try {
                 let rides = []
                 for (const ride of context.user.activePassengerRides) {
@@ -28,6 +28,7 @@ const Passenger = ({ navigation }) => {
                             method: "GET"
                         });
                         console.log(response.ok);
+                        console.log('Debug');
                         console.log('Debug');
                         const rdata = await response.json();
                         rides.push({"rideDetails":rdata.ride});
@@ -60,27 +61,20 @@ const Passenger = ({ navigation }) => {
     return (
         <View style = {styles.container}>
             <Image style={styles.bg} source={background}></Image>
-            <ScrollView>
                 <View style = {styles.textContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Welcome")}>
-                        <Image style={[styles.logo, {width: "25%"}]} source={logo} />
+                    <TouchableOpacity onPress={() => navigation.navigate("Landing")}>
+                        <Image style={styles.logo} source={logo} />
                     </TouchableOpacity>
                     <Text style={styles.text}>Welcome, {context.user.firstName}</Text>
-                    <View style={{ width: "75%", marginTop: 25 }}>
-                        <Pressable
-                        style={submit}
-                        onPress={() => navigation.navigate("FindRide")}
-                        >
-                        <Text style={styles.text}>Find a New Ride</Text>
-                        </Pressable>
-                    </View>
                     {hasActivePass &&
-                        <View style={{ width: '100%', marginTop: 10 }}>
+                        <View style={{ width: '100%', marginTop: '4%' }}>
                             <Text style={[styles.text, {marginTop: 20, marginLeft: 10, fontSize: 20}]}>Your Active Rides</Text>
                             <Accordion data={activeRidesPass} edit={true}/>
                         </View>}
+                    <Pressable style={submit} onPress={() => navigation.navigate('Landing')}>
+                        <Text style={styles.text}>Back to Home</Text>
+                    </Pressable>
                 </View>
-            </ScrollView>
         </View>
     )
 }
@@ -90,13 +84,14 @@ export default Passenger
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: '100%'
+        height: '100%',
     },
     textContainer: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%'
+        height: '100%',
+        marginTop: '-20%'
     },
     bg: {
         position: 'absolute',
@@ -110,13 +105,8 @@ const styles = StyleSheet.create({
         color: '#000'
     },
     logo: {
-        width: '40%',
+        width: "80%",
         height: undefined,
-        aspectRatio: 1,
-        borderWidth: 2,
-        borderColor: '#ffde59',
-        borderRadius: 5,
-        marginTop: 100,
-        marginBottom: 40
-    }
+        aspectRatio: 2.5
+      },
 });

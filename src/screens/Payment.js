@@ -152,6 +152,7 @@ _onNavigationStateChange = (webViewState) => {
 
         return (
             <View style = {styles.container}>
+                <Image style={styles.bg} source={background}></Image>
                 <ScrollView contentContainerStyle={{flexGrow:1}}>
                     <View style = {{ flex: 1 }}>
                         {
@@ -200,13 +201,8 @@ const styles = StyleSheet.create({
         color: '#000'
     },
     logo: {
-        width: '30%',
+        width: "50%",
         height: undefined,
-        borderWidth: 2,
-        borderColor: '#ffde59',
-        borderRadius: 5,
-        aspectRatio: 1,
-        marginBottom: 100,
-        marginTop: 70
-    }
+        aspectRatio: 2.5
+      },
 });

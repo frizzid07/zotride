@@ -235,12 +235,14 @@ router.post("/login", async (req, res) => {
 
 router.post("/auth", async (req, res) => {
   const { token } = req.body.authToken;
-  console.log(`In Auth Route => ${token}`)
+  console.log(`In Auth Route => ${token}`);
+  console.log('Debug');
   if (!token) {
     return res
       .status(401)
       .json({ error: "You must be logged in, token not given" });
   }
+  console.log('Debug');
 
   jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
     if (err) {

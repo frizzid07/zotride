@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  LogBox
 } from "react-native";
 import React, { useState, useContext, useEffect, useRef } from "react";
 
@@ -41,8 +42,11 @@ const Rides = ({ navigation, route }) => {
   });
   const isInitialRender = useRef(true);
 
-
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+  LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+  ]);
   
   const fetchDrivers = async () => {
     const driverData = [];
@@ -56,6 +60,7 @@ const Rides = ({ navigation, route }) => {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         if (response.ok) {
           const driver = await response.json();
@@ -99,6 +104,7 @@ const Rides = ({ navigation, route }) => {
         },
         body: JSON.stringify(requestBody),
       });
+      console.log('Debug');
       const data = await response.json();
       console.log("mandatory log");
       if (!response.ok) {
@@ -122,36 +128,6 @@ const Rides = ({ navigation, route }) => {
     
   }, [filters]);
 
-  async function bookRide(ride) {
-    const data = {
-      "rideId": ride._id,
-      "userId": context.user._id
-    }
-    try {
-      const response = await fetch(NGROK_TUNNEL + "/bookRide", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      console.log(response.ok);
-      console.log('Debug');
-      const rdata = await response.json();
-      console.log(rdata);
-      console.log('In Book Ride');
-      if(response.ok) {
-        navigation.navigate("Payment", {ride: ride});
-      } else {
-        alert(rdata.error);
-        console.log("Error while booking ride")
-      }
-    } catch (error) {
-      alert(error);
-      console.log("Error while booking ride "+error)
-    }
-  };
-
   const closeFilterModal = () => {
     setFilterModalVisible(false);
   };
@@ -169,7 +145,7 @@ const Rides = ({ navigation, route }) => {
     <View style={styles.container}>
       <Image style={styles.bg} source={background} />
       <ScrollView>
-        <Text style={[styles.text, { marginBottom: 5, marginTop: 50 }]}>
+        <Text style={[styles.text, { marginBottom: '4%', marginTop: 50 }]}>
           Available Rides
         </Text>
         {rides.length === 0 ? (
@@ -182,7 +158,7 @@ const Rides = ({ navigation, route }) => {
           rides.map((ride, index) => {
             const driver = drivers[index];
             return (
-              <RideCard driverDetail={driver} rideDetails={ride}></RideCard>
+              <RideCard key={index} driverDetail={driver} rideDetails={ride} navigation={navigation}></RideCard>
             );
           })
         )}
@@ -200,7 +176,7 @@ const Rides = ({ navigation, route }) => {
         <Pressable
           style={[
             submit,
-            { marginTop: 15, marginLeft: 80, marginRight: 80, fontSize: 20 },
+            { marginTop: '1%', marginLeft: 80, marginRight: 80, fontSize: 20 },
           ]}
           onPress={changePreferencesHandler}
         >

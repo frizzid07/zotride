@@ -20,11 +20,9 @@ const AuthProvider = ({ children }) => {
     setIsLoggedIn(true);
     setToken(authToken.token);
     console.log(`In authcontext ${JSON.stringify(authToken)}`);
-    console.log("Fuck me")
     try {
-      console.log("Safe Word")
-      console.log("Please bro")
-      console.log("Final Rerquest")
+      console.log('Debug');
+      console.log('Debug');
       let checkUser = await fetch(NGROK_TUNNEL + "/auth", {
         method: "POST",
         headers: {
@@ -35,22 +33,10 @@ const AuthProvider = ({ children }) => {
       console.log(checkUser.ok);
       console.log('Debug');
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       const userData = await checkUser.json();
       console.log(userData.userData);
       console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
-      console.log('Debug');
       if (userData !== undefined) {
-        console.log("Leggo")
         setUser(userData.userData);
         AsyncStorage.setItem("user", JSON.stringify(userData.userData));
         AsyncStorage.setItem("token", authToken.token);
