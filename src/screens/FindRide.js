@@ -55,6 +55,74 @@ const FindRide = ({ navigation }) => {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
   const { DateTime } = require('luxon');
 
+  LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+  ]);
+
+  const getInfo = async (data) => {
+    try {
+      const response = await fetch(`https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${data.startLocation.latitude},${data.startLocation.longitude}&destinations=${data.endLocation.latitude},${data.endLocation.longitude}&key=${DISTANCE_MATRIX_KEY}`, {
+        method: "GET"
+      });
+      console.log(response.ok);
+      console.log('Debug');
+      if(response.ok) {
+        const rdata = await response.json();
+        console.log(rdata);
+        console.log('Debug');
+        setLocData(rdata);
+      }
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  function metersToMiles(meters) {
+    const miles = meters * 0.000621371;
+    return miles.toFixed(1);
+  }
+
+  function calcFare(total) {
+    const rate = 2;
+    const extra = 10;
+    const fix = 5;
+    const above = 25;
+    const next = 25;
+    const min = 1;
+    const cons = 1.5;
+
+    total = total / 1000;
+    if (10>total){
+    var cost = fix;
+    }
+    else if (10<total && 20>total)
+      {
+      var cost = (total * rate) + extra;
+      }
+      else if (20<total && 30>total)
+      {
+          var cost = (total * rate) + next;
+      }
+      else if (30<total && 50>total)
+      {
+          var cost = ((total - 30) * cons) + above;
+      }
+      else
+      {
+          var cost = ((total - 50) * min) + 50;
+      }
+
+    var fare = cost * 0.11 + cost;
+    return fare.toFixed(2);
+  }
+
+  useEffect(() => {
+    if (data.startLocation.description && data.endLocation.description) {
+      console.log('Start and end locations are populated');
+      getInfo(data);
+    }
+  }, [data.startLocation.description, data.endLocation.description]);
+
   function startLocVisibleHandler() {
     setStartLocVisible(!isStartLocVisible);
   }
@@ -118,7 +186,9 @@ const FindRide = ({ navigation }) => {
     if (
       data.startLocation.description == "" ||
       data.endLocation.description == "" ||
-      data.startTime == ""
+      data.startTime == "" ||
+      data.startRadius == "" ||
+      data.endRadius == ""
     ) {
       setErrorMsg("Please Enter All Fields");
       return;
@@ -126,11 +196,6 @@ const FindRide = ({ navigation }) => {
 
     try {
       console.log("Checking");
-      console.log("log error")
-      console.log("Checking");
-      console.log("log log");
-      console.log("log log");
-      console.log("log log");
       const response = await fetch(NGROK_TUNNEL + "/findRide", {
         method: "POST",
         headers: {
@@ -140,12 +205,13 @@ const FindRide = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
       console.log('Debug');
       if (response.ok) {
         console.log("Ride found Successfully");
-        navigation.navigate("Rides", { rides: rdata, initialParams: {"startLocation":data.startLocation, "endLocation":data.endLocation,"startTime":data.startTime}});
+        navigation.navigate("Rides", { rides: rdata });
       } else {
         alert("Could not find ride");
       }
@@ -240,6 +306,17 @@ const FindRide = ({ navigation }) => {
             onCancel={datePickerVisibleHandler}
           />
         </View>
+        {locData !== null && 
+          <View>
+            <Text style={[styles.text, { marginTop: 15, textAlign: "center"}]}>Trip Stats</Text>
+            <Text style={[styles.buttontext, {fontSize: 20, marginTop: 10}]}>
+            Journey: {metersToMiles(locData.rows[0].elements[0].distance.value)} miles{"\n"}
+            Duration: {locData.rows[0].elements[0].duration.text}{"\n"}
+            Estimated Cab Fare: ${calcFare(locData.rows[0].elements[0].distance.value)}
+            </Text>
+          </View>
+        }
+        <Text style={[styles.text, { marginTop: 15 }]}>Other Details</Text>
         <TextInput
           style={[input, { marginTop: 15 }]}
           placeholder="Ride Pickup Radius (in miles)"
@@ -299,9 +376,13 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   logo: {
-    width: "60%",
+    width: "20%",
     height: undefined,
-    aspectRatio: 2.5
+    aspectRatio: 1,
+    borderWidth: 1,
+    borderColor: "#ffde59",
+    borderRadius: 5,
+    marginBottom: 10,
   },
   locButton: {
     backgroundColor: "#fff",

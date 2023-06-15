@@ -77,32 +77,43 @@ const Landing = ({ navigation }) => {
       try {
         console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${context.user.activeDriverRide}`, {
-          method: "GET",
-        }
-      );
-      console.log(response.ok);
-      console.log('Debug');
-      const rdata = await response.json()
-      console.log(rdata);
-      console.log('In Landing');
-      if(rdata.driver !== null) {
-        console.log('Driver Record found');
-        return true;
-      } else {
-        try {
-          const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({data: {userId: context.user._id}})
-          });
-          console.log(response2.ok);
-          console.log('Debug');
-          const rdata2 = await response2.json();
-          console.log(rdata2);
-        } catch(error) {
-          console.error(error);
+          method: "GET"
+        });
+        console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        const rdata = await response.json();
+        console.log(rdata);
+        setActiveRide(rdata.ride);
+        setHasActive(true);
+    } catch(err) {
+      console.log(err);
+    }
+  } else {
+        if(!context.user.isDriver) {
+          setHasActive(false);
+          setIsDriver(false);
+        } else {
+          try {
+        console.log('Debug');
+        console.log('In here');
+        const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
+          method: "GET"
+        });
+        console.log(response.ok);
+        console.log('Debug');
+        console.log('Debug');
+        const result = await response.json();
+        console.log(result);
+        console.log('In Active Ride');
+
+        if (result.ride) {
+          console.log("Current Driver has Active Ride");
+          setActiveRide(result.ride);
+          setHasActive(true);
+        } else {
+          console.log("Current Driver has no Active Ride");
+          setHasActive(false);
         }
       } catch (err) {
         console.log("Some backend error");
