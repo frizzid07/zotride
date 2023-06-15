@@ -25,6 +25,9 @@ const AuthProvider = ({ children }) => {
       console.log("Safe Word")
       console.log("Please bro")
       console.log("Final Rerquest")
+      console.log("Safe Word")
+      console.log("Please bro")
+      console.log("Final Rerquest")
       let checkUser = await fetch(NGROK_TUNNEL + "/auth", {
         method: "POST",
         headers: {

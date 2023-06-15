@@ -59,6 +59,8 @@ const Register = ({ navigation }) => {
         console.log("Fetching Verify API");
         console.log("Please bro");
         try {
+          console.log("log log");
+          console.log("log log");
           const response = await fetch(NGROK_TUNNEL + "/verify", {
             method: "POST",
             headers: {

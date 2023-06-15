@@ -60,6 +60,8 @@ const Login = ({ navigation }) => {
     try {
       setIsChecking(true);
       console.log(`In Login ${data}, ${JSON.stringify(data)}`);
+      console.log("log log");
+      console.log("log log");
       const response = await fetch(NGROK_TUNNEL + "/login", {
         method: "POST",
         headers: {

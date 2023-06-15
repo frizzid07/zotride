@@ -215,6 +215,8 @@ const ListRide = ({ navigation, route }) => {
     
     else {
       try {
+        console.log("log log");
+        console.log("log log");
         const response = await fetch(NGROK_TUNNEL + "/listRide", {
           method: "POST",
           headers: {

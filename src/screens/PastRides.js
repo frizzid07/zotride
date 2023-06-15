@@ -26,6 +26,10 @@ import {
     const getRides = async () => {
 
       try {
+        console.log("log log");
+        console.log("log log");
+        console.log("log log");
+        console.log("log log");
         const response = await fetch(
           NGROK_TUNNEL + `/getRides?userId=${context.user._id}`,
           {
@@ -35,6 +39,8 @@ import {
         console.log(response.ok);
         console.log('Debug');
         if (response.ok) {
+          console.log("log log");
+          console.log("log log");
           const rides = await response.json();
           console.log(rides);
           setCurrentRides(rides.currentRides);
@@ -49,6 +55,10 @@ import {
 
     const getDriverRides = async () => {
       try {
+        console.log("log log");
+        console.log("log log");
+        console.log("log log");
+        console.log("log log");
         const response = await fetch(
           NGROK_TUNNEL + `/getDriverRides?driverId=${context.user._id}`,
           {
@@ -58,6 +68,8 @@ import {
         console.log(response.ok);
         if (response.ok) {
           console.log('Debug');
+          console.log("log log");
+          console.log("log log");
           const rides = await response.json();
           console.log(rides);
           setCurrentDrives(rides.currentRidesList);

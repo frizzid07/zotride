@@ -49,6 +49,8 @@ const Rides = ({ navigation, route }) => {
 
     for (const ride of rides) {
       try {
+        console.log("log log");
+        console.log("log log");
         const response = await fetch(
           NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
           {
@@ -92,6 +94,8 @@ const Rides = ({ navigation, route }) => {
         "maxRideCost":filters.maxCost,
         "maxCapacity":filters.maxCapacity
       }
+      console.log("log log");
+      console.log("log log");
       const response = await fetch(NGROK_TUNNEL + "/filterRides", {
         method: "POST",
         headers: {

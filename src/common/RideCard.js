@@ -29,6 +29,8 @@ const RideCard = ({ navigation, driverDetail, rideDetails }) => {
         "userId": context.user._id
       }
       try {
+        console.log("log log");
+        console.log("log log");
         const response = await fetch(NGROK_TUNNEL + "/bookRide", {
           method: "PUT",
           headers: {
@@ -37,6 +39,8 @@ const RideCard = ({ navigation, driverDetail, rideDetails }) => {
           body: JSON.stringify(data),
         });
         console.log(response.ok);
+        console.log("log log");
+        console.log("log log");
         const rdata = await response.json();
         console.log(rdata);
         console.log('In Book Ride');
