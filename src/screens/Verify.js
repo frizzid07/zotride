@@ -56,6 +56,7 @@ const Verify = ({ navigation, route }) => {
                 console.log(response.ok);
                 console.log('Debug');
                 console.log('Debug');
+                console.log('Debug');
                 const data = await response.json();
                 console.log(data);
                 console.log('In Verify');

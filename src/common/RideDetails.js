@@ -10,13 +10,8 @@ import { NGROK_TUNNEL } from "@env";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../server/context/authContext";
 
-  const RideDetails = ({rideDetails, driverDetails, passengerDetails, edit, refreshPassengerScreen}) => {
+  const RideDetails = ({rideDetails, driverDetails, passengerDetails, edit}) => {
     const context = useContext(AuthContext);
-    const [refreshState, setRefreshState] = useState(false);
-
-    useEffect(() => {
-      refreshPassengerScreen();
-    }, [refreshState]);
 
     async function endTrip() {
       try {
@@ -28,8 +23,6 @@ import { AuthContext } from "../../server/context/authContext";
           let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
           context.user.activePassengerRides = activeRides;
           context.user.past_rides = [...context.user.past_rides, rideDetails._id];
-          console.log(`New Context ${JSON.stringify(context)}`);
-          setRefreshState(prevRefresh => !prevRefresh);
           alert("Trip ended successfully!");
           navigation.pop();
         }
@@ -47,12 +40,8 @@ import { AuthContext } from "../../server/context/authContext";
           if(response.ok) {
             let activeRides = context.user.activePassengerRides.filter((x) => x !== rideDetails._id);
             context.user.activePassengerRides = activeRides;
-            context.user.past_rides = [...context.user.past_rides, rideDetails._id];
-            alert("Trip cancelled succesfully");
-            navigation.pop();
-            console.log(`New Context ${JSON.stringify(context)}`);
-            setRefreshState(prevRefresh => !prevRefresh);
             alert("Trip cancelled successfully!");
+            navigation.pop();
           }
         } catch(error) {
         console.error(error);
@@ -187,6 +176,8 @@ import { AuthContext } from "../../server/context/authContext";
     },
     rideBox: {
       backgroundColor: "#ffffff",
+      borderWidth: 2,
+      borderRadius: 10,
       padding: 8,
       margin: 8,
       borderColor: "black",

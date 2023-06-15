@@ -84,6 +84,7 @@ const EditProfile = ({ navigation, route }) => {
           console.log("Why Bro")
           console.log(response.ok);
           console.log('Debug');
+          console.log('Debug');
           if (response.ok) {
             console.log("User Updated");
             context.updateUser({firstName:fdata.firstName,
@@ -92,6 +93,7 @@ const EditProfile = ({ navigation, route }) => {
                 monthOfBirth:fdata.monthOfBirth,
                 yearOfBirth:fdata.yearOfBirth})
             alert("Your Record is Updated");
+            console.log('Debug');
             navigation.pop();
           }
         } catch (error) {

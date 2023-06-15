@@ -66,9 +66,11 @@ const FindRide = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
       if(response.ok) {
         const rdata = await response.json();
         console.log(rdata);
+        console.log('Debug');
         console.log('Debug');
         setLocData(rdata);
       }
@@ -206,8 +208,10 @@ const FindRide = ({ navigation }) => {
       console.log(response.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log('In Find Ride');
+      console.log('Debug');
       console.log('Debug');
       if (response.ok) {
         console.log("Ride found Successfully");
@@ -227,9 +231,6 @@ const FindRide = ({ navigation }) => {
         contentContainerStyle={styles.textContainer}
         keyboardShouldPersistTaps="handled"
       >
-        <TouchableOpacity>
-          <Image style={styles.logo} source={logo} />
-        </TouchableOpacity>
         <Text style={[styles.text, { marginBottom: 25, fontSize: 30 }]}>
           Enter Desired Ride
         </Text>
@@ -348,6 +349,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
+    paddingBottom: 50
   },
   textContainer: {
     flex: 1,

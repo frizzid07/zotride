@@ -70,8 +70,10 @@ const Login = ({ navigation }) => {
       console.log(response.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
+      console.log('Debug');
       console.log('Debug');
       if (response.ok) {
         console.log(`Token in Login ${JSON.stringify(rdata)}`);

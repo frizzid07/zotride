@@ -33,7 +33,8 @@ import {
     useEffect(() => {
       async function getDetails() {
         try {
-          console.log("Please bro")
+          console.log("Please bro");
+          console.log('Debug');
           const response = await fetch(
               NGROK_TUNNEL + `/getDriver?driverId=${ride.driverId}`,
               {
@@ -41,6 +42,7 @@ import {
               }
             );
             console.log(response.ok);
+            console.log('Debug');
             console.log('Debug');
             if (response.ok) {
               const driver = await response.json();

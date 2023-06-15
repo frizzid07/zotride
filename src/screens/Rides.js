@@ -20,7 +20,6 @@ import background from "../../assets/background.jpg";
 import { submit } from "../common/button";
 
 import { NGROK_TUNNEL } from "@env";
-import axios from "axios";
 
 import { AuthContext } from "../../server/context/authContext";
 
@@ -60,6 +59,7 @@ const Rides = ({ navigation, route }) => {
           }
         );
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         console.log('Debug');
@@ -106,6 +106,7 @@ const Rides = ({ navigation, route }) => {
         body: JSON.stringify(requestBody),
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       const data = await response.json();

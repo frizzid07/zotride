@@ -28,6 +28,7 @@ const Driver = ({ navigation }) => {
     console.log("Checking if Driver has an Active ride");
     if(context.user.activeDriverRide) {
       try {
+        console.log('Debug');
         const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${context.user.activeDriverRide}`, {
           method: "GET",
           headers: {
@@ -35,6 +36,7 @@ const Driver = ({ navigation }) => {
           }
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         const rdata = await response.json();
@@ -55,6 +57,7 @@ const Driver = ({ navigation }) => {
           }
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         const result = await response.json();
@@ -100,6 +103,7 @@ const Driver = ({ navigation }) => {
       console.log(response.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
       const result = await response.json();
       console.log(result);
       console.log('Debug');
@@ -119,6 +123,7 @@ const Driver = ({ navigation }) => {
         method: "GET"
       });
       console.log(response.ok);
+      console.log('Debug');
       console.log('Debug');
       console.log('Debug');
       if(response.ok) {
@@ -144,6 +149,7 @@ const Driver = ({ navigation }) => {
       console.log(response.ok);
       console.log('Debug');
       console.log('Debug');
+      console.log('Debug');
       const result = await response.json();
       console.log(result);
       console.log('Debug');
@@ -158,68 +164,6 @@ const Driver = ({ navigation }) => {
       }
     } catch (err) {
       console.log("Error in deleting " + err);
-    }
-  }
-
-  const editReg = async () => {
-    try {
-      const response = await fetch(NGROK_TUNNEL + `/getDriver?driverId=${context.user._id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      });
-      console.log(response.ok);
-      console.log('Debug');
-      console.log('Debug');
-      const rdata = await response.json();
-      console.log(rdata);
-      console.log('Debug');
-      navigation.navigate('DriverRegistration', {driver: rdata.driver});
-    } catch(error) {
-      console.log("Could not edit record");
-      alert(error)
-    }
-  }
-
-  const deleteReg = async () => {
-    try {
-      const response = await fetch(NGROK_TUNNEL + `/deleteDriver?driverId=${context.user._id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      });
-      console.log(response.ok);
-      console.log('Debug');
-      if (response.ok) {
-        console.log("Driver Deleted");
-        context.updateUser({ isDriver: false});
-        try {
-          const response2 = await fetch(NGROK_TUNNEL + "/driverRegistration", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({data: {userId: context.user._id}})
-          });
-          console.log(response2.ok);
-          console.log('Debug');
-          console.log('Debug');
-          const rdata = await response2.json();
-          console.log(rdata);
-          console.log('Debug');
-        } catch(error) {
-          console.error(error);
-        }
-        alert("Driver Record Deleted");
-      } else {
-        console.log("Some error in registering");
-        navigation.navigate("DriverRegistration");
-      }
-    } catch(error) {
-      console.log("Could not delete record");
-      alert(error)
     }
   }
 
@@ -258,20 +202,6 @@ const Driver = ({ navigation }) => {
             </View>
           </View>
         )}
-        {/* <View style={{ width: "60%", marginTop: 15 }}>
-          <Pressable
-            style={[submit, { backgroundColor: 'rgba(0, 74, 172, 0.8)' }]}
-            onPress={editReg}
-          >
-            <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Edit Registration</Text>
-          </Pressable>
-          <Pressable
-            style={[submit, { backgroundColor: "rgba(194, 24, 7, 0.8)", marginTop: -5 }]}
-            onPress={deleteReg}
-          >
-            <Text style={[styles.text, { color: 'white', fontSize: 20 }]}>Delete Registration</Text>
-          </Pressable>
-        </View> */}
       </View>
     </View>
   );

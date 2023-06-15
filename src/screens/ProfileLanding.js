@@ -40,6 +40,8 @@ const ProfileLanding = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
+      console.log('Debug');
       const rdata = await response.json();
       console.log(rdata);
       navigation.navigate('DriverRegistration', {driver: rdata.driver});
@@ -59,6 +61,7 @@ const ProfileLanding = ({ navigation }) => {
       });
       console.log(response.ok);
       console.log('Debug');
+      console.log('Debug');
       if (response.ok) {
         console.log("Driver Deleted");
         context.updateUser({ isDriver: false});
@@ -71,6 +74,7 @@ const ProfileLanding = ({ navigation }) => {
             body: JSON.stringify({data: {userId: context.user._id}})
           });
           console.log(response2.ok);
+          console.log('Debug');
           console.log('Debug');
           console.log('Debug');
           const rdata = await response2.json();
@@ -231,7 +235,6 @@ const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: "row",
     alignItems: "center",
-    //marginBottom: 20,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,

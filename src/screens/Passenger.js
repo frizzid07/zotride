@@ -29,10 +29,12 @@ const Passenger = ({ navigation }) => {
                 for (const ride of context.user.activePassengerRides) {
                         try {
                         console.log('Debug');
+                        console.log('Debug');
                         const response = await fetch(NGROK_TUNNEL + `/getRide?rideId=${ride}`, {
                             method: "GET"
                         });
                         console.log(response.ok);
+                        console.log('Debug');
                         console.log('Debug');
                         console.log('Debug');
                         const rdata = await response.json();

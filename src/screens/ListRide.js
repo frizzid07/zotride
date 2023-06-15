@@ -269,6 +269,7 @@ const ListRide = ({ navigation, route }) => {
         console.log(response.ok);
         console.log('Debug');
         console.log('Debug');
+        console.log('Debug');
         if (response.ok) {
           console.log("Ride Updated");
           alert("Trip Updated");
@@ -290,6 +291,7 @@ const ListRide = ({ navigation, route }) => {
           body: JSON.stringify({ data: data }),
         });
         console.log(response.ok);
+        console.log('Debug');
         console.log('Debug');
         console.log('Debug');
         const rdata = await response.json();

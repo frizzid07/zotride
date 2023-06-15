@@ -35,6 +35,7 @@ const Landing = ({ navigation }) => {
 
   const getUser = async () => {
     console.log("In Landing => Getting The User Data");
+    console.log("Debug");
     let userVal = await AsyncStorage.getItem("user");
     if (userVal) {
       console.log("Got user");
@@ -45,6 +46,7 @@ const Landing = ({ navigation }) => {
         setIsDriver(true);
       } else {
         console.log("User is not a driver");
+        setIsDriver(false);
       }
     } else {
       console.log("Didn't get user");
@@ -56,20 +58,8 @@ const Landing = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    getUser();
+    checkActiveRide();
   }, [context]);
-
-  useEffect(() => {
-    getUser();
-  }, [isDriver]);
-
-  useEffect(() => {
-    const refreshListener = navigation.addListener('focus', () => {
-      getUser();
-    });
-
-    return refreshListener;
-  }, [navigation]);
 
   async function checkActiveRideDriver() {
     console.log("Checking if Driver has an Active ride");
@@ -81,64 +71,28 @@ const Landing = ({ navigation }) => {
         });
         console.log(response.ok);
         console.log('Debug');
+        console.log("Debug");
+        console.log('Debug');
         console.log('Debug');
         const rdata = await response.json();
         console.log(rdata);
+        console.log('Debug');
         setActiveRide(rdata.ride);
         setHasActive(true);
     } catch(err) {
       console.log(err);
     }
-  } else {
-        if(!context.user.isDriver) {
-          setHasActive(false);
-          setIsDriver(false);
-        } else {
-          try {
-        console.log('Debug');
-        console.log('In here');
-        const response = await fetch(NGROK_TUNNEL + `/findActiveRide?driverId=${context.user._id}`, {
-          method: "GET"
-        });
-        console.log(response.ok);
-        console.log('Debug');
-        console.log('Debug');
-        const result = await response.json();
-        console.log(result);
-        console.log('In Active Ride');
-
-        if (result.ride) {
-          console.log("Current Driver has Active Ride");
-          setActiveRide(result.ride);
-          setHasActive(true);
-        } else {
-          console.log("Current Driver has no Active Ride");
-          setHasActive(false);
-        }
-      } catch (err) {
-        console.log("Some backend error");
-        console.log(err);
-      }
-    }
   }
 }
 
-  async function checkActiveRide() {
-    console.log("Checking if Passenger has an Active ride");
+  function checkActiveRide() {
+    setName(context.user.firstName);
     if(context.user.isDriver) {      
       setIsDriver(true);
     } else {
       setIsDriver(false);
     }
   }
-
-  useEffect(() => {
-    checkActiveRide();
-  }, [context]);
-
-  useEffect(() => {
-    checkActiveRideDriver();
-  }, []);
 
   useEffect(() => {
     checkActiveRideDriver();
